@@ -1,5 +1,5 @@
 {
-  "name": "vault-client",
+  "name": "vaultclient",
   "version": "0.0.1",
   "description": "Client library and binary for Vault, the user directory and key management service",
   "main": "index.js",
