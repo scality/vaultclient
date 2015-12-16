@@ -1,6 +1,2 @@
-require('./es6-compat.js');
-
-module.exports = {
-    default: require('./lib/IAMClient.js').default,
-    errorCode: require('./lib/ErrorCodes.js').errorCode,
-};
+module.exports = require('./lib/IAMClient.js');
+module.exports.errorCode = require('./lib/ErrorCodes.js').errorCode;
