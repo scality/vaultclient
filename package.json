@@ -11,7 +11,7 @@
   },
   "homepage": "https://github.com/scality/IronMan-VaultClient#readme",
   "dependencies": {
-    "readline": "^1.2.1"
+    "commander": "^2.9.0"
   },
   "devDependencies": {
     "babel-eslint": "^4.1.3",

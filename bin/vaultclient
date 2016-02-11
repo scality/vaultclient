@@ -1,0 +1,106 @@
+#!/usr/bin/env node
+
+const program = require('commander');
+
+const vaultclient = require('../index');
+
+
+program.option('--host [HOST]', 'host where Vault is running (default to ' +
+               'VAULT_HOST environment variable)')
+       .option('--port [PORT]', 'port where Vault is running (default to ' +
+               'VAULT_PORT environment variable)');
+
+function action(cmd, fn, args) {
+    if (typeof args !== 'object') {
+        program.commands.find(c => c._name === cmd).outputHelp();
+        process.exit(-1);
+    }
+
+    try {
+        const client = new vaultclient.Client(
+            args.parent.host ? args.parent.host : process.env.VAULT_HOST,
+            args.parent.port ? args.parent.port : process.env.VAULT_PORT)
+        fn(client, args);
+    } catch (err) {
+        process.stderr.write(err.message + '\n');
+        program.commands.find(c => c._name === cmd).outputHelp();
+        process.exit(-1);
+    }
+}
+
+function handleVaultResponse(err, data) {
+    if (err) {
+        process.stdout.write(JSON.stringify(err, null, 4) + '\n');
+        process.exit(1);
+    }
+    process.stdout.write(JSON.stringify(data, null, 4) + '\n');
+    process.exit(0);
+}
+
+program
+    .command('create-account')
+    .option('--name <NAME>')
+    .option('--email <EMAIL>')
+    .option('--password <PASSWORD>')
+    .action(action.bind(null, 'create-account', (client, args) => {
+        client.createAccount(
+            args.name, { email: args.email, password: args.password },
+            handleVaultResponse);
+    }));
+
+program
+    .command('delete-account')
+    .option('--name <NAME>')
+    .action(action.bind(null, 'delete-account', (client, args) => {
+        client.deleteAccount(args.name, handleVaultResponse);
+    }));
+
+program
+    .command('create-user')
+    .option('--account-name <ACCOUNT-NAME>')
+    .option('--name <NAME>')
+    .option('--email <EMAIL>')
+    .option('--password <PASSWORD>')
+    .action(action.bind(null, 'create-user', (client, args) => {
+        client.createUser(args.accountName, args.name,
+                          { email: args.email, password: args.password },
+                          handleVaultResponse);
+    }));
+
+program
+    .command('delete-user')
+    .option('--account-name <ACCOUNT-NAME>')
+    .option('--name <NAME>')
+    .action(action.bind(null, 'delete-user', (client, args) => {
+        client.deleteUser(args.accountName, args.name, handleVaultResponse);
+    }));
+
+program
+    .command('create-access-key')
+    .option('--account-name <ACCOUNT-NAME>')
+    .option('--user-name [USER-NAME]')
+    .action(action.bind(null, 'create-access-key', (client, args) => {
+        client.createAccessKey(args.accountName, args.userName, {},
+                               handleVaultResponse);
+    }));
+
+program
+    .command('delete-access-key')
+    .option('--id <ID>')
+    .action(action.bind(null, 'delete-access-key', (client, args) => {
+        client.deleteAccessKey(args.id, handleVaultResponse);
+    }));
+
+program
+    .command('*')
+    .action(() => {
+        program.outputHelp();
+        process.exit(-1);
+    });
+
+if (process.argv.length > 2) {
+    program.parse(process.argv);
+} else {
+    program.outputHelp();
+    process.exit(-1);
+}
