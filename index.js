@@ -1,2 +1,4 @@
-module.exports = require('./lib/IAMClient.js');
-module.exports.errorCode = require('./lib/ErrorCodes.js').errorCode;
+module.exports = {
+    Client: require('./lib/IAMClient.js'),
+    errorCode: require('./lib/ErrorCodes.js').errorCode,
+};
