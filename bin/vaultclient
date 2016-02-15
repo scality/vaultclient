@@ -19,7 +19,8 @@ function action(cmd, fn, args) {
     try {
         const client = new vaultclient.Client(
             args.parent.host ? args.parent.host : process.env.VAULT_HOST,
-            args.parent.port ? args.parent.port : process.env.VAULT_PORT)
+            Number.parseInt(args.parent.port ? args.parent.port :
+                            process.env.VAULT_PORT, 10));
         fn(client, args);
     } catch (err) {
         process.stderr.write(err.message + '\n');
