@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Client library and binary for Vault, the user directory and key management service",
   "main": "index.js",
-  "repository": "scality/IronMan-VaultClient",
+  "repository": "scality/vaultclient",
   "author": "Scality",
   "license": "ISC",
   "bugs": {
