@@ -5,7 +5,7 @@ Vault. This repository also provides an executable shell for Vault, usable as
 either a CLI or an interactive shell.
 
 This client supports the protocol described in Vault's
-[repository](https://github.com/scality/Vault/blob/master/Protocol.md)
+[repository](https://github.com/scality/Vault/blob/master/Protocol.md).
 
 ## Command-line usage
 
@@ -51,6 +51,9 @@ $ bin/vaultclient create-account --name account0 --email d3v@null \
     }
 }
 ```
+
+See [examples](./Examples.md) on how to create and delete entities such as
+accounts, users and access keys.
 
 ## Javascript API usage
 
