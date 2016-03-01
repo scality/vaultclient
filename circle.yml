@@ -13,3 +13,4 @@ test:
     - npm run --silent lint_yml
     - npm run --silent lint
     - npm run --silent lint_md
+    - npm test
