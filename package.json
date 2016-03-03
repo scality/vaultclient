@@ -11,6 +11,7 @@
   },
   "homepage": "https://github.com/scality/IronMan-VaultClient#readme",
   "dependencies": {
+    "arsenal":"scality/IronMan-Arsenal#rel/1.0",
     "commander": "^2.9.0"
   },
   "devDependencies": {
