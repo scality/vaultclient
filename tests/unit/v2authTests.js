@@ -1,8 +1,8 @@
 'use strict'; // eslint-disable-line
 
+const errors = require('arsenal').errors;
 const assert = require('assert');
 const http = require('http');
-const errorCodes = require('../../lib/ErrorCodes');
 const IAMClient = require('../../lib/IAMClient.js');
 
 const testNames = [
@@ -39,9 +39,7 @@ const correctDictResponse = {
     accountDisplayName: 'TestAccount',
 };
 
-const wrongSigError = new Error(errorCodes.Forbidden.message);
-wrongSigError.code = errorCodes.Forbidden.code;
-wrongSigError.message = errorCodes.Forbidden.message;
+const wrongSigError = errors.Forbidden;
 
 const expectedErrors = [
     null,
