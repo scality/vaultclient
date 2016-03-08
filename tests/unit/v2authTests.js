@@ -90,7 +90,7 @@ function handler(req, res) {
     res.end();
 }
 
-describe('Unit tests with mockup server', function tests() {
+describe('v2 auth tests with mockup server', function tests() {
     let server;
     let client;
 
