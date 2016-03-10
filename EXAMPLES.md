@@ -22,7 +22,8 @@ See [Vault's design document]
 on how entities are related in our supported IAM model.
 
 The Vault server is assumed to be running at 127.0.0.1:8500 in the following
-examples.
+examples. Keep in mind that the '--host' option is always mandatory, indicating
+either Vault Server's IP or Fully Qualified Domain Name.
 
 ### Accounts
 

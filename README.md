@@ -5,7 +5,9 @@ Vault. This repository also provides an executable shell for Vault, usable as
 either a CLI or an interactive shell.
 
 This client supports the protocol described in Vault's
-[repository](https://github.com/scality/Vault/blob/master/Protocol.md).
+[repository](https://github.com/scality/IronMan-Vault/blob/master/Protocol.md).
+
+You can check our [quickstart guide](QUICKSTART.md).
 
 ## Command-line usage
 
@@ -38,7 +40,7 @@ $ bin/vaultclient create-account -h
 
 ```sh
 $ bin/vaultclient create-account --name account0 --email d3v@null \
-                                 --password alpine
+                                 --password alpine --host 127.0.0.1
 {
     "message": {
         "code": 201,
@@ -52,7 +54,10 @@ $ bin/vaultclient create-account --name account0 --email d3v@null \
 }
 ```
 
-See [examples](./Examples.md) on how to create and delete entities such as
+Keep in mind that the '--host' option is always mandatory, indicating either
+Vault Server's IP or Fully Qualified Domain Name.
+
+See [examples](./EXAMPLES.md) on how to create and delete entities such as
 accounts, users and access keys.
 
 ## Javascript API usage
