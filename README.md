@@ -57,7 +57,7 @@ $ bin/vaultclient create-account --name account0 --email d3v@null \
 Keep in mind that the '--host' option is always mandatory, indicating either
 Vault Server's IP or Fully Qualified Domain Name.
 
-See [examples](./Examples.md) on how to create and delete entities such as
+See [examples](./EXAMPLES.md) on how to create and delete entities such as
 accounts, users and access keys.
 
 ## Javascript API usage
