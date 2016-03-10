@@ -40,7 +40,7 @@ $ bin/vaultclient create-account -h
 
 ```sh
 $ bin/vaultclient create-account --name account0 --email d3v@null \
-                                 --password alpine
+                                 --password alpine --host 127.0.0.1
 {
     "message": {
         "code": 201,
@@ -53,6 +53,9 @@ $ bin/vaultclient create-account --name account0 --email d3v@null \
     }
 }
 ```
+
+Keep in mind that the '--host' option is always mandatory, indicating either
+Vault Server's IP or Fully Qualified Domain Name.
 
 See [examples](./Examples.md) on how to create and delete entities such as
 accounts, users and access keys.

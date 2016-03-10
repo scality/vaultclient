@@ -74,6 +74,10 @@ $> bin/vaultclient create-account --name accountName  \
                                   --host 127.0.0.1
 ```
 
+Keep in mind for the rest of this guide that the '--host' option is always
+mandatory in vaultclient, indicating either Vault Server's IP or Fully Qualified
+Domain Name.
+
 ### Create a user
 
 Decide on a name, password, and email address for your user, and run:
