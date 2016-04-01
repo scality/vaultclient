@@ -1,6 +1,6 @@
 {
   "name": "vaultclient",
-  "version": "1.0.0-beta",
+  "version": "1.0.1-beta2",
   "description": "Client library and binary for Vault, the user directory and key management service",
   "main": "index.js",
   "repository": "scality/vaultclient",
@@ -11,7 +11,7 @@
   },
   "homepage": "https://github.com/scality/IronMan-VaultClient#readme",
   "dependencies": {
-    "arsenal":"scality/IronMan-Arsenal#rel/1.0",
+    "arsenal":"scality/IronMan-Arsenal",
     "commander": "^2.9.0"
   },
   "devDependencies": {
