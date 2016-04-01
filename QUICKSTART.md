@@ -78,6 +78,29 @@ Keep in mind for the rest of this guide that the '--host' option is always
 mandatory in vaultclient, indicating either Vault Server's IP or Fully Qualified
 Domain Name.
 
+HTTP is used by default. However you can force the use of HTTPS by adding the
+option '--https' to every command, like this:
+
+``` sh
+$> bin/vaultclient create-account --name accountName  \
+                                  --email account@email.com \
+                                  --password accountPassword \
+                                  --host 127.0.0.1 --https
+```
+
+You can also use self-signed certificate by adding the option '--cafile' to
+the command line, like this:
+
+``` sh
+$> bin/vaultclient create-account --name accountName  \
+                                  --email account@email.com \
+                                  --password accountPassword \
+                                  --host 127.0.0.1 --https --cafile myca.crt
+```
+
+If no cafile is provided and Vault's certificates are signed by a not
+well-known CA the connection will fail.
+
 ### Create a user
 
 Decide on a name, password, and email address for your user, and run:
