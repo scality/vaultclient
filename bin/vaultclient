@@ -34,8 +34,12 @@ function handleVaultResponse(err, data) {
         process.stdout.write(JSON.stringify(err, null, 4) + '\n');
         process.exit(1);
     }
-    process.stdout.write(JSON.stringify(data, null, 4) + '\n');
-    process.exit(0);
+    if (process.stdout.write(JSON.stringify(data, null, 4) + '\n')) {
+        process.exit(0);
+    }
+    process.stdout.on('drain', () => {
+        process.exit(0);
+    });
 }
 
 program
