@@ -54,6 +54,20 @@ program
     }));
 
 program
+    .command('list-account-users')
+    .option('--name <NAME>', 'Name of account')
+    .option('--marker [MARKER]', 'Marker for pagination')
+    .option('--maxItems [MAXITEMS]', 'Max items per page')
+    .option('--pathPrefix [PATHPREFIX]', 'Path prefix for arn search')
+    .action(action.bind(null, 'list-account-users', (client, args) => {
+        client.listAccountUsers(args.name, {
+            marker: args.marker,
+            maxItems: args.maxItems,
+            pathPrefix: args.pathPrefix
+        }, handleVaultResponse);
+    }));
+
+program
     .command('delete-account')
     .option('--name <NAME>')
     .action(action.bind(null, 'delete-account', (client, args) => {
