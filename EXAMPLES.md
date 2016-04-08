@@ -5,12 +5,13 @@
 1. [Entity creation and deletion](#entity-creation-and-deletion)
     1. [create-account](#create-account)
     2. [delete-account](#delete-account)
-    3. [create-user](#create-user)
-    4. [delete-user](#delete-user)
-    5. [create-access-key](#create-access-key)
+    3. [list-account-users](#list-account-users)
+    4. [create-user](#create-user)
+    5. [delete-user](#delete-user)
+    6. [create-access-key](#create-access-key)
         1. [for an account](#for-an-account)
         2. [for a user](#for-a-user)
-    6. [delete-access-key](#delete-access-key)
+    7. [delete-access-key](#delete-access-key)
 
 ## Entity creation and deletion
 
@@ -56,6 +57,59 @@ $ bin/vaultclient delete-account --name TestAccount --host 127.0.0.1
     "message": {
         "code": 204,
         "message": "No content."
+    }
+}
+```
+
+#### list-account-users
+
+```sh
+$ bin/vaultclient list-account-users --help
+
+  Usage: list-account-users [options]
+
+  Options:
+
+    -h, --help                 output usage information
+    --name <NAME>              Name of account
+    --marker [MARKER]          Marker for pagination
+    --maxItems [MAXITEMS]      Max items per page
+    --pathPrefix [PATHPREFIX]  Path prefix for arn search
+
+```
+
+Like:
+
+```sh
+bin/vaultclient list-account-users --name test --pathPrefix /user10
+--maxItems 2 --host 127.0.0.1
+
+{
+    "message": {
+        "code": 200,
+        "message": "Search successful",
+        "body": {
+            "isTruncated": true,
+            "users": [
+                {
+                    "arn": "arn:aws:iam::999233902475:/user10/",
+                    "createDate": "2016-04-06T12:20:43+02:00",
+                    "passwordLastUsed": "2016-04-06T12:20:43+02:00",
+                    "path": "/user10/",
+                    "userId": "LT4J2YPGGZ9AQILAWBBLREX79OIPLZZ0",
+                    "userName": "user10"
+                },
+                {
+                    "arn": "arn:aws:iam::999233902475:/user100/",
+                    "createDate": "2016-04-06T12:20:52+02:00",
+                    "passwordLastUsed": "2016-04-06T12:20:52+02:00",
+                    "path": "/user100/",
+                    "userId": "VWDHI44UJEDS6FU4YQRN68384IBKY8W3",
+                    "userName": "user100"
+                }
+            ],
+            "marker": "1"
+        }
     }
 }
 ```
