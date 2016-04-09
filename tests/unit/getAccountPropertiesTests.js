@@ -42,21 +42,21 @@ const testNames = [
 ];
 
 const testOutputKeys = [
-    [ canId1, canId2, canId3 ],
-    [ canId1, canIdWrongFormat, canId2 ],
-    [ canId1, canIdNotFound, canId2 ],
-    [ canId1, canIdWrongFormat, canIdNotFound, canId3 ],
-    [ email1, email2, email3 ],
-    [ email1, emailWrongFormat, email2],
+    [canId1, canId2, canId3],
+    [canId1, canIdWrongFormat, canId2],
+    [canId1, canIdNotFound, canId2],
+    [canId1, canIdWrongFormat, canIdNotFound, canId3],
+    [email1, email2, email3],
+    [email1, emailWrongFormat, email2],
 ];
 
 const testOutputValues = [
-    [ email1, email2, email3 ],
-    [ email1, 'WrongFormat', email2 ],
-    [ email1, 'NotFound', email2 ],
-    [ email1, 'WrongFormat', 'NotFound', email3 ],
-    [ canId1, canId2, canId3 ],
-    [ canId1, 'WrongFormat', canId2 ],
+    [email1, email2, email3],
+    [email1, 'WrongFormat', email2],
+    [email1, 'NotFound', email2],
+    [email1, 'WrongFormat', 'NotFound', email3],
+    [canId1, canId2, canId3],
+    [canId1, 'WrongFormat', canId2],
 ];
 
 function buildExpecteds() {
@@ -86,11 +86,11 @@ function handler(req, res) {
 
     const outputDict = {};
     inputArray.forEach(key => { outputDict[key] = serverDB[key]; });
-    res.statusCode = 200;
+    res.writeHead(200);
     return res.end(JSON.stringify({ message: outputDict }, null, 4));
 }
 
-describe('getAccountProperties with mockup server', function tests() {
+describe('getAccountProperties with mockup server', () => {
     let server;
     let client;
 
@@ -102,7 +102,7 @@ describe('getAccountProperties with mockup server', function tests() {
 
     afterEach('stop server', () => { server.close(); });
 
-    testNames.forEach(function testHandler(currentValue, testIndex) {
+    testNames.forEach((currentValue, testIndex) => {
         it(testNames[testIndex], done => {
             client.getEmailAddresses(testOutputKeys[testIndex], {},
                 (err, value) => {
