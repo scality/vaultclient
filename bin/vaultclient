@@ -68,6 +68,17 @@ program
     }));
 
 program
+    .command('list-accounts')
+    .option('--marker [MARKER]', 'Marker for pagination', parseInt)
+    .option('--maxItems [MAXITEMS]', 'Max items for pagination', parseInt)
+    .action(action.bind(null, 'list-accounts', (client, args) => {
+        client.listAccounts({
+            marker: args.marker,
+            maxItems: args.maxItems,
+        }, handleVaultResponse);
+    }));
+
+program
     .command('delete-account')
     .option('--name <NAME>')
     .action(action.bind(null, 'delete-account', (client, args) => {
