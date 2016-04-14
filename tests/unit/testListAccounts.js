@@ -5,7 +5,7 @@ const http = require('http');
 
 const IAMClient = require('../../lib/IAMClient.js');
 
-describe('list-account-users', () => {
+describe('list-accounts', () => {
     let server;
     let client;
 
@@ -26,45 +26,32 @@ describe('list-account-users', () => {
     after('stop server', () => { server.close(); });
 
     it('checking request', done => {
-        client.listAccountUsers('test', {
-            maxItems: '6',
+        client.listAccounts({
+            maxItems: 6,
+            marker: '0',
         }, (err, res) => {
             assert.deepStrictEqual(res.data, {
-                name: 'test',
                 maxItems: 6,
+                marker: '0',
             });
-            assert.deepStrictEqual(res.url, '/users');
-            client.listAccountUsers('test', {
-                pathPrefix: '/user',
-                marker: '1',
-            }, (err, res) => {
-                assert.deepStrictEqual(res.data, {
-                    name: 'test',
-                    marker: '1',
-                    pathPrefix: '/user',
-                });
-                assert.deepStrictEqual(res.url, '/users');
-                done();
-            });
+            assert.deepStrictEqual(res.url, '/accounts');
+            done();
         });
     });
 
     [
-        ['marker', '', 'Marker cannot be empty'],
-        ['marker', new Date(), 'marker need to be a string'],
-        ['maxItems', 6, 'maxItems need to be a string'],
-        ['maxItems', 'test', 'maxItems is not a number'],
-        ['maxItems', '0',
+        ['marker', -1, 'Marker must be >= 0'],
+        ['marker', 'test', 'Marker must be a number'],
+        ['maxItems', '6', 'maxItems need to be a number'],
+        ['maxItems', parseInt('test', 10), 'maxItems must be a number'],
+        ['maxItems', 0,
             'maxItems need to be a value between 1 and 1000 included'],
-        ['maxItems', '1500',
+        ['maxItems', 1500,
             'maxItems need to be a value between 1 and 1000 included'],
-        ['pathPrefix', '',
-            'pathPrefix cannot be empty and need start with \'/\''],
-        ['pathPrefix', 6, 'pathPrefix need to be a string'],
     ].forEach(test => {
-        it(`invalid param ${test[0]}`, next => {
+        it(`invalid param ${test[0]}(${test[1]})`, next => {
             try {
-                client.listAccountUsers('test', {
+                client.listAccounts({
                     [test[0]]: test[1],
                 }, () => {
                     assert(false,
