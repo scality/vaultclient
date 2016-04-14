@@ -33,7 +33,7 @@ describe('list-account-users', () => {
                 name: 'test',
                 maxItems: 6,
             });
-            assert.deepStrictEqual(res.url, '/user/list');
+            assert.deepStrictEqual(res.url, '/users');
             client.listAccountUsers('test', {
                 pathPrefix: '/user',
                 marker: '1',
@@ -43,7 +43,7 @@ describe('list-account-users', () => {
                     marker: '1',
                     pathPrefix: '/user',
                 });
-                assert.deepStrictEqual(res.url, '/user/list');
+                assert.deepStrictEqual(res.url, '/users');
                 done();
             });
         });
