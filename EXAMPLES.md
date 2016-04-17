@@ -14,6 +14,7 @@
 2. [Entity listing](#entity-listing)
     1. [list-accounts](#list-accounts)
     2. [list-account-users](#list-account-users)
+    3. [list-access-keys](#list-access-keys)
 
 ## Entity creation and deletion
 
@@ -265,6 +266,54 @@ bin/vaultclient list-account-users --name test --pathPrefix /user10
                     "userName": "user100"
                 }
             ],
+            "marker": "2"
+        }
+    }
+}
+```
+
+#### list-access-keys
+
+```sh
+$ bin/vaultclient list-access-keys --help
+
+  Usage: list-access-keys [options]
+
+  Options:
+
+    -h, --help                     output usage information
+    --account-name <ACCOUNT-NAME>  Name of account
+    --user-name [USER-NAME]        User name
+    --marker [MARKER]              Marker for pagination
+    --max-items [MAXITEMS]         Max items for pagination
+```
+
+Like:
+
+```sh
+bin/vaultclient list-access-keys --account-name test --user-name testuser
+--maxItems 2 --host 127.0.0.1
+
+{
+    "message": {
+        "code": 200,
+        "message": "Search successful",
+        "body": {
+            "accessKeyMetadata": [
+                {
+                    "accessKeyId": "RBOAVC4CS6VETVMGCH6H",
+                    "createDate": "2016-04-16T23:50:31+02:00",
+                    "status": "Active",
+                    "userName": "testuser"
+                },
+                {
+                    "accessKeyId": "RL3LKR7L5BG86K17YKL1",
+                    "createDate": "2016-04-16T23:50:31+02:00",
+                    "status": "Active",
+                    "userName": "testuser"
+                }
+            ],
+            "isTruncated": true,
             "marker": "2"
         }
     }
