@@ -60,8 +60,7 @@ const responseBodies = [
 ];
 
 function makeResponse(res, code, message) {
-    res.statusCode = code;
-    res.message = message;
+    res.writeHead(code, message);
 }
 
 function processRequest(requestObject) {
@@ -90,7 +89,7 @@ function handler(req, res) {
     res.end();
 }
 
-describe('v2 auth tests with mockup server', function tests() {
+describe('v2 auth tests with mockup server', () => {
     let server;
     let client;
 
@@ -102,7 +101,7 @@ describe('v2 auth tests with mockup server', function tests() {
 
     afterEach('stop server', () => { server.close(); });
 
-    testNames.forEach(function testHandler(currentValue, testIndex) {
+    testNames.forEach((currentValue, testIndex) => {
         it(testNames[testIndex], done => {
             client.verifySignatureV2(stringsToSign[testIndex],
                 signaturesFromRequest[testIndex],
