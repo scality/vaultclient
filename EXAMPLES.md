@@ -11,6 +11,10 @@
         1. [for an account](#for-an-account)
         2. [for a user](#for-a-user)
     6. [delete-access-key](#delete-access-key)
+2. [Entity listing](#entity-listing)
+    1. [list-accounts](#list-accounts)
+    2. [list-account-users](#list-account-users)
+    3. [list-access-keys](#list-access-keys)
 
 ## Entity creation and deletion
 
@@ -161,6 +165,157 @@ $ bin/vaultclient delete-access-key --id 7C66DCVN609K7ZHDBVZ0 --host 127.0.0.1
     "message": {
         "code": 204,
         "message": "No content."
+    }
+}
+```
+
+## Entity listing
+
+### Accounts
+
+#### list-accounts
+
+```sh
+$ bin/vaultclient list-accounts --help
+
+  Usage: list-accounts [options]
+
+  Options:
+
+    --marker [MARKER]      Marker for pagination
+    --maxItems [MAXITEMS]  Max items for pagination
+
+```
+
+Like:
+
+```sh
+bin/vaultclient list-accounts --maxItems 2 --host 127.0.0.1
+
+{
+    "message": {
+        "code": 200,
+        "message": "Search successful",
+        "body": {
+            "isTruncated": true,
+            "accounts": [
+                {
+                    "arn": "arn:aws:iam::000140171645:/accountName1/",
+                    "id": "000140171645",
+                    "name": "accountName1",
+                    "createDate": "2016-04-06T23:19:08+02:00",
+                    "emailAddress": "09801321243867278@example.com"
+                },
+                {
+                    "arn": "arn:aws:iam::000238854835:/accountName2/",
+                    "id": "000238854835",
+                    "name": "accountName2",
+                    "createDate": "2016-04-08T15:12:42+02:00",
+                    "emailAddress": "4679125458933413account1@domain.com"
+                }
+            ],
+            "marker": "2"
+        }
+    }
+}
+```
+
+#### list-account-users
+
+```sh
+$ bin/vaultclient list-account-users --help
+
+  Usage: list-account-users [options]
+
+  Options:
+
+    --name <NAME>              Name of account
+    --marker [MARKER]          Marker for pagination
+    --maxItems [MAXITEMS]      Max items per page
+    --pathPrefix [PATHPREFIX]  Path prefix for arn search
+
+```
+
+Like:
+
+```sh
+bin/vaultclient list-account-users --name test --pathPrefix /user10
+--maxItems 2 --host 127.0.0.1
+
+{
+    "message": {
+        "code": 200,
+        "message": "Search successful",
+        "body": {
+            "isTruncated": true,
+            "users": [
+                {
+                    "arn": "arn:aws:iam::999233902475:/user10/",
+                    "createDate": "2016-04-06T12:20:43+02:00",
+                    "passwordLastUsed": "2016-04-06T12:20:43+02:00",
+                    "path": "/user10/",
+                    "userId": "LT4J2YPGGZ9AQILAWBBLREX79OIPLZZ0",
+                    "userName": "user10"
+                },
+                {
+                    "arn": "arn:aws:iam::999233902475:/user100/",
+                    "createDate": "2016-04-06T12:20:52+02:00",
+                    "passwordLastUsed": "2016-04-06T12:20:52+02:00",
+                    "path": "/user100/",
+                    "userId": "VWDHI44UJEDS6FU4YQRN68384IBKY8W3",
+                    "userName": "user100"
+                }
+            ],
+            "marker": "2"
+        }
+    }
+}
+```
+
+#### list-access-keys
+
+```sh
+$ bin/vaultclient list-access-keys --help
+
+  Usage: list-access-keys [options]
+
+  Options:
+
+    -h, --help                     output usage information
+    --account-name <ACCOUNT-NAME>  Name of account
+    --user-name [USER-NAME]        User name
+    --marker [MARKER]              Marker for pagination
+    --max-items [MAXITEMS]         Max items for pagination
+```
+
+Like:
+
+```sh
+bin/vaultclient list-access-keys --account-name test --user-name testuser
+--maxItems 2 --host 127.0.0.1
+
+{
+    "message": {
+        "code": 200,
+        "message": "Search successful",
+        "body": {
+            "accessKeyMetadata": [
+                {
+                    "accessKeyId": "RBOAVC4CS6VETVMGCH6H",
+                    "createDate": "2016-04-16T23:50:31+02:00",
+                    "status": "Active",
+                    "userName": "testuser"
+                },
+                {
+                    "accessKeyId": "RL3LKR7L5BG86K17YKL1",
+                    "createDate": "2016-04-16T23:50:31+02:00",
+                    "status": "Active",
+                    "userName": "testuser"
+                }
+            ],
+            "isTruncated": true,
+            "marker": "2"
+        }
     }
 }
 ```

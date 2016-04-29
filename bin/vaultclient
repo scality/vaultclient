@@ -34,8 +34,12 @@ function handleVaultResponse(err, data) {
         process.stdout.write(JSON.stringify(err, null, 4) + '\n');
         process.exit(1);
     }
-    process.stdout.write(JSON.stringify(data, null, 4) + '\n');
-    process.exit(0);
+    if (process.stdout.write(JSON.stringify(data, null, 4) + '\n')) {
+        process.exit(0);
+    }
+    process.stdout.on('drain', () => {
+        process.exit(0);
+    });
 }
 
 program
@@ -47,6 +51,31 @@ program
         client.createAccount(
             args.name, { email: args.email, password: args.password },
             handleVaultResponse);
+    }));
+
+program
+    .command('list-account-users')
+    .option('--name <NAME>', 'Name of account')
+    .option('--marker [MARKER]', 'Marker for pagination')
+    .option('--maxItems [MAXITEMS]', 'Max items per page')
+    .option('--pathPrefix [PATHPREFIX]', 'Path prefix for arn search')
+    .action(action.bind(null, 'list-account-users', (client, args) => {
+        client.listAccountUsers(args.name, {
+            marker: args.marker,
+            maxItems: args.maxItems,
+            pathPrefix: args.pathPrefix
+        }, handleVaultResponse);
+    }));
+
+program
+    .command('list-accounts')
+    .option('--marker [MARKER]', 'Marker for pagination', parseInt)
+    .option('--maxItems [MAXITEMS]', 'Max items for pagination', parseInt)
+    .action(action.bind(null, 'list-accounts', (client, args) => {
+        client.listAccounts({
+            marker: args.marker,
+            maxItems: args.maxItems,
+        }, handleVaultResponse);
     }));
 
 program
@@ -83,6 +112,20 @@ program
     .action(action.bind(null, 'create-access-key', (client, args) => {
         client.createAccessKey(args.accountName, args.userName, {},
                                handleVaultResponse);
+    }));
+
+program
+    .command('list-access-keys')
+    .option('--account-name <ACCOUNT-NAME>', 'Name of account')
+    .option('--user-name [USER-NAME]', 'User name')
+    .option('--marker [MARKER]', 'Marker for pagination', parseInt)
+    .option('--max-items [MAXITEMS]', 'Max items for pagination', parseInt)
+    .action(action.bind(null, 'list-access-keys', (client, args) => {
+        client.listAccessKeys(args.accountName, {
+            userName: args.userName,
+            marker: args.marker,
+            maxItems: args.maxItems,
+        }, handleVaultResponse);
     }));
 
 program
