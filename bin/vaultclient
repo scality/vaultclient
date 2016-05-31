@@ -1,7 +1,12 @@
 #!/usr/bin/env node
 
-const program = require('commander');
+'use strict'; // eslint-disable-line
+
+const EOL = require('os').eol;
 const fs = require('fs');
+const homedir = require('os').homedir;
+const path = require('path');
+const program = require('commander');
 const vaultclient = require('../index');
 
 program.option('--host [HOST]', 'host where Vault is running (default to ' +
@@ -10,8 +15,38 @@ program.option('--host [HOST]', 'host where Vault is running (default to ' +
                'VAULT_PORT environment variable)')
        .option('--https', 'use HTTPs instead of the default HTTP')
        .option('--cafile [FILE]', 'Authority certificate to use')
-       .option('--noCaVerification', 'Allow untrusted certificate authority');
+       .option('--noCaVerification', 'Allow untrusted certificate authority')
+       .option('--config [PATH]', 'path where the configuration for ' +
+                'vaultclient is (defaults to VAULT_CONFIG environment ' +
+                'variable and ~/.vaultclient.conf in that order)');
 
+function checkConfig(configObject) {
+    if (!configObject) {
+        throw new Error('invalid format');
+    }
+    if (!configObject.accessKey) {
+        throw new Error('invalid access key');
+    }
+    if (!configObject.secretKeyValue) {
+        throw new Error('invalid secret key value');
+    }
+}
+
+function readConfigFile(configFilePath) {
+    let actualPath = path.join(homedir(), '.vaultclient.conf');
+    if (configFilePath) {
+        actualPath = configFilePath;
+    } else if(process.env.VAULT_CONFIG) {
+        actualPath = process.env.VAULT_CONFIG;
+    }
+    try {
+        const config = JSON.parse(fs.readFileSync(actualPath));
+        checkConfig(config);
+        return config;
+    } catch (err) {
+        throw new Error(`error reading config file: ${err}`);
+    }
+};
 
 function action(cmd, fn, args) {
     if (typeof args !== 'object') {
@@ -24,14 +59,22 @@ function action(cmd, fn, args) {
         const ca = args.parent.cafile ?
             fs.readFileSync(args.parent.cafile, 'ascii') : undefined;
         const untrusted = args.parent.noCaVerification ? true : false;
+        const config = readConfigFile(args.parent.config);
         const client = new vaultclient.Client(
             args.parent.host ? args.parent.host : process.env.VAULT_HOST,
             Number.parseInt(args.parent.port ? args.parent.port :
                             process.env.VAULT_PORT, 10),
-            useHttps, undefined, undefined, ca, untrusted);
+            useHttps,
+            undefined,
+            undefined,
+            ca,
+            untrusted,
+            config.accessKey,
+            config.secretKeyValue);
         fn(client, args);
     } catch (err) {
-        process.stderr.write(err.message + '\n');
+        //process.stderr.write(err.message + '\n');
+        process.stderr.write(err + '\n');
         program.commands.find(c => c._name === cmd).outputHelp();
         process.exit(-1);
     }
