@@ -94,9 +94,10 @@ describe('v2 auth tests with mockup server', () => {
     let client;
 
     beforeEach('start server', done => {
-        server = http.createServer(handler).listen(8500);
-        client = new IAMClient('127.0.0.1', 8500);
-        done();
+        server = http.createServer(handler).listen(8500, () => {
+            client = new IAMClient('127.0.0.1', 8500);
+            done();
+        }).on('error', done);
     });
 
     afterEach('stop server', () => { server.close(); });
