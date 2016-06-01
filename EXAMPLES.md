@@ -22,7 +22,7 @@ This page provides quick example one-liners on how to create and delete entities
 by using the different routes supported by vaultclient and Vault.
 
 See [Vault's design document]
-(https://github.com/scality/IronMan-Vault/blob/master/Design.md) for a recap
+(https://github.com/scality/Vault/blob/master/Design.md) for a recap
 on how entities are related in our supported IAM model.
 
 The Vault server is assumed to be running at 127.0.0.1:8500 in the following
