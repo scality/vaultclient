@@ -5,7 +5,7 @@ Vault. This repository also provides an executable shell for Vault, usable as
 either a CLI or an interactive shell.
 
 This client supports the protocol described in Vault's
-[repository](https://github.com/scality/IronMan-Vault/blob/master/Protocol.md).
+[repository](https://github.com/scality/Vault/blob/master/Protocol.md).
 
 You can check our [quickstart guide](QUICKSTART.md).
 
