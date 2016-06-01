@@ -18,7 +18,7 @@
 This guide is intended for developers and CSEs only as an easy way of getting a
 running system for **development and learning purposes only**. Production
 installations follow a totally different path that involves the deployment of
-docker instances through [IronMan-Federation](https://github.com/scality/IronMan-Federation).
+docker instances through [Federation](https://github.com/scality/Federation).
 
 ## Downloads and set-up
 
@@ -41,7 +41,7 @@ Open a terminal and run the following:
 
 ``` sh
 # clone the vault server repository in a folder in your home
-$> git clone https://github.com/scality/IronMan-Vault.git ~/vaultServer
+$> git clone https://github.com/scality/Vault.git ~/vaultServer
 # go into the cloned folder
 $> cd ~/vaultClient
 # install relative dependencies
