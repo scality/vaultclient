@@ -29,6 +29,10 @@ The Vault server is assumed to be running at 127.0.0.1:8500 in the following
 examples. Keep in mind that the '--host' option is always mandatory, indicating
 either Vault Server's IP or Fully Qualified Domain Name.
 
+Vaultclient uses HTTP by default, and so do the following examples. Use the
+option '--https' in every command to force the use of HTTPS. To add your own
+certificate authority, also use the option '--cafile /some/path'.
+
 ### Accounts
 
 #### create-account
