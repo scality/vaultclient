@@ -51,6 +51,15 @@ $ bin/vaultclient create-account --name TestAccount --email account@test.com \
 }
 ```
 
+NB: Account names can include spaces in any command if double quotes are used:
+
+```sh
+$ bin/vaultclient create-account --name "Account name with spaces" \
+                                 --email account@test.com \
+                                 --password accountpassword --host 127.0.0.1
+
+```
+
 #### delete-account
 
 ```sh
@@ -88,6 +97,16 @@ $ bin/vaultclient create-user --account-name TestAccount --name TestUser \
         }
     }
 }
+```
+
+NB: User names can include spaces in any command if double quotes are used:
+
+```sh
+$ bin/vaultclient create-user --account-name "Account name with spaces" \
+                              --name "User name with spaces" \
+                              --email user@test.com \
+                              --password userpassword \
+                              --host 127.0.0.1
 ```
 
 #### delete-user

@@ -81,8 +81,9 @@ function handler(req, res) {
     } else if (req.method === 'GET' && req.url === '/acl/canonicalIds') {
         inputArray = JSON.parse(req.headers.additionaldata).emailAddresses;
     }
-    if (!Array.isArray(inputArray))
+    if (!Array.isArray(inputArray)) {
         throw new Error('Input error');
+    }
 
     const outputDict = {};
     inputArray.forEach(key => { outputDict[key] = serverDB[key]; });
