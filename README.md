@@ -12,6 +12,12 @@ This client supports the protocol described in Vault's
 
 You can check our [quickstart guide](QUICKSTART.md).
 
+## Contributing
+
+In order to contribute, please follow the
+[Contributing Guidelines](
+https://github.com/scality/Guidelines/blob/master/CONTRIBUTING.md).
+
 ## Command-line usage
 
 For general help, run:
