@@ -1,11 +1,11 @@
 {
   "name": "vaultclient",
-  "version": "1.0.1-beta2",
+  "version": "1.0.0",
   "description": "Client library and binary for Vault, the user directory and key management service",
   "main": "index.js",
   "repository": "scality/vaultclient",
   "author": "Scality",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/scality/vaultclient/issues"
   },
