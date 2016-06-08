@@ -4,7 +4,7 @@
   "description": "Client library and binary for Vault, the user directory and key management service",
   "main": "index.js",
   "repository": "scality/vaultclient",
-  "author": "Scality",
+  "author": "Giorgio Regni",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/scality/vaultclient/issues"
