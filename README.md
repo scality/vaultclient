@@ -1,5 +1,8 @@
 # Vault Client Library
 
+[![CircleCI][badgepub]](https://circleci.com/gh/scality/vaultclient)
+[![Scality CI][badgepriv]](http://ci.ironmann.io/gh/scality/vaultclient)
+
 This repository provides a client library for any service that wants to rely on
 Vault. This repository also provides an executable shell for Vault, usable as
 either a CLI or an interactive shell.
@@ -105,3 +108,6 @@ client.deleteAccount('account999', (err, data) => {
 // --> message = Not found.
 // --> code = 404
 ```
+
+[badgepub]: https://circleci.com/gh/scality/vaultclient.svg?style=svg
+[badgepriv]: http://ci.ironmann.io/gh/scality/vaultclient.svg?style=svg&circle-token=40f1e9fe0ad184248c37cbf3d89b164c35fd1667
