@@ -1,14 +1,17 @@
 #!/usr/bin/env node
 
 const program = require('commander');
-
+const fs = require('fs');
 const vaultclient = require('../index');
-
 
 program.option('--host [HOST]', 'host where Vault is running (default to ' +
                'VAULT_HOST environment variable)')
        .option('--port [PORT]', 'port where Vault is running (default to ' +
-               'VAULT_PORT environment variable)');
+               'VAULT_PORT environment variable)')
+       .option('--https', 'use HTTPs instead of the default HTTP')
+       .option('--cafile [FILE]', 'Authority certificate to use')
+       .option('--noCaVerification', 'Allow untrusted certificate authority');
+
 
 function action(cmd, fn, args) {
     if (typeof args !== 'object') {
@@ -17,10 +20,15 @@ function action(cmd, fn, args) {
     }
 
     try {
+        const useHttps = !!args.parent.https;
+        const ca = args.parent.cafile ?
+            fs.readFileSync(args.parent.cafile, 'ascii') : undefined;
+        const untrusted = args.parent.noCaVerification ? true : false;
         const client = new vaultclient.Client(
             args.parent.host ? args.parent.host : process.env.VAULT_HOST,
             Number.parseInt(args.parent.port ? args.parent.port :
-                            process.env.VAULT_PORT, 10));
+                            process.env.VAULT_PORT, 10),
+            useHttps, undefined, undefined, ca, untrusted);
         fn(client, args);
     } catch (err) {
         process.stderr.write(err.message + '\n');

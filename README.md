@@ -69,6 +69,30 @@ Vault Server's IP or Fully Qualified Domain Name.
 See [examples](./EXAMPLES.md) on how to create and delete entities such as
 accounts, users and access keys.
 
+### Command-line HTTPS support
+
+The command-line tool uses the HTTP protocol by default. To force the use of
+HTTPS, include the option '--https' in every command. You can also specify your
+own certificate authority by including the option '--cafile'. Example:
+
+```sh
+$ bin/vaultclient create-account --name account0 --email d3v@null \
+                                 --password alpine --host 127.0.0.1 --https \
+                                 --cafile <path>
+{
+    "message": {
+        "code": 201,
+        "message": "Created",
+        "body": {
+            "arn": "arn:aws:iam::456854744086:/account0/",
+            "id": "456854744086",
+            "canonicalId": "7E27S2BXH4JC3Y2CMUOEMO4UJ0I2D5TP4Q...VD7J6SCV7FEM8T"
+        }
+    }
+}
+
+```
+
 ## Javascript API usage
 
 Here is a basic example showing how to use the library, and what type of objects
@@ -114,6 +138,39 @@ client.deleteAccount('account999', (err, data) => {
 // --> message = Not found.
 // --> code = 404
 ```
+
+### Javascript API HTTPS support
+
+The programmatical client supports the use of HTTPS altough HTTP is the
+protocol by default. To enable HTTPS, set the constructor's argument 'useHttps'
+to true.
+
+```js
+const vaultclient = require('vaultclient');
+
+// the constructor's signature is vaultclient.Client(host, port, useHttps, key,
+    cert, ca)
+const client = new vaultclient.Client('auth.mydomain.com', 8500, true);
+
+client.createAccount('account0', { email: 'dev@null', password: 'pass' },
+    (err, data) => {
+        console.log(data);
+});
+
+// { message:
+//    { code: 201,
+//      message: 'Created',
+//      body:
+//       { arn: 'arn:aws:iam::040564259525:/account0/',
+//         id: '040564259525',
+//         canonicalId: 'A6QOM41TPP9P7KQ37M0I5DN8DQ88LJ6KCL9C8E...EZMFGBD' } } }
+
+```
+
+For enabling a two ways https encryption, set the constructor argument 'cert'
+and 'key' to the content of the client certificate.
+For use your own certificate authority, set the constructor argument 'ca' to
+the content of your authority certificate.
 
 [badgepub]: https://circleci.com/gh/scality/vaultclient.svg?style=svg
 [badgepriv]: http://ci.ironmann.io/gh/scality/vaultclient.svg?style=svg&circle-token=40f1e9fe0ad184248c37cbf3d89b164c35fd1667

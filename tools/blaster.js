@@ -19,12 +19,15 @@ options.host = 'localhost';
 options.port = '8500';
 options.nOps = 100;
 
-if (commander.host)
+if (commander.host) {
     options.host = commander.host;
-if (commander.port)
+}
+if (commander.port) {
     options.port = commander.port;
-if (commander.nOps)
+}
+if (commander.nOps) {
     options.nOps = commander.nOps;
+}
 
 process.stdout.write(
         `process: ${options.nOps} ops server ${options.host}:${options.port}\n`
@@ -45,8 +48,9 @@ const chars = 'abcdefghipqrstuvwxyz0123456789';
 
 function generateString(size) {
     let str = '';
-    for (let i = 0; i < size; i++)
+    for (let i = 0; i < size; i++) {
         str += chars[Math.floor(Math.random() * (chars.length))];
+    }
     return str;
 }
 

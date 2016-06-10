@@ -29,6 +29,10 @@ The Vault server is assumed to be running at 127.0.0.1:8500 in the following
 examples. Keep in mind that the '--host' option is always mandatory, indicating
 either Vault Server's IP or Fully Qualified Domain Name.
 
+Vaultclient uses HTTP by default, and so do the following examples. Use the
+option '--https' in every command to force the use of HTTPS. To add your own
+certificate authority, also use the option '--cafile /some/path'.
+
 ### Accounts
 
 #### create-account
@@ -49,6 +53,15 @@ $ bin/vaultclient create-account --name TestAccount --email account@test.com \
         }
     }
 }
+```
+
+NB: Account names can include spaces in any command if double quotes are used:
+
+```sh
+$ bin/vaultclient create-account --name "Account name with spaces" \
+                                 --email account@test.com \
+                                 --password accountpassword --host 127.0.0.1
+
 ```
 
 #### delete-account
@@ -88,6 +101,16 @@ $ bin/vaultclient create-user --account-name TestAccount --name TestUser \
         }
     }
 }
+```
+
+NB: User names can include spaces in any command if double quotes are used:
+
+```sh
+$ bin/vaultclient create-user --account-name "Account name with spaces" \
+                              --name "User name with spaces" \
+                              --email user@test.com \
+                              --password userpassword \
+                              --host 127.0.0.1
 ```
 
 #### delete-user
