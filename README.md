@@ -3,9 +3,9 @@
 [![CircleCI][badgepub]](https://circleci.com/gh/scality/vaultclient)
 [![Scality CI][badgepriv]](http://ci.ironmann.io/gh/scality/vaultclient)
 
-This repository provides a client library for any service that wants to rely on
-Vault. This repository also provides an executable shell for Vault, usable as
-either a CLI or an interactive shell.
+This repository provides a client library for any service that relies on
+Vault. This repository also provides an executable shell for Vault, which can be
+used from either a CLI or an interactive shell.
 
 This client supports the protocol described in Vault's
 [repository](https://github.com/scality/Vault/blob/master/Protocol.md).
@@ -63,11 +63,35 @@ $ bin/vaultclient create-account --name account0 --email d3v@null \
 }
 ```
 
-Keep in mind that the '--host' option is always mandatory, indicating either
-Vault Server's IP or Fully Qualified Domain Name.
+Keep in mind that the '--host' flag is mandatory and should specify either Vault
+Server's IP or Fully Qualified Domain Name.
 
-See [examples](./EXAMPLES.md) on how to create and delete entities such as
-accounts, users and access keys.
+See [examples](./EXAMPLES.md) of how to create and delete entities such as
+accounts, users, and access keys.
+
+### Command-line HTTPS support
+
+The command-line tool uses the HTTP protocol by default. To force the use of
+HTTPS, include the option '--https' in every command. You can also specify your
+own certificate authority by including the option '--cafile'. Example:
+
+```sh
+$ bin/vaultclient create-account --name account0 --email d3v@null \
+                                 --password alpine --host 127.0.0.1 --https \
+                                 --cafile <path>
+{
+    "message": {
+        "code": 201,
+        "message": "Created",
+        "body": {
+            "arn": "arn:aws:iam::456854744086:/account0/",
+            "id": "456854744086",
+            "canonicalId": "7E27S2BXH4JC3Y2CMUOEMO4UJ0I2D5TP4Q...VD7J6SCV7FEM8T"
+        }
+    }
+}
+
+```
 
 ### Command-line HTTPS support
 
@@ -95,8 +119,8 @@ $ bin/vaultclient create-account --name account0 --email d3v@null \
 
 ## Javascript API usage
 
-Here is a basic example showing how to use the library, and what type of objects
-the functions return.
+This is a basic example of how to use the library and the type of objects
+returned by each function.
 
 ```js
 const vaultclient = require('vaultclient');
@@ -141,8 +165,8 @@ client.deleteAccount('account999', (err, data) => {
 
 ### Javascript API HTTPS support
 
-The programmatical client supports the use of HTTPS altough HTTP is the
-protocol by default. To enable HTTPS, set the constructor's argument 'useHttps'
+The programmatical client supports both the HTTP and HTTPS protocols. HTTP is
+the default protocol. To enable HTTPS, set the constructor's argument 'useHttps'
 to true.
 
 ```js
@@ -167,10 +191,10 @@ client.createAccount('account0', { email: 'dev@null', password: 'pass' },
 
 ```
 
-For enabling a two ways https encryption, set the constructor argument 'cert'
-and 'key' to the content of the client certificate.
-For use your own certificate authority, set the constructor argument 'ca' to
-the content of your authority certificate.
+To enable two way https encryption, set the constructor argument 'cert' and
+'key' to the content of the client certificate. To use your own certificate
+authority, set the constructor argument 'ca' to the content of your
+authority certificate.
 
 [badgepub]: https://circleci.com/gh/scality/vaultclient.svg?style=svg
 [badgepriv]: http://ci.ironmann.io/gh/scality/vaultclient.svg?style=svg&circle-token=40f1e9fe0ad184248c37cbf3d89b164c35fd1667
