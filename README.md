@@ -93,30 +93,6 @@ $ bin/vaultclient create-account --name account0 --email d3v@null \
 
 ```
 
-### Command-line HTTPS support
-
-The command-line tool uses the HTTP protocol by default. To force the use of
-HTTPS, include the option '--https' in every command. You can also specify your
-own certificate authority by including the option '--cafile'. Example:
-
-```sh
-$ bin/vaultclient create-account --name account0 --email d3v@null \
-                                 --password alpine --host 127.0.0.1 --https \
-                                 --cafile <path>
-{
-    "message": {
-        "code": 201,
-        "message": "Created",
-        "body": {
-            "arn": "arn:aws:iam::456854744086:/account0/",
-            "id": "456854744086",
-            "canonicalId": "7E27S2BXH4JC3Y2CMUOEMO4UJ0I2D5TP4Q...VD7J6SCV7FEM8T"
-        }
-    }
-}
-
-```
-
 ## Javascript API usage
 
 This is a basic example of how to use the library and the type of objects
