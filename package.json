@@ -3,13 +3,13 @@
   "version": "0.0.1",
   "description": "Client library and binary for Vault, the user directory and key management service",
   "main": "index.js",
-  "repository": "scality/IronMan-VaultClient",
+  "repository": "scality/VaultClient",
   "author": "Scality",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/scality/IronMan-VaultClient/issues"
+    "url": "https://github.com/scality/VaultClient/issues"
   },
-  "homepage": "https://github.com/scality/IronMan-VaultClient#readme",
+  "homepage": "https://github.com/scality/VaultClient#readme",
   "dependencies": {
     "bunyan-logstash": "^0.3.4",
     "readline": "^1.2.1",
@@ -19,7 +19,7 @@
     "babel-eslint": "^4.1.3",
     "eslint": "^1.5.1",
     "eslint-config-airbnb": "^0.0.9",
-    "eslint-config-ironman": "scality/IronMan-Guidelines",
+    "eslint-config-ironman": "scality/Guidelines",
     "mocha": "^2.3.4"
   },
   "scripts": {
