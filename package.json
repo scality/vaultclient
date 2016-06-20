@@ -7,9 +7,9 @@
   "author": "Scality",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/scality/IronMan-VaultClient/issues"
+    "url": "https://github.com/scality/VaultClient/issues"
   },
-  "homepage": "https://github.com/scality/IronMan-VaultClient#readme",
+  "homepage": "https://github.com/scality/VaultClient#readme",
   "dependencies": {
     "commander": "^2.9.0"
   },
@@ -17,7 +17,7 @@
     "babel-eslint": "^4.1.3",
     "eslint": "^1.5.1",
     "eslint-config-airbnb": "^0.0.9",
-    "eslint-config-ironman": "scality/IronMan-Guidelines",
+    "eslint-config-ironman": "scality/Guidelines",
     "mocha": "^2.3.4"
   },
   "scripts": {
