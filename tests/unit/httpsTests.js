@@ -5,7 +5,8 @@ const fs = require('fs');
 const http = require('http');
 const https = require('https');
 const errors = require('arsenal').errors;
-
+const querystring = require('querystring');
+const getCodeFromErr = require('../utils/getCodeFromErr');
 const IAMClient = require('../../lib/IAMClient.js');
 
 const httpPort = 8500;
@@ -16,14 +17,16 @@ const accountName = 'account_name';
 const accountOptions = { email: 'acc@oun.t', password: 'pwd' };
 
 const expectedResponse = {
-    message: {
-        code: 201,
-        message: 'Created',
-        body: {
+    account: {
+        data: {
             arn: 'arn:aws:iam::619305055237:/account0/',
             id: '619305055237',
             canonicalId: 'CER9UNUF89LNFWQCS90RHR0WHTYUW9Q3HY9KBUMSR75V9B4VX' +
                 'GJ0RF89X8SQEBSG',
+        },
+    },
+    secretKey: {
+        data: {
         },
     },
 };
@@ -47,14 +50,9 @@ const testClients = [
 ];
 
 function extractPost(req, cb) {
-    let body = '';
-    req.on('data', data => body += data).on('error', cb).on('end', () => {
-        try {
-            body = JSON.parse(body);
-        } catch (e) {
-            return cb(e);
-        }
-        return cb(null, body);
+    const body = [];
+    req.on('data', data => body.push(data)).on('error', cb).on('end', () => {
+        cb(null, querystring.parse(body.join('')));
     });
 }
 
@@ -62,12 +60,11 @@ function handler(req, res) {
     if (req.method === 'POST') {
         extractPost(req, (err, body) => {
             if (err || (body && (body.name !== accountName
-                        || body.emailAddress !== accountOptions.email
-                        || body.saltedPwd !== accountOptions.password))) {
+                        || body.emailAddress !== accountOptions.email))) {
+                const code = getCodeFromErr(body);
                 res.writeHead(errors.WrongFormat.code,
                     { 'Content-type': 'text/javascript' });
-                return res.end(
-                    JSON.stringify({ message: errors.WrongFormat }, null, 4));
+                return res.end(`<Error><Code>${code}</Code></Error>`);
             }
             res.writeHead(201, { 'Content-type': 'text/javascript' });
             return res.end(JSON.stringify(expectedResponse, null, 4));

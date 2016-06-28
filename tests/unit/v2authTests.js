@@ -47,7 +47,7 @@ const expectedErrors = [
 ];
 const expectedResponseBodies = [
     correctDictResponse,
-    undefined,
+    null,
 ];
 
 const responseHeaders = [
@@ -56,7 +56,6 @@ const responseHeaders = [
 ];
 const responseBodies = [
     correctDictResponse,
-    { message: wrongSigError },
 ];
 
 function makeResponse(res, code, message) {
@@ -79,8 +78,13 @@ function handler(req, res) {
         const testCaseIndex = processRequest(
             JSON.parse(req.headers.additionaldata));
         if (typeof testCaseIndex === 'number') {
-            makeResponse(res, responseHeaders[testCaseIndex].code,
-                responseHeaders[testCaseIndex].message);
+            if (testCaseIndex === 0) {
+                makeResponse(res, responseHeaders[testCaseIndex].code,
+                    responseHeaders[testCaseIndex].message);
+            } else {
+                res.writeHead(400, { 'Content-Type': 'text/javascript '});
+                res.write(`<Error><Code>Forbidden</Code></Error>`);
+            }
             if (responseBodies[testCaseIndex]) {
                 res.write(JSON.stringify(responseBodies[testCaseIndex]));
             }
