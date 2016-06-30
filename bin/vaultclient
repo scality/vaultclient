@@ -107,6 +107,13 @@ program
     }));
 
 program
+    .command('generate-account-access-key')
+    .option('--name <NAME>')
+    .action(action.bind(null, 'generate-account-access-key', (client, args) => {
+        client.generateAccountAccessKey(args.name, handleVaultResponse);
+    }));
+
+program
     .command('list-accounts')
     .option('--marker [MARKER]', 'Marker for pagination', parseInt)
     .option('--maxItems [MAXITEMS]', 'Max items for pagination', parseInt)
