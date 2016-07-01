@@ -11,10 +11,8 @@ describe('list-accounts', () => {
 
     before('start server', done => {
         server = http.createServer((req, res) => {
-            res.end(JSON.stringify({
-                url: req.url,
-                data: JSON.parse(req.headers.additionaldata),
-            }));
+            res.writeHead(200, {'Content-Type': 'text/javascript'});
+            res.end('{}');
         })
         .on('error', done)
         .listen(8500, () => {
@@ -24,20 +22,6 @@ describe('list-accounts', () => {
     });
 
     after('stop server', () => { server.close(); });
-
-    it('checking request', done => {
-        client.listAccounts({
-            maxItems: 6,
-            marker: '0',
-        }, (err, res) => {
-            assert.deepStrictEqual(res.data, {
-                maxItems: 6,
-                marker: '0',
-            });
-            assert.deepStrictEqual(res.url, '/accounts');
-            done();
-        });
-    });
 
     [
         ['marker', -1, 'Marker must be >= 0'],

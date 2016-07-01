@@ -61,8 +61,10 @@ function action(cmd, fn, args) {
             fs.readFileSync(args.parent.cafile, 'ascii') : undefined;
         const untrusted = args.parent.noCaVerification ? true : false;
         const config = readConfigFile(args.parent.config);
-        const client = new vaultclient.Client(
-            args.parent.host ? args.parent.host : process.env.VAULT_HOST,
+        const accessKey = config.accessKey;
+        const secretKey = config.secretKeyValue;
+        let host = args.parent.host || process.env.VAULT_HOST || 'localhost';
+        const client = new vaultclient.Client(host,
             Number.parseInt(args.parent.port ? args.parent.port :
                             process.env.VAULT_PORT, 10),
             useHttps,
@@ -70,8 +72,8 @@ function action(cmd, fn, args) {
             undefined,
             ca,
             untrusted,
-            config.accessKey,
-            config.secretKeyValue);
+            accessKey,
+            secretKey);
         fn(client, args);
     } catch (err) {
         //process.stderr.write(err.message + '\n');
@@ -98,25 +100,10 @@ program
     .command('create-account')
     .option('--name <NAME>')
     .option('--email <EMAIL>')
-    .option('--password <PASSWORD>')
     .action(action.bind(null, 'create-account', (client, args) => {
         client.createAccount(
-            args.name, { email: args.email, password: args.password },
+            args.name, { email: args.email },
             handleVaultResponse);
-    }));
-
-program
-    .command('list-account-users')
-    .option('--name <NAME>', 'Name of account')
-    .option('--marker [MARKER]', 'Marker for pagination')
-    .option('--maxItems [MAXITEMS]', 'Max items per page')
-    .option('--pathPrefix [PATHPREFIX]', 'Path prefix for arn search')
-    .action(action.bind(null, 'list-account-users', (client, args) => {
-        client.listAccountUsers(args.name, {
-            marker: args.marker,
-            maxItems: args.maxItems,
-            pathPrefix: args.pathPrefix
-        }, handleVaultResponse);
     }));
 
 program
@@ -135,56 +122,6 @@ program
     .option('--name <NAME>')
     .action(action.bind(null, 'delete-account', (client, args) => {
         client.deleteAccount(args.name, handleVaultResponse);
-    }));
-
-program
-    .command('create-user')
-    .option('--account-name <ACCOUNT-NAME>')
-    .option('--name <NAME>')
-    .option('--email <EMAIL>')
-    .option('--password <PASSWORD>')
-    .action(action.bind(null, 'create-user', (client, args) => {
-        client.createUser(args.accountName, args.name,
-                          { email: args.email, password: args.password },
-                          handleVaultResponse);
-    }));
-
-program
-    .command('delete-user')
-    .option('--account-name <ACCOUNT-NAME>')
-    .option('--name <NAME>')
-    .action(action.bind(null, 'delete-user', (client, args) => {
-        client.deleteUser(args.accountName, args.name, handleVaultResponse);
-    }));
-
-program
-    .command('create-access-key')
-    .option('--account-name <ACCOUNT-NAME>')
-    .option('--user-name [USER-NAME]')
-    .action(action.bind(null, 'create-access-key', (client, args) => {
-        client.createAccessKey(args.accountName, args.userName, {},
-                               handleVaultResponse);
-    }));
-
-program
-    .command('list-access-keys')
-    .option('--account-name <ACCOUNT-NAME>', 'Name of account')
-    .option('--user-name [USER-NAME]', 'User name')
-    .option('--marker [MARKER]', 'Marker for pagination', parseInt)
-    .option('--max-items [MAXITEMS]', 'Max items for pagination', parseInt)
-    .action(action.bind(null, 'list-access-keys', (client, args) => {
-        client.listAccessKeys(args.accountName, {
-            userName: args.userName,
-            marker: args.marker,
-            maxItems: args.maxItems,
-        }, handleVaultResponse);
-    }));
-
-program
-    .command('delete-access-key')
-    .option('--id <ID>')
-    .action(action.bind(null, 'delete-access-key', (client, args) => {
-        client.deleteAccessKey(args.id, handleVaultResponse);
     }));
 
 program
