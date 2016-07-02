@@ -3,6 +3,7 @@
 const assert = require('assert');
 const http = require('http');
 const IAMClient = require('../../lib/IAMClient.js');
+const querystring = require('querystring');
 
 const canId1 =
     '0123456789012345678901234567890123456789012345678901234567890123';
@@ -76,19 +77,23 @@ const testExpecteds = buildExpecteds();
 function handler(req, res) {
     let inputArray;
 
-    if (req.method === 'GET' && req.url === '/acl/emailAddresses') {
-        inputArray = JSON.parse(req.headers.additionaldata).canonicalIds;
-    } else if (req.method === 'GET' && req.url === '/acl/canonicalIds') {
-        inputArray = JSON.parse(req.headers.additionaldata).emailAddresses;
+    if (req.method === 'GET') {
+        const index = req.url.indexOf('?');
+        const data = querystring.parse(req.url.substring(index + 1));
+        if (data.Action === 'AclEmailAddresses') {
+            inputArray = data.canonicalIds;
+        } else {
+            inputArray = data.emailAddresses;
+        }
     }
     if (!Array.isArray(inputArray)) {
-        throw new Error('Input error');
+        inputArray = [inputArray];
     }
 
     const outputDict = {};
     inputArray.forEach(key => { outputDict[key] = serverDB[key]; });
     res.writeHead(200);
-    return res.end(JSON.stringify({ message: outputDict }, null, 4));
+    return res.end(JSON.stringify(outputDict), null, 4);
 }
 
 describe('getAccountProperties with mockup server', () => {
@@ -109,7 +114,7 @@ describe('getAccountProperties with mockup server', () => {
                 (err, value) => {
                     assert(!err);
                     assert.deepStrictEqual(
-                        value.message,
+                        value.message.body,
                         testExpecteds[testIndex]);
                     done();
                 });
