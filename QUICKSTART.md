@@ -5,13 +5,16 @@
 1. [Before starting](#before-starting)
 2. [Downloads and set-up](#downloads-and-set-up)
     1. [Vault Client](#vault-client)
-    2. [Vault Server](#vault-server)
+    2. [Aws cli](#aws-cli)
+    3. [Vault Server](#vault-server)
 3. [Provision your S3 account](#provision-your-s3-account)
     1. [Create an account](#create-an-account)
-    2. [Create a user](#create-a-user)
-    3. [Create an access key for your user](#create-an-access-key-for-your-user)
+    2. [Create an access key for the account](#create-an-access-key-for-the-account)
+    3. [Set up amazon aws cli](#set-up-amazon-aws-cli)
+    4. [Create a user](#create-a-user)
+    5. [Create an access key for your user](#create-an-access-key-for-your-user)
 4. [Set up your .s3cfg](#set-up-your-s3cfg)
-5. [Use s3cmd with your local S3 connector] (#use-s3cmd-with-your-local-s3-connector)
+5. [Use s3cmd with your local S3 connector](#use-s3cmd-with-your-local-s3-connector)
 
 ## Before starting
 
@@ -35,6 +38,14 @@ $> cd ~/vaultClient
 $> npm install
 ```
 
+### Aws cli
+
+Open a terminal and run the following command :
+
+```sh
+$> sudo pip install awscli==1.10.38
+```
+
 ### Vault Server
 
 Open a terminal and run the following:
@@ -43,9 +54,9 @@ Open a terminal and run the following:
 # clone the vault server repository in a folder in your home
 $> git clone https://github.com/scality/Vault.git ~/vaultServer
 # go into the cloned folder
-$> cd ~/vaultClient
+$> cd ~/vaultServer
 # install relative dependencies
-$> npm install
+$> npm install --production
 ```
 
 ## Provision your S3 account
@@ -65,106 +76,159 @@ the next steps, please read our [examples](./Examples.md).
 
 ### Create an account
 
-Decide on a name, password, and email address for your account, and run:
+Decide on a name and email address for your account, and run:
 
 ``` sh
-$> bin/vaultclient create-account --name accountName  \
-                                  --email account@email.com \
-                                  --password accountPassword \
-                                  --host 127.0.0.1
+$> ./bin/vaultclient create-account --name accountName --email account@email.com
 ```
-
-Keep in mind for the rest of this guide that the '--host' option is always
-mandatory in vaultclient, indicating either Vault Server's IP or Fully Qualified
-Domain Name.
 
 HTTP is used by default. However you can force the use of HTTPS by adding the
 option '--https' to every command, like this:
 
 ``` sh
-$> bin/vaultclient create-account --name accountName  \
-                                  --email account@email.com \
-                                  --password accountPassword \
-                                  --host 127.0.0.1 --https
+$> ./bin/vaultclient create-account --name accountName \
+  --email account@email.com --https
 ```
 
-You can also use self-signed certificate by adding the option '--cafile' to
+You can also use self-signed certificate by adding the option ```--cafile``` to
 the command line, like this:
 
 ``` sh
-$> bin/vaultclient create-account --name accountName  \
-                                  --email account@email.com \
-                                  --password accountPassword \
-                                  --host 127.0.0.1 --https --cafile myca.crt
+$> ./bin/vaultclient create-account --name accountName \
+  --email account@email.com --https --cafile myca.crt
 ```
 
-If no cafile is provided and Vault's certificates are signed by a not
-well-known CA the connection will fail.
+Or disable the ssl verification by using the option ```---noCaVerification```
+to the command line, like :
+
+```sh
+$> ./bin/vaultclient create-account --name accountName \
+  --email account@email.com --https --noCaVerification
+```
+
+If no ```--cafile``` or ```---noCaVerification``` is provided and Vault's
+certificates are signed by a not well-known CA the connection will fail.
+
+### Create an access key for the account
+
+You will need an access key to be able to use the Amazon aws cli, by using the
+following command :
+
+```sh
+$> ./bin/vaultclient generate-account-access-key --name accountName
+```
+
+You will have an output like :
+
+```json
+{
+    "id": "XMHR9IQ9UYN56W1OSN2S",
+    "value": "5tK4XOid7pXss66A7Jn=Yz7ybnMIB4Uf/BjavN58",
+    "createDate": "2016-07-02T21:47:57Z",
+    "lastUsedDate": "2016-07-02T21:47:57Z",
+    "status": "Active",
+}
+```
+
+You will need both ```id``` and ```value``` to configure Amanzon aws cli in
+the next step. Where ```id``` is your access key and ```value``` is your
+secret key.
+
+### Set up amazon aws cli
+
+With values of the access key previously generate, now configure the Amazon
+aws cli :
+
+```sh
+$> aws configure
+AWS Access Key ID [None]: XMHR9IQ9UYN56W1OSN2S
+AWS Secret Access Key [None]: 5tK4XOid7pXss66A7Jn=Yz7ybnMIB4Uf/BjavN58
+Default region name [None]: us-east-1
+Default output format [None]: json
+```
+
+You can use aws cli to manager now.
 
 ### Create a user
 
-Decide on a name, password, and email address for your user, and run:
+Decide on a name for your user, and run:
 
 ``` sh
-$> bin/vaultclient create-user --account-name accountName \
-                               --name userName \
-                               --email user@email.com \
-                               --password userpassword \
-                               --host 127.0.0.1
+$> aws --endpoint-url http://localhost:8600 iam create-user --user-name userName
 ```
 
 ### Create an access-key for your user
 
-Decide on a name, password, and email address for your user, and run:
+To create your access key, run the following command :
 
 ``` sh
-$> bin/vaultclient create-access-key --account-name accountName \
-                                     --user-name userName \
-                                     --host 127.0.0.1
+$> aws --endpoint-url http://localhost:8600 iam create-access-key --user-name userName
 ```
 
 The response will print something like:
 
-``` sh
+``` json
 {
-    "message": {
-        "code": 201,
-        "message": "Created",
-        "body": {
-            "accountName": "TestAccount",
-            "userName": "TestUser",
-            "status": "Active",
-            "createDate": "2016-02-22T11:25:10+01:00",
-            "id": "D4IT2AWSB588GO5J9T00", # save this field
-            "value": "UEEu8tYlsOGGrgf4DAiSZD6apVNPUWqRiPG0nTB6" #save this field
-        }
-    }
+  "AccessKey": {
+      "UserName": "userName",
+      "Status": "Active",
+      "CreateDate": "2015-03-09T18:39:23.411Z",
+      "SecretAccessKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYzEXAMPLEKEY",
+      "AccessKeyId": "AKIAIOSFODNN7EXAMPLE"
+  }
 }
 ```
 
-Keep both the ```value``` and ```id``` fields, as you will need them for next
-step.
-
 ## Set up your .s3cfg
 
-Run your favourite text editor (here, we'll use vim), and open  your .s3cfg file
 (if you don't have one, you probably need to
 [install s3cmd](http://s3tools.org/s3cmd)).
 
-``` sh
-$> vim ~/.s3cfg
+You will now configure s3cmd by using the following commands :
+
+```sh
+$> s3cmd --configure
+Enter new values or accept defaults in brackets with Enter.
+Refer to user manual for detailed description of all options.
+
+Access key and Secret key are your identifiers for Amazon S3. Leave them empty
+for using the env variables.
+Access Key: AKIAIOSFODNN7EXAMPLE
+Secret Key: wJalrXUtnFEMI/K7MDENG/bPxRfiCYzEXAMPLEKEY
+Default Region [US]:
+
+Encryption password is used to protect your files from reading
+by unauthorized persons while in transfer to S3
+Encryption password:
+Path to GPG program [/usr/bin/gpg]:
+
+When using secure HTTPS protocol all communication with Amazon S3
+servers is protected from 3rd party eavesdropping. This method is
+slower than plain HTTP, and can only be proxied with Python 2.7 or newer
+Use HTTPS protocol [Yes]: No
+
+On some networks all internet access must go through a HTTP proxy.
+Try setting it here if you can't connect to S3 directly
+HTTP Proxy server name:
+
+New settings:
+  Access Key: AKIAIOSFODNN7EXAMPLE
+  Secret Key: wJalrXUtnFEMI/K7MDENG/bPxRfiCYzEXAMPLEKEY
+  Default Region: US
+  Encryption password:
+  Path to GPG program: /usr/bin/gpg
+  Use HTTPS protocol: False
+  HTTP Proxy server name:
+  HTTP Proxy server port: 0
+
+Test access with supplied credentials? [Y/n] n
+
+Save settings? [y/N] y
+Configuration saved to '~/.s3cfg'
 ```
 
-In this file, you need to set up the values for two fields:
-
-- ```access_key``` needs to be set to ```id```;
-- ```secret_key``` needs to be set to ```value```.
-
-From the previous example, it should be:
-
-```
-access_key = D4IT2AWSB588GO5J9T00
-secret_key = UEE8tYlsOGGrgf4DAiSZD6apVNPUWqRiPG0nTB6
+```sh
+$> sed -i 's/s3\.amazonaws\.com/localhost:8600/g' ~/.s3cfg
 ```
 
 ## Use s3cmd with your local S3 connector
