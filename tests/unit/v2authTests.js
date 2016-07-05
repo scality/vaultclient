@@ -4,6 +4,7 @@ const errors = require('arsenal').errors;
 const assert = require('assert');
 const http = require('http');
 const IAMClient = require('../../lib/IAMClient.js');
+const querystring = require('querystring');
 
 const testNames = [
     'should authenticate correct v2 request',
@@ -47,20 +48,13 @@ const expectedErrors = [
 ];
 const expectedResponseBodies = [
     correctDictResponse,
-    null,
+    undefined,
 ];
 
-const responseHeaders = [
-    { code: 200, message: 'Authentication successful' },
-    { code: wrongSigError.code, message: wrongSigError.message },
-];
 const responseBodies = [
     correctDictResponse,
+    null,
 ];
-
-function makeResponse(res, code, message) {
-    res.writeHead(code, message);
-}
 
 function processRequest(requestObject) {
     for (let i = 0; i < stringsToSign.length; i++) {
@@ -74,18 +68,18 @@ function processRequest(requestObject) {
 }
 
 function handler(req, res) {
-    if (req.method === 'GET' && req.url === `/auth/v2`) {
-        const testCaseIndex = processRequest(
-            JSON.parse(req.headers.additionaldata));
+    if (req.method === 'GET') {
+        const index = req.url.indexOf('?');
+        const data = querystring.parse(req.url.substring(index + 1));
+        const testCaseIndex = processRequest(data);
         if (typeof testCaseIndex === 'number') {
             if (testCaseIndex === 0) {
-                makeResponse(res, responseHeaders[testCaseIndex].code,
-                    responseHeaders[testCaseIndex].message);
+                res.writeHead(200, { 'Content-Type': 'application/json' });
             } else {
-                res.writeHead(400, { 'Content-Type': 'text/javascript '});
+                res.writeHead(400, { 'Content-Type': 'text/xml '});
                 res.write(`<Error><Code>Forbidden</Code></Error>`);
             }
-            if (responseBodies[testCaseIndex]) {
+            if (responseBodies[testCaseIndex] !== undefined) {
                 res.write(JSON.stringify(responseBodies[testCaseIndex]));
             }
         }
@@ -114,8 +108,8 @@ describe('v2 auth tests with mockup server', () => {
                 { algo: hashAlgorithms[testIndex] },
                 (err, response) => {
                     assert.deepStrictEqual(err, expectedErrors[testIndex]);
-                    assert.deepStrictEqual(
-                        response,
+                    assert.deepStrictEqual(response ?
+                        response.message.body : response,
                         expectedResponseBodies[testIndex]);
                     done();
                 });
