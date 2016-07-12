@@ -77,7 +77,9 @@ function handler(req, res) {
                 res.writeHead(200, { 'Content-Type': 'application/json' });
             } else {
                 res.writeHead(400, { 'Content-Type': 'text/xml '});
-                res.write(`<Error><Code>Forbidden</Code></Error>`);
+                res.write(
+                    '<ErrorResponse><Error><Code>Forbidden</Code>' +
+                    '</Error></ErrorResponse>');
             }
             if (responseBodies[testCaseIndex] !== undefined) {
                 res.write(JSON.stringify(responseBodies[testCaseIndex]));
