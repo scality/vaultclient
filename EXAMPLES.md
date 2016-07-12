@@ -245,8 +245,11 @@ client.verifySignatureV2(
     'signature',
     'accessKey',
     {
-        algo: 'sha256', // sha1 or sha256 (optionnal)
-        reqUid: 'some-request-id', // Request id to trace request (optionnal)
+        algo: 'sha256', // sha1 or sha256 (optional)
+        reqUid: 'some-request-id', // Request id to trace request (optional)
+        requestContext: '{}', // Request context to perform authorization
+        // against IAM policies. This is a stringified version of a
+        // RequestContext class.  See Arsenal for class details.
     },
     (err, result) => {
         result.message.code; // http result code
@@ -273,7 +276,10 @@ client.verifySignatureV4(
     'us-east-1', // Region
     scopeDate, // Date in ISO 8601 format, YYYYMMDDTHHMMSSZ
     {
-        reqUid: 'some-request-id', // Request id to trace request (optionnal)
+        reqUid: 'some-request-id', // Request id to trace request (optional)
+        requestContext: '{}', // Request context to perform authorization
+        // against IAM policies. This is a stringified version of a
+        // RequestContext class.  See Arsenal for class details.
     },
     (err, result) => {
         result.message.code; // http result code
