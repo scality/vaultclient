@@ -10,7 +10,10 @@ const program = require('commander');
 
 const vaultclient = require('../index');
 
-program.option('--host [HOST]', 'host where Vault is running (default to ' +
+const version = require('../package.json').version;
+
+program.version(version)
+        .option('--host [HOST]', 'host where Vault is running (default to ' +
                'VAULT_HOST environment variable)')
        .option('--port [PORT]', 'port where Vault is running (default to ' +
                'VAULT_PORT environment variable)')
