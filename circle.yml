@@ -18,6 +18,6 @@ dependencies:
 test:
   override:
     - npm run --silent lint_yml
-    - npm run --silent lint
+    - npm run --silent lint -- --max-warnings 0
     - npm run --silent lint_md
     - npm test
