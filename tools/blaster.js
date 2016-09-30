@@ -55,7 +55,7 @@ function generateString(size) {
 }
 
 function hmac(stringToSign, key) {
-    return createHmac('sha256', key).update(stringToSign).digest();
+    return createHmac('sha256', key).update(stringToSign, 'binary').digest();
 }
 
 function calculateSigningKeyV4(secretKey) {
