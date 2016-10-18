@@ -11,7 +11,7 @@
   },
   "homepage": "https://github.com/scality/vaultclient#readme",
   "dependencies": {
-    "arsenal": "scality/Arsenal",
+    "arsenal": "scality/Arsenal#ft/node-v6",
     "commander": "2.9.0",
     "xml2js": "0.4.17"
   },
@@ -20,7 +20,7 @@
     "eslint": "2.13.1",
     "eslint-config-airbnb": "6.2.0",
     "eslint-plugin-react": "4.3.0",
-    "eslint-config-scality": "scality/Guidelines",
+    "eslint-config-scality": "scality/Guidelines#ft/node-v6",
     "mocha": "2.5.3"
   },
   "scripts": {
