@@ -24,8 +24,8 @@ describe('healthcheck test', () => {
 
     it('should return 200 on request', done => {
         client.healthcheck(null, (err, obj, resCode) => {
-            assert.deepEqual(err, null);
-            assert.deepEqual(resCode, 200);
+            assert.deepStrictEqual(err, null);
+            assert.deepStrictEqual(resCode, 200);
             done();
         });
     });
