@@ -1,6 +1,6 @@
 {
   "name": "vaultclient",
-  "version": "1.2.0",
+  "version": "6.3.0",
   "description": "Client library and binary for Vault, the user directory and key management service",
   "main": "index.js",
   "repository": "scality/vaultclient",
@@ -11,7 +11,7 @@
   },
   "homepage": "https://github.com/scality/vaultclient#readme",
   "dependencies": {
-    "arsenal": "scality/Arsenal",
+    "arsenal": "scality/Arsenal#rel/6.3",
     "commander": "^2.9.0",
     "xml2js": "^0.4.16"
   },
@@ -19,7 +19,7 @@
     "babel-eslint": "^4.1.3",
     "eslint": "^1.5.1",
     "eslint-config-airbnb": "^0.0.9",
-    "eslint-config-scality": "scality/Guidelines",
+    "eslint-config-scality": "scality/Guidelines#rel/6.3",
     "mocha": "^2.3.4"
   },
   "scripts": {
