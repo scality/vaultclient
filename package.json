@@ -13,7 +13,8 @@
   "dependencies": {
     "arsenal": "scality/Arsenal#rel/6.2.5",
     "commander": "^2.9.0",
-    "xml2js": "^0.4.16"
+    "xml2js": "^0.4.16",
+    "werelogs": "scality/werelogs#rel/6.2.5"
   },
   "devDependencies": {
     "babel-eslint": "^4.1.3",
