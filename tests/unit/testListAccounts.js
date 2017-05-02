@@ -24,8 +24,7 @@ describe('list-accounts', () => {
     after('stop server', () => { server.close(); });
 
     [
-        ['marker', -1, 'Marker must be >= 0'],
-        ['marker', 'test', 'Marker must be a number'],
+        ['marker', '', 'Marker cannot be an empty string'],
         ['maxItems', '6', 'maxItems need to be a number'],
         ['maxItems', parseInt('test', 10), 'maxItems must be a number'],
         ['maxItems', 0,
