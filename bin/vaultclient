@@ -118,7 +118,7 @@ program
 
 program
     .command('list-accounts')
-    .option('--marker [MARKER]', 'Marker for pagination', parseInt)
+    .option('--marker [MARKER]', 'Marker for pagination')
     .option('--maxItems [MAXITEMS]', 'Max items for pagination', parseInt)
     .action(action.bind(null, 'list-accounts', (client, args) => {
         client.listAccounts({
