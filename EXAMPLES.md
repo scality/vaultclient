@@ -250,6 +250,8 @@ client.verifySignatureV2(
         requestContext: '{}', // Request context to perform authorization
         // against IAM policies. This is a stringified version of a
         // RequestContext class.  See Arsenal for class details.
+        securityToken: 'abcdef0123456789', // security token for temporary
+        // credentials
     },
     (err, result) => {
         result.message.code; // http result code
@@ -280,6 +282,8 @@ client.verifySignatureV4(
         requestContext: '{}', // Request context to perform authorization
         // against IAM policies. This is a stringified version of a
         // RequestContext class.  See Arsenal for class details.
+        securityToken: 'abcdef0123456789', // security token for temporary
+        // credentials
     },
     (err, result) => {
         result.message.code; // http result code
