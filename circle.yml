@@ -10,6 +10,8 @@ machine:
     vault.testing.local: 127.0.0.1
   node:
     version: 6.9.5
+  environment:
+    CXX: g++-4.9
 
 dependencies:
   pre:
