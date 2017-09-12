@@ -127,7 +127,7 @@ function createAccount(index, callback) {
         accountName = createUniqueName(accountNames);
         email = createUniqueEmail(emails);
     }
-    const options = {email, password: getPassword()};
+    const options = { email, password: getPassword() };
     client.createAccount(accountName, options, (err, data) => {
         if (!err && !error) {
             accountNames.push(accountName);
@@ -171,10 +171,9 @@ function deleteAccount(index, callback) {
         }
         ++nbError;
         if (error) {
-            callback('Should not delete an unexisting account', index);
-        } else {
-            callback(err.description, index);
+            return callback('Should not delete an unexisting account', index);
         }
+        return callback(err.description, index);
     });
 }
 
@@ -203,13 +202,14 @@ function createUser(index, callback) {
     } else {
         accountName = createUniqueName(accountNames);
     }
-    const params = {email, password: getPassword()};
+    const params = { email, password: getPassword() };
     client.createUser(accountName, userName, params, (err, data) => {
         if (!error && !err) {
             const acc = accounts[accountName];
             acc.usersNames.push(userName);
             acc.usersEmails.push(email);
-            acc.users[userName] = {email, data, accessKeys: [], secretKeys: {}};
+            acc.users[userName] = { email, data, accessKeys: [],
+                secretKeys: {} };
             return callback(null, index + 1);
         } else if (error && err) {
             return callback(null, index + 1);
@@ -251,10 +251,9 @@ function deleteUser(index, callback) {
         }
         ++nbError;
         if (!error && err) {
-            callback('Should delete an existing user', index);
-        } else {
-            callback('Should not delete an unexisting user', index);
+            return callback('Should delete an existing user', index);
         }
+        return callback('Should not delete an unexisting user', index);
     });
 }
 
@@ -332,7 +331,7 @@ function verifySignatureV2(index, callback) {
     let accountName = 'unexistingAccountName';
     let accessKey = 'unexistingAccessKey';
     let signature = hmac('signature', 'secretKey').toString('base64');
-    const  params = {algo: 'sha1'};
+    const  params = { algo: 'sha1' };
     if (accountNames.length > 0) {
         accountName = getName(accountNames);
         const acc = accounts[accountName];
@@ -390,7 +389,7 @@ function verifySignatureV4(index, callback) {
         }
     }
     client.verifySignatureV4('signature', signature,
-            accessKey, region, scopeDate, {reqUid: 'toto'}, err => {
+            accessKey, region, scopeDate, { reqUid: 'toto' }, err => {
                 if (!error && !err) {
                     return callback(null, index + 1);
                 } else if (error && err) {
@@ -424,7 +423,7 @@ function getEmails(index, callback) {
             arr = ['unexisting1', 'unexisting2', 'undefined'];
         }
     }
-    client.getEmailAddresses(arr, {reqUid: 'toto'}, (err, data) => {
+    client.getEmailAddresses(arr, { reqUid: 'toto' }, (err, data) => {
         let email = 'NotFound';
         let ok = true;
         arr.forEach((n, index) => {
@@ -461,7 +460,7 @@ function getCanonicalIds(index, callback) {
             ];
         }
     }
-    client.getCanonicalIds(arr, {reqUid: 'toto'}, (err, data) => {
+    client.getCanonicalIds(arr, { reqUid: 'toto' }, (err, data) => {
         let ok = true;
         let canonicalId = 'NotFound';
         arr.forEach(e => {

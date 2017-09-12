@@ -32,7 +32,7 @@ describe('path prefix test with path parameter set', () => {
     afterEach('stop server', () => { server.close(); });
 
     it('should send a request with the set path', done => {
-        client.assumeRoleBackbeat(roleArn, roleSessionName, { reqUid: '1'},
+        client.assumeRoleBackbeat(roleArn, roleSessionName, { reqUid: '1' },
             err => {
                 assert.strictEqual(err, null);
                 done();

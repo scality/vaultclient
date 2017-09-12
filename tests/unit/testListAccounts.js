@@ -11,7 +11,7 @@ describe('list-accounts', () => {
 
     before('start server', done => {
         server = http.createServer((req, res) => {
-            res.writeHead(200, {'Content-Type': 'text/javascript'});
+            res.writeHead(200, { 'Content-Type': 'text/javascript' });
             res.end('{}');
         })
         .on('error', done)
@@ -44,7 +44,7 @@ describe('list-accounts', () => {
             } catch (e) {
                 assert.deepStrictEqual(e.message,
                     test[2]);
-                return next();
+                next();
             }
         });
     });

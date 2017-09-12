@@ -13,9 +13,13 @@ const expErr = errors.InternalError
 describe('handling unrecognized error syntax', () => {
     let client;
 
-    beforeEach('create client', () => client = new IAMClient('127.0.0.1'));
+    beforeEach('create client', () => {
+        client = new IAMClient('127.0.0.1');
+    });
 
-    afterEach('delete client', () => { client = undefined; });
+    afterEach('delete client', () => {
+        client = undefined;
+    });
 
     it('should return Internal Error for unrecognized errors', done => {
         client.handleResponse(res, ret, log, err => {

@@ -65,6 +65,7 @@ function processRequest(requestObject) {
             return i;
         }
     }
+    return false;
 }
 
 function handler(req, res) {
@@ -76,7 +77,7 @@ function handler(req, res) {
             if (testCaseIndex === 0) {
                 res.writeHead(200, { 'Content-Type': 'application/json' });
             } else {
-                res.writeHead(400, { 'Content-Type': 'text/xml '});
+                res.writeHead(400, { 'Content-Type': 'text/xml ' });
                 res.write(
                     '<ErrorResponse><Error><Code>Forbidden</Code>' +
                     '</Error></ErrorResponse>');
