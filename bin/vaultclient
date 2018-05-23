@@ -103,9 +103,10 @@ program
     .command('create-account')
     .option('--name <NAME>')
     .option('--email <EMAIL>')
+    .option('--quota <Quota>', 'Maximum quota for the account', parseInt)
     .action(action.bind(null, 'create-account', (client, args) => {
         client.createAccount(
-            args.name, { email: args.email },
+            args.name, { email: args.email, quota: args.quota || null },
             handleVaultResponse);
     }));
 
@@ -125,6 +126,22 @@ program
             marker: args.marker,
             maxItems: args.maxItems,
         }, handleVaultResponse);
+    }));
+
+program
+    .command('update-account-quota')
+    .option('--account-name <NAME>', 'Name of the account')
+    .option('--quota <QUOTA>', 'Quota max for the account', parseInt)
+    .action(action.bind(null, 'update-account-quota', (client, args) => {
+        client.updateAccountQuota(args.accountName, args.quota,
+            handleVaultResponse);
+    }));
+
+program
+    .command('delete-account-quota')
+    .option('--account-name <NAME>', 'Name of the account')
+    .action(action.bind(null, 'delete-account-quota', (client, args) => {
+        client.deleteAccountQuota(args.accountName, handleVaultResponse);
     }));
 
 program
