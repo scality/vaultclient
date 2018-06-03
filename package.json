@@ -1,36 +1,36 @@
 {
-  "name": "vaultclient",
-  "engines": {
-    "node": ">=6.9.5"
-  },
-  "version": "7.4.0",
-  "description": "Client library and binary for Vault, the user directory and key management service",
-  "main": "index.js",
-  "repository": "scality/vaultclient",
-  "author": "Giorgio Regni",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/scality/vaultclient/issues"
-  },
-  "homepage": "https://github.com/scality/vaultclient#readme",
-  "dependencies": {
-    "arsenal": "scality/Arsenal#rel/7.4",
-    "commander": "2.9.0",
-    "xml2js": "0.4.17",
-    "werelogs": "scality/werelogs#rel/7.4"
-  },
-  "devDependencies": {
-    "babel-eslint": "4.1.8",
-    "eslint": "1.10.3",
-    "eslint-config-airbnb": "0.0.9",
-    "eslint-config-scality": "scality/Guidelines#rel/7.4",
-    "mocha": "2.5.3"
-  },
-  "scripts": {
-    "start": "node client.js",
-    "lint": "eslint $(git ls-files '*.js')",
-    "lint_yml": "yamllint $(git ls-files '*.yml')",
-    "lint_md": "mdlint $(git ls-files '*.md')",
-    "test": "mocha tests/unit"
-  }
+    "name": "vaultclient",
+    "engines": {
+        "node": ">=6.9.5"
+    },
+    "version": "7.4.0.1",
+    "description": "Client library and binary for Vault, the user directory and key management service",
+    "main": "index.js",
+    "repository": "scality/vaultclient",
+    "author": "Giorgio Regni",
+    "license": "Apache-2.0",
+    "bugs": {
+        "url": "https://github.com/scality/vaultclient/issues"
+    },
+    "homepage": "https://github.com/scality/vaultclient#readme",
+    "dependencies": {
+        "arsenal": "scality/Arsenal#hotfix/7.4.0",
+        "commander": "2.9.0",
+        "xml2js": "0.4.17",
+        "werelogs": "scality/werelogs#hotfix/7.4.0"
+    },
+    "devDependencies": {
+        "babel-eslint": "4.1.8",
+        "eslint": "1.10.3",
+        "eslint-config-airbnb": "0.0.9",
+        "eslint-config-scality": "scality/Guidelines#hotfix/7.4.0",
+        "mocha": "2.5.3"
+    },
+    "scripts": {
+        "start": "node client.js",
+        "lint": "eslint $(git ls-files '*.js')",
+        "lint_yml": "yamllint $(git ls-files '*.yml')",
+        "lint_md": "mdlint $(git ls-files '*.md')",
+        "test": "mocha tests/unit"
+    }
 }
