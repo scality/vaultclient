@@ -17,7 +17,7 @@
     "arsenal": "scality/Arsenal#4e522a4",
     "commander": "2.9.0",
     "xml2js": "0.4.17",
-    "werelogs": "scality/werelogs#ba0c415"
+    "werelogs": "scality/werelogs#1a6e052"
   },
   "devDependencies": {
     "babel-eslint": "4.1.8",
