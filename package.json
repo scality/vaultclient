@@ -14,16 +14,16 @@
   },
   "homepage": "https://github.com/scality/vaultclient#readme",
   "dependencies": {
-    "arsenal": "scality/Arsenal#4e522a4",
+    "arsenal": "github:scality/arsenal#84bf7bd",
     "commander": "2.9.0",
     "xml2js": "0.4.17",
-    "werelogs": "scality/werelogs#ba0c415"
+    "werelogs": "scality/werelogs#74b121b"
   },
   "devDependencies": {
     "babel-eslint": "4.1.8",
     "eslint": "1.10.3",
-    "eslint-config-airbnb": "0.0.9",
-    "eslint-config-scality": "scality/Guidelines#cebb730",
+    "eslint-config-airbnb-base": "^13.1.0",
+    "eslint-config-scality": "scality/Guidelines#1d6f287b",
     "mocha": "2.5.3"
   },
   "scripts": {
