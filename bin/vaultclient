@@ -13,16 +13,16 @@ const vaultclient = require('../index');
 const version = require('../package.json').version;
 
 program.version(version)
-        .option('--host [HOST]', 'host where Vault is running (default to ' +
-               'VAULT_HOST environment variable)')
-       .option('--port [PORT]', 'port where Vault is running (default to ' +
-               'VAULT_PORT environment variable)')
-       .option('--https', 'use HTTPs instead of the default HTTP')
-       .option('--cafile [FILE]', 'Authority certificate to use')
-       .option('--noCaVerification', 'Allow untrusted certificate authority')
-       .option('--config [PATH]', 'path where the configuration for ' +
-                'vaultclient is (defaults to VAULT_CONFIG environment ' +
-                'variable and ~/.vaultclient.conf in that order)');
+    .option('--host [HOST]', 'host where Vault is running (default to ' +
+        'VAULT_HOST environment variable)')
+    .option('--port [PORT]', 'port where Vault is running (default to ' +
+        'VAULT_PORT environment variable)')
+    .option('--https', 'use HTTPs instead of the default HTTP')
+    .option('--cafile [FILE]', 'Authority certificate to use')
+    .option('--noCaVerification', 'Allow untrusted certificate authority')
+    .option('--config [PATH]', 'path where the configuration for ' +
+        'vaultclient is (defaults to VAULT_CONFIG environment ' +
+        'variable and ~/.vaultclient.conf in that order)');
 
 function checkConfig(configObject) {
     if (!configObject) {
@@ -40,7 +40,7 @@ function readConfigFile(configFilePath) {
     let actualPath = path.join(homedir(), '.vaultclient.conf');
     if (configFilePath) {
         actualPath = configFilePath;
-    } else if(process.env.VAULT_CONFIG) {
+    } else if (process.env.VAULT_CONFIG) {
         actualPath = process.env.VAULT_CONFIG;
     }
     try {
@@ -103,9 +103,13 @@ program
     .command('create-account')
     .option('--name <NAME>')
     .option('--email <EMAIL>')
+    .option('--quota <Quota>', 'Maximum quota for the account', parseInt)
     .action(action.bind(null, 'create-account', (client, args) => {
         client.createAccount(
-            args.name, { email: args.email },
+            args.name, {
+                email: args.email,
+                quota: args.quota || null
+            },
             handleVaultResponse);
     }));
 
@@ -125,6 +129,22 @@ program
             marker: args.marker,
             maxItems: args.maxItems,
         }, handleVaultResponse);
+    }));
+
+program
+    .command('update-account-quota')
+    .option('--account-name <NAME>', 'Name of the account')
+    .option('--quota <QUOTA>', 'Maximum quota for the account', parseInt)
+    .action(action.bind(null, 'update-account-quota', (client, args) => {
+        client.updateAccountQuota(args.accountName, args.quota,
+            handleVaultResponse);
+    }));
+
+program
+    .command('delete-account-quota')
+    .option('--account-name <NAME>', 'Name of the account')
+    .action(action.bind(null, 'delete-account-quota', (client, args) => {
+        client.deleteAccountQuota(args.accountName, handleVaultResponse);
     }));
 
 program
