@@ -11,7 +11,7 @@ describe('list-accounts', () => {
 
     before('start server', done => {
         server = http.createServer((req, res) => {
-            res.writeHead(200, {'Content-Type': 'text/javascript'});
+            res.writeHead(200, { 'Content-Type': 'text/javascript' });
             res.end('{}');
         })
         .on('error', done)
@@ -33,6 +33,7 @@ describe('list-accounts', () => {
         ['maxItems', 1500,
             'maxItems need to be a value between 1 and 1000 included'],
     ].forEach(test => {
+        // eslint-disable-next-line consistent-return
         it(`invalid param ${test[0]}(${test[1]})`, next => {
             try {
                 client.listAccounts({

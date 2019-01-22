@@ -20,10 +20,10 @@
     "werelogs": "scality/werelogs#74b121b"
   },
   "devDependencies": {
-    "babel-eslint": "4.1.8",
-    "eslint": "1.10.3",
+    "eslint": "^5.12.1",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-config-scality": "scality/Guidelines#1d6f287b",
+    "eslint-plugin-import": "^2.15.0",
     "mocha": "2.5.3"
   },
   "scripts": {

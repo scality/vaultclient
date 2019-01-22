@@ -26,7 +26,8 @@ serverDB[accountId3] = canId3;
 function handler(req, res) {
     const index = req.url.indexOf('?');
     const data = querystring.parse(req.url.substring(index + 1));
-    const inputArray = data.accountIds;
+
+    let inputArray = data.accountIds;
     if (!Array.isArray(inputArray)) {
         inputArray = [inputArray];
     }

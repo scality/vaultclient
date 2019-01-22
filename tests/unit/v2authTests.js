@@ -56,6 +56,7 @@ const responseBodies = [
     null,
 ];
 
+// eslint-disable-next-line consistent-return
 function processRequest(requestObject) {
     for (let i = 0; i < stringsToSign.length; i++) {
         if (requestObject.stringToSign === stringsToSign[i]
@@ -76,7 +77,7 @@ function handler(req, res) {
             if (testCaseIndex === 0) {
                 res.writeHead(200, { 'Content-Type': 'application/json' });
             } else {
-                res.writeHead(400, { 'Content-Type': 'text/xml '});
+                res.writeHead(400, { 'Content-Type': 'text/xml ' });
                 res.write(
                     '<ErrorResponse><Error><Code>Forbidden</Code>' +
                     '</Error></ErrorResponse>');
