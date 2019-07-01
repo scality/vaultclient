@@ -3,6 +3,7 @@
 const assert = require('assert');
 const http = require('http');
 const IAMClient = require('../../lib/IAMClient.js');
+
 const path = '/_/test';
 const roleArn = 'arn:aws:iam::123456789:role/test';
 const roleSessionName = 'foo';

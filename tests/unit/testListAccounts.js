@@ -14,10 +14,10 @@ describe('list-accounts', () => {
             res.writeHead(200, { 'Content-Type': 'text/javascript' });
             res.end('{}');
         })
-        .on('error', done)
-        .listen(8500, () => {
-            done();
-        });
+            .on('error', done)
+            .listen(8500, () => {
+                done();
+            });
         client = new IAMClient('127.0.0.1', 8500);
     });
 
@@ -36,7 +36,7 @@ describe('list-accounts', () => {
         // eslint-disable-next-line consistent-return
         it(`invalid param ${test[0]}(${test[1]})`, next => {
             try {
-                client.listAccounts({
+                return client.listAccounts({
                     [test[0]]: test[1],
                 }, () => {
                     assert(false,

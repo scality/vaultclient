@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 /* eslint-disable consistent-return */
+=======
+/* eslint-disable prefer-destructuring */
+>>>>>>> origin/w/8.0/improvement/S3C-2290/update-arsenal-dep
 
 'use strict'; // eslint-disable-line
 
-const createHmac = require('crypto').createHmac;
+const { createHmac } = require('crypto');
 const commander = require('commander');
 
 const IAMClient = require('../lib/IAMClient.js');
@@ -31,10 +35,10 @@ if (commander.nOps) {
 }
 
 process.stdout.write(
-        `process: ${options.nOps} ops server ${options.host}:${options.port}\n`
-        );
+    `process: ${options.nOps} ops server ${options.host}:${options.port}\n`,
+);
 
-const client = new IAMClient(options.host,  Number(options.port));
+const client = new IAMClient(options.host, Number(options.port));
 
 let nbError = 0;
 const accounts = {};
@@ -49,7 +53,7 @@ const chars = 'abcdefghipqrstuvwxyz0123456789';
 
 function generateString(size) {
     let str = '';
-    for (let i = 0; i < size; i++) {
+    for (let i = 0; i < size; i += 1) {
         str += chars[Math.floor(Math.random() * (chars.length))];
     }
     return str;
@@ -103,7 +107,7 @@ function reset(callback) {
     let nb = accountNames.length;
     accountNames.forEach(name => {
         client.deleteAccount(name, () => {
-            nb--;
+            nb -= 1;
             if (nb === 0) {
                 callback();
             }
@@ -141,10 +145,10 @@ function createAccount(index, callback) {
                 usersEmails: [],
             };
             return callback(null, index + 1);
-        } else if (error && err && err.EntityAlreadyExists) {
+        } if (error && err && err.EntityAlreadyExists) {
             return callback(null, index + 1);
         }
-        ++nbError;
+        nbError += 1;
         if (!error) {
             return callback(err.description, index);
         }
@@ -167,15 +171,15 @@ function deleteAccount(index, callback) {
             emails.splice(emails.indexOf(accounts[accountName].email), 1);
             accounts[accountName] = undefined;
             return callback(null, index + 1);
-        } else if (error && err && err.EntityDoesNotExist) {
+        }
+        if (error && err && err.EntityDoesNotExist) {
             return callback(null, index + 1);
         }
-        ++nbError;
+        nbError += 1;
         if (error) {
-            callback('Should not delete an unexisting account', index);
-        } else {
-            callback(err.description, index);
+            return callback('Should not delete an unexisting account', index);
         }
+        return callback(err.description, index);
     });
 }
 
@@ -211,16 +215,20 @@ function createUser(index, callback) {
             acc.usersNames.push(userName);
             acc.usersEmails.push(email);
             acc.users[userName] = {
+<<<<<<< HEAD
                 email,
                 data,
                 accessKeys: [],
                 secretKeys: {}
+=======
+                email, data, accessKeys: [], secretKeys: {},
+>>>>>>> origin/w/8.0/improvement/S3C-2290/update-arsenal-dep
             };
             return callback(null, index + 1);
-        } else if (error && err) {
+        } if (error && err) {
             return callback(null, index + 1);
         }
-        ++nbError;
+        nbError += 1;
         if (!error && err) {
             return callback(`Should create an user: ${userName}`, index);
         }
@@ -249,18 +257,18 @@ function deleteUser(index, callback) {
             const acc = accounts[accountName];
             acc.usersNames.splice(acc.usersNames.indexOf(userName), 1);
             acc.usersEmails.splice(
-                acc.usersEmails.indexOf(acc.users[userName].email), 1);
+                acc.usersEmails.indexOf(acc.users[userName].email), 1,
+            );
             acc.users[userName] = undefined;
             return callback(null, index + 1);
-        } else if (error && err) {
+        } if (error && err) {
             return callback(null, index + 1);
         }
-        ++nbError;
+        nbError += 1;
         if (!error && err) {
-            callback('Should delete an existing user', index);
-        } else {
-            callback('Should not delete an unexisting user', index);
+            return callback('Should delete an existing user', index);
         }
+        return callback('Should not delete an unexisting user', index);
     });
 }
 
@@ -285,13 +293,13 @@ function createAccessKey(index, callback) {
             const accessKey = data.message.body.id;
             const secretKey = data.message.body.value;
             accounts[accountName].users[userName]
-                    .secretKeys[accessKey] = secretKey;
+                .secretKeys[accessKey] = secretKey;
             accounts[accountName].users[userName].accessKeys.push(accessKey);
             return callback(null, index + 1);
-        } else if (err && error) {
+        } if (err && error) {
             return callback(null, index + 1);
         }
-        ++nbError;
+        nbError += 1;
         if (!error && err) {
             return callback('Should create an accessKey', index);
         }
@@ -317,15 +325,15 @@ function deleteAccessKey(index, callback) {
     }
     client.deleteAccessKey(accessKey, err => {
         if (!err && !error) {
-            const accessKeys = accounts[accountName].users[userName].accessKeys;
+            const { accessKeys } = accounts[accountName].users[userName];
             accessKeys.splice(accessKeys.indexOf(accessKey), 1);
-            accounts[accountName].
-                    users[userName].secretKeys[accessKey] = undefined;
+            accounts[accountName]
+                .users[userName].secretKeys[accessKey] = undefined;
             return callback(null, index + 1);
-        } else if (err && error) {
+        } if (err && error) {
             return callback(null, index + 1);
         }
-        ++nbError;
+        nbError += 1;
         if (err) {
             return callback('Should delete an accessKey', index);
         }
@@ -338,7 +346,7 @@ function verifySignatureV2(index, callback) {
     let accountName = 'unexistingAccountName';
     let accessKey = 'unexistingAccessKey';
     let signature = hmac('signature', 'secretKey').toString('base64');
-    const  params = { algo: 'sha1' };
+    const params = { algo: 'sha1' };
     if (accountNames.length > 0) {
         accountName = getName(accountNames);
         const acc = accounts[accountName];
@@ -349,7 +357,7 @@ function verifySignatureV2(index, callback) {
                 accessKey = getName(user.accessKeys);
                 if (random()) {
                     signature = hmac('signature',
-                            user.secretKeys[accessKey]).toString('base64');
+                        user.secretKeys[accessKey]).toString('base64');
                     if (random()) {
                         error = false;
                         params.algo = 'sha256';
@@ -361,10 +369,10 @@ function verifySignatureV2(index, callback) {
     client.verifySignatureV2('signature', signature, accessKey, params, err => {
         if (!error && !err) {
             return callback(null, index + 1);
-        } else if (error && err) {
+        } if (error && err) {
             return callback(null, index + 1);
         }
-        ++nbError;
+        nbError += 1;
         if (error) {
             const ret = 'Should not verify a not valid signature v2';
             return callback(ret, index);
@@ -388,7 +396,8 @@ function verifySignatureV4(index, callback) {
                 accessKey = getName(user.accessKeys);
                 if (random()) {
                     const signingKey = calculateSigningKeyV4(
-                                                user.secretKeys[accessKey]);
+                        user.secretKeys[accessKey],
+                    );
                     signature = hmac('signature', signingKey).toString('hex');
                     error = false;
                 }
@@ -396,6 +405,7 @@ function verifySignatureV4(index, callback) {
         }
     }
     client.verifySignatureV4('signature', signature,
+<<<<<<< HEAD
             accessKey, region, scopeDate, { reqUid: 'toto' }, err => {
                 if (!error && !err) {
                     return callback(null, index + 1);
@@ -409,6 +419,22 @@ function verifySignatureV4(index, callback) {
                 }
                 return callback('Should verify valid signature v4', index);
             });
+=======
+        accessKey, region, scopeDate, { reqUid: 'toto' }, err => {
+            if (!error && !err) {
+                return callback(null, index + 1);
+            }
+            if (error && err) {
+                return callback(null, index + 1);
+            }
+            nbError += 1;
+            if (error) {
+                const ret = 'Should not verify not valid signature v4';
+                return callback(ret, index);
+            }
+            return callback('Should verify valid signature v4', index);
+        });
+>>>>>>> origin/w/8.0/improvement/S3C-2290/update-arsenal-dep
 }
 
 function getEmails(index, callback) {
@@ -418,7 +444,7 @@ function getEmails(index, callback) {
     if (accountNames.length > 0 && random()) {
         if (random()) {
             const nb = Math.floor(Math.random() * accountNames.length);
-            for (let i = 0; i < nb; ++i) {
+            for (let i = 0; i < nb; i += 1) {
                 const index = Math.floor(Math.random() * accountNames.length);
                 names.push(accountNames[index]);
             }
@@ -438,12 +464,12 @@ function getEmails(index, callback) {
                 email = accounts[names[index]].email;
             }
             if (email !== data.message.body[n]) {
-                ++nbError;
+                nbError += 1;
                 ok = false;
             }
         });
-        return ok ? callback(null, index + 1) :
-        callback('Fail in getEmailAddresses', index);
+        return ok ? callback(null, index + 1)
+            : callback('Fail in getEmailAddresses', index);
     });
 }
 
@@ -454,7 +480,7 @@ function getCanonicalIds(index, callback) {
     if (accountNames.length > 0 && random()) {
         if (random()) {
             const nb = Math.floor(Math.random() * emails.length);
-            for (let i = 0; i < nb; ++i) {
+            for (let i = 0; i < nb; i += 1) {
                 const index = Math.floor(Math.random() * emails.length);
                 arr.push(emails[index]);
             }
@@ -472,16 +498,16 @@ function getCanonicalIds(index, callback) {
         let canonicalId = 'NotFound';
         arr.forEach(e => {
             if (error === false) {
-                canonicalId =
-            accounts[accountNames[emails.indexOf(e)]].canonicalId;
+                canonicalId = accounts[accountNames[emails.indexOf(e)]]
+                    .canonicalId;
             }
             if (canonicalId !== data.message.body[e]) {
-                ++nbError;
+                nbError += 1;
                 ok = false;
             }
         });
-        return ok ? callback(null, index + 1) :
-        callback('Fail in getCanonicalIds', index);
+        return ok ? callback(null, index + 1)
+            : callback('Fail in getCanonicalIds', index);
     });
 }
 
