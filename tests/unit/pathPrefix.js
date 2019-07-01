@@ -3,6 +3,7 @@
 const assert = require('assert');
 const http = require('http');
 const IAMClient = require('../../lib/IAMClient.js');
+
 const path = '/_/test';
 const roleArn = 'arn:aws:iam::123456789:role/test';
 const roleSessionName = 'foo';
@@ -32,7 +33,7 @@ describe('path prefix test with path parameter set', () => {
     afterEach('stop server', () => { server.close(); });
 
     it('should send a request with the set path', done => {
-        client.assumeRoleBackbeat(roleArn, roleSessionName, { reqUid: '1'},
+        client.assumeRoleBackbeat(roleArn, roleSessionName, { reqUid: '1' },
             err => {
                 assert.strictEqual(err, null);
                 done();

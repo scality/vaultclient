@@ -1,7 +1,7 @@
 {
   "name": "vaultclient",
   "engines": {
-    "node": ">=6.9.5"
+    "node": ">=10.16.0"
   },
   "version": "8.0.1",
   "description": "Client library and binary for Vault, the user directory and key management service",
@@ -14,23 +14,24 @@
   },
   "homepage": "https://github.com/scality/vaultclient#readme",
   "dependencies": {
-    "arsenal": "scality/Arsenal#67365083",
-    "commander": "2.9.0",
-    "xml2js": "0.4.17",
-    "werelogs": "scality/werelogs#0ff7ec82"
+    "arsenal": "scality/Arsenal#4fd77d73",
+    "commander": "2.20.0",
+    "xml2js": "0.4.19",
+    "werelogs": "scality/werelogs#4e0d97c"
   },
   "devDependencies": {
-    "babel-eslint": "4.1.8",
-    "eslint": "1.10.3",
-    "eslint-config-airbnb": "0.0.9",
+    "babel-eslint": "10.0.2",
+    "eslint": "6.0.1",
+    "eslint-config-airbnb": "17.1.0",
     "eslint-config-scality": "scality/Guidelines#71a059ad",
-    "mocha": "2.5.3"
+    "eslint-plugin-import": "^2.18.0",
+    "mocha": "6.1.4"
   },
   "scripts": {
     "start": "node client.js",
     "lint": "eslint $(git ls-files '*.js')",
     "lint_yml": "yamllint $(git ls-files '*.yml')",
     "lint_md": "mdlint $(git ls-files '*.md')",
-    "test": "mocha tests/unit"
+    "test": "mocha --exit tests/unit"
   }
 }
