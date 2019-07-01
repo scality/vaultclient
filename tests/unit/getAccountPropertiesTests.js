@@ -1,9 +1,11 @@
+/* eslint-disable operator-linebreak */
 'use strict'; // eslint-disable-line
 
 const assert = require('assert');
 const http = require('http');
-const IAMClient = require('../../lib/IAMClient.js');
 const querystring = require('querystring');
+const IAMClient = require('../../lib/IAMClient.js');
+
 
 const canId1 =
     '0123456789012345678901234567890123456789012345678901234567890123';
@@ -115,7 +117,8 @@ describe('getAccountProperties with mockup server', () => {
                     assert(!err);
                     assert.deepStrictEqual(
                         value.message.body,
-                        testExpecteds[testIndex]);
+                        testExpecteds[testIndex],
+                    );
                     done();
                 });
         });
