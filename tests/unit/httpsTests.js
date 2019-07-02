@@ -4,7 +4,7 @@ const assert = require('assert');
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
-const errors = require('arsenal').errors;
+const { errors } = require('arsenal');
 const querystring = require('querystring');
 const getCodeFromErr = require('../utils/getCodeFromErr');
 const IAMClient = require('../../lib/IAMClient.js');
@@ -21,8 +21,8 @@ const expectedResponse = {
         data: {
             arn: 'arn:aws:iam::619305055237:/account0/',
             id: '619305055237',
-            canonicalId: 'CER9UNUF89LNFWQCS90RHR0WHTYUW9Q3HY9KBUMSR75V9B4VX' +
-                'GJ0RF89X8SQEBSG',
+            canonicalId: 'CER9UNUF89LNFWQCS90RHR0WHTYUW9Q3HY9KBUMSR75V9B4VX'
+            + 'GJ0RF89X8SQEBSG',
         },
     },
     secretKey: {
@@ -101,8 +101,9 @@ describe('v2 auth tests with mockup server', () => {
             httpsServer.on('listening', () => {
                 httpsOptions.requestCert = true;
                 httpsOptions.rejectUnauthorized = true;
-                httpsOptions.ca =
-                    [fs.readFileSync('tests/utils/ca.crt', 'ascii')];
+                httpsOptions.ca = [fs.readFileSync(
+                    'tests/utils/ca.crt', 'ascii',
+                )];
                 httpsServer2 = https.createServer(httpsOptions, handler);
                 httpsServer2.on('listening', done);
                 httpsServer2.on('error', done);

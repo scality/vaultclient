@@ -1,7 +1,7 @@
 'use strict'; // eslint-disable-line
 // const http = require('http');
 const assert = require('assert');
-const errors = require('arsenal').errors;
+const { errors } = require('arsenal');
 const IAMClient = require('../../lib/IAMClient.js');
 
 const log = { error() {} };
@@ -13,7 +13,7 @@ const expErr = errors.InternalError
 describe('handling unrecognized error syntax', () => {
     let client;
 
-    beforeEach('create client', () => client = new IAMClient('127.0.0.1'));
+    beforeEach('create client', () => { client = new IAMClient('127.0.0.1'); });
 
     afterEach('delete client', () => { client = undefined; });
 
