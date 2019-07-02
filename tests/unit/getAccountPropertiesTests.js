@@ -6,7 +6,6 @@ const http = require('http');
 const querystring = require('querystring');
 const IAMClient = require('../../lib/IAMClient.js');
 
-
 const canId1 =
     '0123456789012345678901234567890123456789012345678901234567890123';
 const canId2 =

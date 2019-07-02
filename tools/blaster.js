@@ -141,7 +141,8 @@ function createAccount(index, callback) {
                 usersEmails: [],
             };
             return callback(null, index + 1);
-        } if (error && err && err.EntityAlreadyExists) {
+        }
+        if (error && err && err.EntityAlreadyExists) {
             return callback(null, index + 1);
         }
         nbError += 1;
@@ -214,7 +215,8 @@ function createUser(index, callback) {
                 email, data, accessKeys: [], secretKeys: {},
             };
             return callback(null, index + 1);
-        } if (error && err) {
+        }
+        if (error && err) {
             return callback(null, index + 1);
         }
         nbError += 1;
@@ -250,7 +252,8 @@ function deleteUser(index, callback) {
             );
             acc.users[userName] = undefined;
             return callback(null, index + 1);
-        } if (error && err) {
+        }
+        if (error && err) {
             return callback(null, index + 1);
         }
         nbError += 1;
@@ -285,7 +288,8 @@ function createAccessKey(index, callback) {
                 .secretKeys[accessKey] = secretKey;
             accounts[accountName].users[userName].accessKeys.push(accessKey);
             return callback(null, index + 1);
-        } if (err && error) {
+        }
+        if (err && error) {
             return callback(null, index + 1);
         }
         nbError += 1;
@@ -319,7 +323,8 @@ function deleteAccessKey(index, callback) {
             accounts[accountName]
                 .users[userName].secretKeys[accessKey] = undefined;
             return callback(null, index + 1);
-        } if (err && error) {
+        }
+        if (err && error) {
             return callback(null, index + 1);
         }
         nbError += 1;
@@ -358,7 +363,8 @@ function verifySignatureV2(index, callback) {
     client.verifySignatureV2('signature', signature, accessKey, params, err => {
         if (!error && !err) {
             return callback(null, index + 1);
-        } if (error && err) {
+        }
+        if (error && err) {
             return callback(null, index + 1);
         }
         nbError += 1;
