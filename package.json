@@ -14,10 +14,10 @@
   },
   "homepage": "https://github.com/scality/vaultclient#readme",
   "dependencies": {
-    "arsenal": "scality/Arsenal#b03f5b8",
+    "arsenal": "scality/Arsenal#d6fde6",
     "commander": "2.20.0",
     "xml2js": "0.4.19",
-    "werelogs": "scality/werelogs#4e0d97c"
+    "werelogs": "scality/werelogs#351a2a3"
   },
   "devDependencies": {
     "babel-eslint": "10.0.2",
