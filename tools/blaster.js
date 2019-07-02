@@ -212,7 +212,10 @@ function createUser(index, callback) {
             acc.usersNames.push(userName);
             acc.usersEmails.push(email);
             acc.users[userName] = {
-                email, data, accessKeys: [], secretKeys: {},
+                email,
+                data,
+                accessKeys: [],
+                secretKeys: {},
             };
             return callback(null, index + 1);
         }
