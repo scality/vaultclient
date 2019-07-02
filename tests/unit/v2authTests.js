@@ -6,7 +6,6 @@ const http = require('http');
 const querystring = require('querystring');
 const IAMClient = require('../../lib/IAMClient.js');
 
-
 const testNames = [
     'should authenticate correct v2 request',
     'should send error if signature is incorrect',
