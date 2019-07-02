@@ -1,10 +1,10 @@
 'use strict'; // eslint-disable-line
 
-const errors = require('arsenal').errors;
+const { errors } = require('arsenal');
 const assert = require('assert');
 const http = require('http');
-const IAMClient = require('../../lib/IAMClient.js');
 const querystring = require('querystring');
+const IAMClient = require('../../lib/IAMClient.js');
 
 const testNames = [
     'should authenticate correct v2 request',
@@ -57,7 +57,7 @@ const responseBodies = [
 ];
 
 function processRequest(requestObject) {
-    for (let i = 0; i < stringsToSign.length; i++) {
+    for (let i = 0; i < stringsToSign.length; i += 1) {
         if (requestObject.stringToSign === stringsToSign[i]
             && requestObject.accessKey === accessKeys[i]
             && requestObject.signatureFromRequest === signaturesFromRequest[i]
@@ -65,6 +65,7 @@ function processRequest(requestObject) {
             return i;
         }
     }
+    return null;
 }
 
 function handler(req, res) {
@@ -76,10 +77,11 @@ function handler(req, res) {
             if (testCaseIndex === 0) {
                 res.writeHead(200, { 'Content-Type': 'application/json' });
             } else {
-                res.writeHead(400, { 'Content-Type': 'text/xml '});
+                res.writeHead(400, { 'Content-Type': 'text/xml ' });
                 res.write(
-                    '<ErrorResponse><Error><Code>Forbidden</Code>' +
-                    '</Error></ErrorResponse>');
+                    '<ErrorResponse><Error><Code>Forbidden</Code>'
+                    + '</Error></ErrorResponse>',
+                );
             }
             if (responseBodies[testCaseIndex] !== undefined) {
                 res.write(JSON.stringify(responseBodies[testCaseIndex]));
@@ -110,9 +112,9 @@ describe('v2 auth tests with mockup server', () => {
                 { algo: hashAlgorithms[testIndex] },
                 (err, response) => {
                     assert.deepStrictEqual(err, expectedErrors[testIndex]);
-                    assert.deepStrictEqual(response ?
-                        response.message.body : response,
-                        expectedResponseBodies[testIndex]);
+                    assert.deepStrictEqual(response
+                        ? response.message.body : response,
+                    expectedResponseBodies[testIndex]);
                     done();
                 });
         });
