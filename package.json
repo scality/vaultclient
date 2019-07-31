@@ -1,7 +1,7 @@
 {
   "name": "vaultclient",
   "engines": {
-    "node": ">=10.16.0"
+    "node": ">=10"
   },
   "version": "8.1.1",
   "description": "Client library and binary for Vault, the user directory and key management service",
@@ -16,8 +16,9 @@
   "dependencies": {
     "arsenal": "scality/Arsenal#dd6fde6",
     "commander": "2.20.0",
+    "werelogs": "scality/werelogs#4e0d97c",
     "xml2js": "0.4.19",
-    "werelogs": "scality/werelogs#351a2a3"
+    "yarn": "^1.17.3"
   },
   "devDependencies": {
     "babel-eslint": "10.0.2",
