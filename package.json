@@ -14,9 +14,9 @@
   },
   "homepage": "https://github.com/scality/vaultclient#readme",
   "dependencies": {
-    "arsenal": "scality/Arsenal#dd6fde6",
+    "arsenal": "scality/Arsenal#f8bf038",
     "commander": "2.20.0",
-    "werelogs": "scality/werelogs#4e0d97c",
+    "werelogs": "scality/werelogs#0a4c576",
     "xml2js": "0.4.19"
   },
   "devDependencies": {
