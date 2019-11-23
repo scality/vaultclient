@@ -4,25 +4,35 @@
 
 const EOL = require('os').eol;
 const fs = require('fs');
-const homedir = require('os').homedir;
+const { homedir } = require('os');
 const path = require('path');
 const program = require('commander');
 
 const vaultclient = require('../index');
 
-const version = require('../package.json').version;
+const { version } = require('../package.json');
 
-program.version(version)
-    .option('--host [HOST]', 'host where Vault is running (default to ' +
-        'VAULT_HOST environment variable)')
-    .option('--port [PORT]', 'port where Vault is running (default to ' +
-        'VAULT_PORT environment variable)')
+program
+    .version(version)
+    .option(
+        '--host [HOST]',
+        'host where Vault is running (default to '
+        + 'VAULT_HOST environment variable)',
+    )
+    .option(
+        '--port [PORT]',
+        'port where Vault is running (default to '
+        + 'VAULT_PORT environment variable)',
+    )
     .option('--https', 'use HTTPs instead of the default HTTP')
     .option('--cafile [FILE]', 'Authority certificate to use')
     .option('--noCaVerification', 'Allow untrusted certificate authority')
-    .option('--config [PATH]', 'path where the configuration for ' +
-        'vaultclient is (defaults to VAULT_CONFIG environment ' +
-        'variable and ~/.vaultclient.conf in that order)');
+    .option(
+        '--config [PATH]',
+        'path where the configuration for '
+        + 'vaultclient is (defaults to VAULT_CONFIG environment '
+        + 'variable and ~/.vaultclient.conf in that order)',
+    );
 
 function checkConfig(configObject) {
     if (!configObject) {
@@ -50,7 +60,7 @@ function readConfigFile(configFilePath) {
     } catch (err) {
         throw new Error(`error reading config file: ${err}`);
     }
-};
+}
 
 function action(cmd, fn, args) {
     if (typeof args !== 'object') {
@@ -60,27 +70,32 @@ function action(cmd, fn, args) {
 
     try {
         const useHttps = !!args.parent.https;
-        const ca = args.parent.cafile ?
-            fs.readFileSync(args.parent.cafile, 'ascii') : undefined;
-        const untrusted = args.parent.noCaVerification ? true : false;
+        const ca = args.parent.cafile
+            ? fs.readFileSync(args.parent.cafile, 'ascii')
+            : undefined;
+        const untrusted = !!args.parent.noCaVerification;
         const config = readConfigFile(args.parent.config);
-        const accessKey = config.accessKey;
+        const { accessKey } = config;
         const secretKey = config.secretKeyValue;
-        let host = args.parent.host || process.env.VAULT_HOST || 'localhost';
-        const client = new vaultclient.Client(host,
-            Number.parseInt(args.parent.port ? args.parent.port :
-                            process.env.VAULT_PORT, 10),
+        const host = args.parent.host || process.env.VAULT_HOST || 'localhost';
+        const client = new vaultclient.Client(
+            host,
+            Number.parseInt(
+                args.parent.port ? args.parent.port : process.env.VAULT_PORT,
+                10,
+            ),
             useHttps,
             undefined,
             undefined,
             ca,
             untrusted,
             accessKey,
-            secretKey);
+            secretKey,
+        );
         fn(client, args);
     } catch (err) {
-        //process.stderr.write(err.message + '\n');
-        process.stderr.write(err + '\n');
+        // process.stderr.write(err.message + '\n');
+        process.stderr.write(`${err}\n`);
         program.commands.find(c => c._name === cmd).outputHelp();
         process.exit(-1);
     }
@@ -88,10 +103,10 @@ function action(cmd, fn, args) {
 
 function handleVaultResponse(err, data) {
     if (err) {
-        process.stdout.write(JSON.stringify(err, null, 4) + '\n');
+        process.stdout.write(`${JSON.stringify(err, null, 4)}\n`);
         process.exit(1);
     }
-    if (process.stdout.write(JSON.stringify(data, null, 4) + '\n')) {
+    if (process.stdout.write(`${JSON.stringify(data, null, 4)}\n`)) {
         process.exit(0);
     }
     process.stdout.on('drain', () => {
@@ -104,62 +119,91 @@ program
     .option('--name <NAME>')
     .option('--email <EMAIL>')
     .option('--quota <Quota>', 'Maximum quota for the account', parseInt)
-    .action(action.bind(null, 'create-account', (client, args) => {
-        client.createAccount(
-            args.name, {
-                email: args.email,
-                quota: args.quota || null
-            },
-            handleVaultResponse);
-    }));
+    .option('--accountid <ExternalAccountID>')
+    .action(
+        action.bind(null, 'create-account', (client, args) => {
+            client.createAccount(
+                args.name,
+                {
+                    email: args.email,
+                    quota: args.quota || null,
+                    externalAccountId: args.accountid || null,
+                },
+                handleVaultResponse,
+            );
+        }),
+    );
 
 program
     .command('generate-account-access-key')
     .option('--name <NAME>')
-    .action(action.bind(null, 'generate-account-access-key', (client, args) => {
-        client.generateAccountAccessKey(args.name, handleVaultResponse);
-    }));
+    .option('--accesskey <ExternalAccessKey>')
+    .option('--secretkey <ExternalSecretKey>')
+    .action(
+        action.bind(null, 'generate-account-access-key', (client, args) => {
+            client.generateAccountAccessKey(
+                args.name,
+                {
+                    externalAccessKey: args.accesskey || null,
+                    externalSecretKey: args.secretkey || null,
+                },
+                handleVaultResponse,
+            );
+        }),
+    );
 
 program
     .command('list-accounts')
     .option('--marker [MARKER]', 'Marker for pagination')
     .option('--maxItems [MAXITEMS]', 'Max items for pagination', parseInt)
-    .action(action.bind(null, 'list-accounts', (client, args) => {
-        client.listAccounts({
-            marker: args.marker,
-            maxItems: args.maxItems,
-        }, handleVaultResponse);
-    }));
+    .action(
+        action.bind(null, 'list-accounts', (client, args) => {
+            client.listAccounts(
+                {
+                    marker: args.marker,
+                    maxItems: args.maxItems,
+                },
+                handleVaultResponse,
+            );
+        }),
+    );
 
 program
     .command('update-account-quota')
     .option('--account-name <NAME>', 'Name of the account')
     .option('--quota <QUOTA>', 'Maximum quota for the account', parseInt)
-    .action(action.bind(null, 'update-account-quota', (client, args) => {
-        client.updateAccountQuota(args.accountName, args.quota,
-            handleVaultResponse);
-    }));
+    .action(
+        action.bind(null, 'update-account-quota', (client, args) => {
+            client.updateAccountQuota(
+                args.accountName,
+                args.quota,
+                handleVaultResponse,
+            );
+        }),
+    );
 
 program
     .command('delete-account-quota')
     .option('--account-name <NAME>', 'Name of the account')
-    .action(action.bind(null, 'delete-account-quota', (client, args) => {
-        client.deleteAccountQuota(args.accountName, handleVaultResponse);
-    }));
+    .action(
+        action.bind(null, 'delete-account-quota', (client, args) => {
+            client.deleteAccountQuota(args.accountName, handleVaultResponse);
+        }),
+    );
 
 program
     .command('delete-account')
     .option('--name <NAME>')
-    .action(action.bind(null, 'delete-account', (client, args) => {
-        client.deleteAccount(args.name, handleVaultResponse);
-    }));
+    .action(
+        action.bind(null, 'delete-account', (client, args) => {
+            client.deleteAccount(args.name, handleVaultResponse);
+        }),
+    );
 
-program
-    .command('*')
-    .action(() => {
-        program.outputHelp();
-        process.exit(-1);
-    });
+program.command('*').action(() => {
+    program.outputHelp();
+    process.exit(-1);
+});
 
 if (process.argv.length > 2) {
     program.parse(process.argv);
