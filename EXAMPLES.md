@@ -70,11 +70,14 @@ Output example :
 ```
 
 ### Create account with quota
+
 ```sh
 vautclient create-account --name john2 --email john2@acme.com --quota 100
 ```
+
 The previous example will create an account named 'john2' with an email
 'john2@acme.com' with quota set to 100 bytes.
+
 ```json
 {
     "account": {
@@ -90,10 +93,12 @@ The previous example will create an account named 'john2' with an email
 ```
 
 ### Inject accountID
+
 ```sh
 vautclient create-account --name john3 --email john3@acme.com \
 --accountid 098765567890
 ```
+
 The previous example will create an account named 'john2' with an email
 'john2@acme.com' with account ID set to `098765567890`.
 
@@ -111,7 +116,6 @@ The previous example will create an account named 'john2' with an email
 }
 ```
 
-
 In the following output, secretKey is the first accessKey of the account, the
 relevant information here are ```secretKey.id``` (AccessKeyId)
 and ```secretKey.value``` (SecretKey)
@@ -119,9 +123,7 @@ and ```secretKey.value``` (SecretKey)
 ### Generate account access key
 
 ```sh
-
 vaultclient generate-account-access-key --name john
-
 ```
 
 The previous example will generate a new account access key for the account
@@ -138,7 +140,6 @@ Output example :
     "status": "Active",
     "userId": "235437388852"
 }
-
 ```
 
 ### Inject accesskey and secretkey
@@ -206,18 +207,14 @@ Output example :
 ### List accounts
 
 ```sh
-
 vaultclient list-accounts --max-items 30
-
 ```
 
 The previous example will list at most, 30 accounts. You can also paginate by
 using ```--marker```, like :
 
 ```sh
-
 vaultclient list-accounts --max-items 30 --marker 1
-
 ```
 
 The previous example will list at most, the 30 next accounts in the list.
@@ -225,7 +222,6 @@ The previous example will list at most, the 30 next accounts in the list.
 Output example:
 
 ```json
-
 {
     "isTruncated": false,
     "accounts": [
@@ -255,15 +251,12 @@ Output example:
         }
     ]
 }
-
 ```
 
 ### Delete account
 
 ```sh
-
 vaultclient delete-account --name john
-
 ````
 
 The previous example will delete the account named ```john```.
@@ -376,6 +369,7 @@ client.updateAccountQuota('accountName', <quotavalue>, (err, result) => {
 
 });
 ```
+
 ```<quotavalue>``` should be a positive number(not a string).
 The output format is the same as vaultclient cli.
 
