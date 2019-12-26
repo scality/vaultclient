@@ -26,13 +26,15 @@ In order to contribute, please follow the
 [Contributing Guidelines](
 https://github.com/scality/Guidelines/blob/master/CONTRIBUTING.md).
 
-## Pre-requisite:
+## Pre-requisite
+
 To use vaultclient with an existing S3Connector deployment, Vault requires
 the use of AWS signature v4 and valid administration credentials
 in its administrative interfaces (that is, create, delete and list
 accounts, users and access keys). In order to make vaultcient use an
 administrative credential (accessKey, secretKey) pair you must first create a
 json file like this:
+
 ```
 {
     "accessKey": "<administrative access key for Vault>",
@@ -43,6 +45,7 @@ json file like this:
 For an existing deployment admin credentials need to be captured from the
 supervisor node. The admin credentials are stored in the same folder as the
 inventory file post S3Connector deployment completion. Example:
+
 ```sh
 $> cat federation/env/s3config/vault/admin-clientprofile/admin1.json
 {
@@ -99,6 +102,7 @@ $> ./bin/vaultclient --config ./admin.conf --host <S3C-storage-node-IP> \
 
 Alternatively, if you are using S3Connector storage node, vaultclient can be
 found in the docker container `scality-vault`
+
 ```sh
 # ssh to a storage node and exec to the scality-vault docker container
 $> docker exec -it scality-vault bash
