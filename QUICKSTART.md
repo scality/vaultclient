@@ -35,7 +35,7 @@ $> git clone https://github.com/scality/vaultclient.git ~/vaultClient
 # go into the cloned folder
 $> cd ~/vaultClient
 # install relative dependencies
-$> npm install
+$> yarn install
 ```
 
 ### Aws cli

@@ -3,21 +3,31 @@
 ## Tables of contents
 
 1. [Cli](#cli)
-    1. [Https](#cli-https)
-    2. [Create account](#cli-create-account)
-    3. [Generate account access key](#cli-generate-account-access-key)
-    4. [List accounts](#cli-list-accounts)
-    5. [Delete account](#cli-delete-account)
+    1. [Https](#https)
+    2. [Create account](#create-account)
+    3. [Create account with quota](#create-account-with-quota)
+    4. [Inject accountID](#inject-accountid)
+    5. [Generate account access key](#generate-account-access-key)
+    6. [Inject accesskey and secretkey](#inject-accesskey-and-secretkey)
+    7. [Update account quota](#update-account-quota)
+    8. [Delete account quota](#delete-account-quota)
+    9. [List accounts](#list-accounts)
+    10. [Delete account](#delete-account)
 2. [Api](#api)
-    1. [Start](#api-start)
-    2. [Create account](#api-create-account)
-    3. [Generate account access key](#api-generate-account-access-key)
-    4. [List accounts](#api-list-accounts)
-    5. [Delete account](#api-delete-account)
-    6. [Authenticate V2](#api-authenticate-v2)
-    7. [Authenticate V4](#api-authenticate-v4)
-    8. [Get email addresses](#api-get-email-addresses)
-    9. [Get canonical ids](#api-get-canonical-ids)
+    1. [Start](#start)
+    2. [Create account](#create-account-1)
+    3. [Create account with quota](#create-account-with-quota-1)
+    4. [Inject accountID](#inject-accountid-1)
+    5. [Generate account access key](#generate-account-access-key-1)
+    6. [Inject accesskey and secretkey](#inject-accesskey-and-secretkey-1)
+    7. [Update account quota](#update-account-quota-1)
+    8. [Delete account quota](#delete-account-quota-1)
+    9. [List accounts](#list-accounts-1)
+    10. [Delete account](#delete-account-1)
+    11. [Authenticate V2](#authenticate-v2)
+    12. [Authenticate V4](#authenticate-v4)
+    13. [Get email addresses](#get-email-addresses)
+    14. [Get canonical ids](#get-canonical-ids)
 3. [Step to set up an account](#step-to-set-up-an-account)
 
 ## Cli
@@ -48,15 +58,59 @@ Output example :
 ```json
 {
     "account": {
-        "arn": "arn:aws:iam::685038099695:/john/",
-        "canonicalId": "8LTVNPCFXUUU8SRQCX3PJQ5PDMYP6TE7610KELF480Q4OWH9OZCS",
-        "id": "685038099695",
+        "arn": "arn:aws:iam::235437388852:/john/",
+        "canonicalId": "8dfc0d36337c3af81417d13e9a9fc20ec4efb553bdd70e27110d13632f74dad0",
+        "id": "235437388852",
         "emailAddress": "john@acme.com",
         "name": "john",
-        "createDate": "2016-07-02T21:26:38Z"
+        "createDate": "2019-12-26T10:49:20Z",
+        "quotaMax": 0
     }
 }
 ```
+
+### Create account with quota
+```sh
+vautclient create-account --name john2 --email john2@acme.com --quota 100
+```
+The previous example will create an account named 'john2' with an email
+'john2@acme.com' with quota set to 100 bytes.
+```json
+{
+    "account": {
+        "arn": "arn:aws:iam::090923674872:/john2/",
+        "canonicalId": "4b76c3580a6e604220daf983d59be9321b6459a08b0b9eb2d99eb69c5b432bc5",
+        "id": "090923674872",
+        "emailAddress": "john2@acme.com",
+        "name": "john2",
+        "createDate": "2019-12-26T10:42:41Z",
+        "quotaMax": 100
+    }
+}
+```
+
+### Inject accountID
+```sh
+vautclient create-account --name john3 --email john3@acme.com \
+--accountid 098765567890
+```
+The previous example will create an account named 'john2' with an email
+'john2@acme.com' with account ID set to `098765567890`.
+
+```json
+{
+    "account": {
+        "arn": "arn:aws:iam::098765567890:/john3/",
+        "canonicalId": "8af6f7a15c15fb2bb1e0dac4fc9edd4582cdd3201117b761473d63aba9f7dac6",
+        "id": "098765567890",
+        "emailAddress": "john3@acme.com",
+        "name": "john3",
+        "createDate": "2019-12-26T10:46:55Z",
+        "quotaMax": 0
+    }
+}
+```
+
 
 In the following output, secretKey is the first accessKey of the account, the
 relevant information here are ```secretKey.id``` (AccessKeyId)
@@ -76,15 +130,77 @@ named ```john```
 Output example :
 
 ```json
-
 {
-    "id": "XMHR9IQ9UYN56W1OSN2S",
-    "value": "5tK4XOid7pXss66A7Jn=Yz7ybnMIB4Uf/BjavN58",
-    "createDate": "2016-07-02T21:47:57Z",
-    "lastUsedDate": "2016-07-02T21:47:57Z",
+    "id": "ERUY93RPJHWGUBF0IDQ8",
+    "value": "5Of4usgFeLVH5Qr0NU6UxW0nyeYzdNQaJKQS=dRt",
+    "createDate": "2019-12-26T10:50:02Z",
+    "lastUsedDate": "2019-12-26T10:50:02Z",
     "status": "Active",
+    "userId": "235437388852"
 }
 
+```
+
+### Inject accesskey and secretkey
+
+```sh
+vaultclient generate-account-access-key --name john \
+--accesskey=AKIA5X47K766FWESB7PL \
+--secretkey=+870aSdHxh9PPS7jxcRuYIMeX9P0ytDYVd/Q8s1B
+```
+
+The previous example will generate inject the supplied account access key
+and secret key for the account named ```john```
+
+Output example :
+
+```json
+{
+    "id": "AKIA5X47K766FWESB7PL",
+    "value": "+870aSdHxh9PPS7jxcRuYIMeX9P0ytDYVd/Q8s1B",
+    "createDate": "2019-12-26T10:50:52Z",
+    "lastUsedDate": "2019-12-26T10:50:52Z",
+    "status": "Active",
+    "userId": "235437388852"
+}
+```
+
+### Update Account Quota
+
+```sh
+vaultclient update-account-quota --account-name john --quota 10000
+```
+
+The previous example will update the quota with the value specified
+for the account named ```john```
+
+Output example :
+
+```json
+{
+    "arn": "arn:aws:iam::235437388852:/john/",
+    "id": "235437388852",
+    "canonicalId": "8dfc0d36337c3af81417d13e9a9fc20ec4efb553bdd70e27110d13632f74dad0",
+    "quota": 10000
+}
+```
+
+### Delete Account Quota
+
+```sh
+vaultclient delete-account-quota --account-name john
+```
+
+The previous example will delete any quota for the account named ```john```
+
+Output example :
+
+```json
+{
+    "arn": "arn:aws:iam::235437388852:/john/",
+    "id": "235437388852",
+    "canonicalId": "8dfc0d36337c3af81417d13e9a9fc20ec4efb553bdd70e27110d13632f74dad0"
+}
 ```
 
 ### List accounts
@@ -194,9 +310,41 @@ client.createAccount('accountName', {
 
 The result format is the same as vaultclient cli.
 
+### Create account with quota
+
+The following example show how create an account with quota
+using the api :
+
+```js
+client.createAccount('accountName', {
+    email: 'accountName@test.com',
+    quota: 100
+}, (err, result) => {
+
+});
+```
+
+The result format is the same as vaultclient cli.
+
+### Inject accountID
+
+The following example show how create an account with custom account ID
+using the api :
+
+```js
+client.createAccount('accountName', {
+    email: 'accountName@test.com',
+    externalAccountId: '123123123123'
+}, (err, result) => {
+
+});
+```
+
+The result format is the same as vaultclient cli.
+
 ### Generate account access key
 
-The following example show how create an account access key :
+The following example show how to create an account access key :
 
 ```js
 client.generateAccountAccessKey('accountName', (err, result) => {
@@ -204,6 +352,42 @@ client.generateAccountAccessKey('accountName', (err, result) => {
 });
 ```
 
+### Inject accesskey and secretkey
+
+The following example show how to inject an account access key and secret key:
+
+```js
+client.generateAccountAccessKey('accountName', (err, result), {
+    externalAccessKey: 'AKIA5X47K766FWESB7PL',
+    externalSecretKey: '+870aSdHxh9PPS7jxcRuYIMeX9P0ytDYVd/Q8s1B'
+} => {
+
+});
+```
+
+The output format is the same as vaultclient cli.
+
+### Update account quota
+
+The following example show how to update quota for an account with the api :
+
+```js
+client.updateAccountQuota('accountName', <quotavalue>, (err, result) => {
+
+});
+```
+```<quotavalue>``` should be a positive number(not a string).
+The output format is the same as vaultclient cli.
+
+### Delete account quota
+
+The following example show how to delete quota for an account with the api :
+
+```js
+client.deleteAccountQuota('accountName', (err, result) => {
+
+});
+```
 The output format is the same as vaultclient cli.
 
 ### List accounts
