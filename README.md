@@ -1,7 +1,6 @@
 # Vault Client Library
 
 [![CircleCI][badgepub]](https://circleci.com/gh/scality/vaultclient)
-[![Scality CI][badgepriv]](http://ci.ironmann.io/gh/scality/vaultclient)
 
 This repository provides a client library for any service that relies on
 Vault. This repository also provides an cli binary to interact with Vault.
@@ -26,6 +25,100 @@ You can check our [quickstart guide](QUICKSTART.md).
 In order to contribute, please follow the
 [Contributing Guidelines](
 https://github.com/scality/Guidelines/blob/master/CONTRIBUTING.md).
+
+## Prerequisite
+
+To use vaultclient with an existing S3 Connector deployment, Vault requires
+the use of AWS signature v4 and valid administration credentials
+in its administrative interfaces (that is: to create, delete, and
+list accounts, users, and access keys). In order to make vaultcient use an
+administrative credential (accessKey, secretKey) pair, first create a
+json file like this:
+
+```
+{
+    "accessKey": "<administrative access key for Vault>",
+    "secretKeyValue": "<administrative secret key for Vault>"
+}
+```
+
+For an existing deployment admin credentials need to be captured from the
+supervisor node. The admin credentials are stored in the same folder as the
+inventory file post S3 Connector deployment completion. Example:
+
+```sh
+$> cat federation/env/s3config/vault/admin-clientprofile/admin1.json
+{
+    "accessKey": "W1JLTJYBDH7XT5YK5SL0",
+    "secretKeyValue": "S/=6J6tfEfg2fMMUtobXsdbhfq3wmSCUSvNRyK/e"
+}
+```
+
+There are three ways of passing the content of the file to vaultclient:
+
+* Name the file `.vaultclient.conf` and place it in your home folder, that is: `~/.vaultclient.conf`
+
+* Set environment variable `VAULT_CONFIG` with the path of the file: `export VAULT_CONFIG=<filepath>`
+
+* Pass the filepath in the command line with option `--config`
+
+An example of the third option is:
+
+```sh
+$ bin/vaultclient create-account --name account0 --email d3v@null \
+                                 --config <path>
+```
+
+To use it outside the S3 Connector's docker container environment,
+Vaultclient needs a node.js and yarn envrionment
+
+Recommended Node version: 10.16.x
+
+Node.js can be installed from [nodejs.org](https://nodejs.org/) and yarn can be
+installed from [yarnpkg.com](https://yarnpkg.com/).
+
+## Installation
+
+Open a terminal and run the following:
+
+```sh
+# Clone this repository in a folder in your home
+$> git clone https://github.com/scality/vaultclient.git ~/vaultClient
+# Go into the cloned folder
+$> cd ~/vaultClient
+# Install relative dependencies
+$> yarn install
+# Configure the Vault administrator credentials in the same directory,
+# using the format shown in the following example.
+$> cat admin.conf
+{
+    "accessKey": "W1JLTJYBDH7XT5YK5SL0",
+    "secretKeyValue": "S/=6J6tfEfg2fMMUtobXsdbhfq3wmSCUSvNRyK/e"
+}
+# Use the vaultclient binary with the prefix shown in the following example.
+$> ./bin/vaultclient --config ./admin.conf --host <S3C-storage-node-IP> \
+    --port 8600 <subcommand>
+```
+
+Alternatively, if you are using S3 Connector storage node, vaultclient can be
+found in the ```scality-vault``` docker container.
+
+```sh
+# SSH to a storage node and exec to the scality-vault docker container
+$> docker exec -it scality-vault bash
+# Change the directory to that of vault client
+$> cd node_modules/vaultclient/
+# Configure the Vault administrator credentials in the same directory,
+# using the format shown in the following example.
+$> cat admin.conf
+{
+    "accessKey": "W1JLTJYBDH7XT5YK5SL0",
+    "secretKeyValue": "S/=6J6tfEfg2fMMUtobXsdbhfq3wmSCUSvNRyK/e"
+}
+# You can use vaultclient binary with the below prefix
+$> ./bin/vaultclient --config ./admin.conf --host 127.0.0.1 --port 8600 \
+    <subcommand>
+```
 
 ## Command-line usage
 
@@ -60,36 +153,6 @@ See [examples](./EXAMPLES.md) to have an overview of all available commands.
 ### Command-line HTTPS support
 
 See [examples](./EXAMPLES.md) to know how to set up https.
-
-### Command-line use of Vault administration credentials
-
-Vault requires the use of AWS signature v4 and valid administration credentials
-in its administrative interfaces (that is, create, delete and list
-accounts, users and access keys). In order to make vaultcient use an
-administrative credential (accessKey, secretKey) pair you must first create a
-json file like this:
-
-```
-{
-    "accessKey": "<administrative access key for Vault>",
-    "secretKeyValue": "<administrative secret key for Vault>"
-}
-```
-
-There are three ways of passing the content of the file to vaultclient:
-
-1. Name the file `.vaultclient.conf` and place it in your home folder, that is: `~/.vaultclient.conf`
-
-2. Set environment variable `VAULT_CONFIG` with the path of the file: `export VAULT_CONFIG=<filepath>`
-
-3. Pass the filepath in the command line with option `--config`
-
-An example of the third option is:
-
-```sh
-$ bin/vaultclient create-account --name account0 --email d3v@null \
-                                 --config <path>
-```
 
 ## Javascript API usage
 
