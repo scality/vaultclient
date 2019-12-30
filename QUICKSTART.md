@@ -23,6 +23,14 @@ running system for **development and learning purposes only**. Production
 installations follow a totally different path that involves the deployment of
 docker instances through [Federation](https://github.com/scality/Federation).
 
+To use it outside the S3 Connector's Docker container environment,
+Vaultclient needs a Node.js and Yarn envrionment
+
+Recommended Node version: 10.16.x
+
+Node.js can be installed from [nodejs.org](https://nodejs.org/) and Yarn can be
+installed from [yarnpkg.com](https://yarnpkg.com/).
+
 ## Downloads and set-up
 
 ### Vault Client
@@ -35,12 +43,12 @@ $> git clone https://github.com/scality/vaultclient.git ~/vaultClient
 # go into the cloned folder
 $> cd ~/vaultClient
 # install relative dependencies
-$> npm install
+$> yarn install
 ```
 
-### Aws cli
+### AWS CLI
 
-Open a terminal and run the following command :
+Open a terminal and run the following command:
 
 ```sh
 $> sudo pip install awscli==1.10.38
@@ -99,7 +107,7 @@ $> ./bin/vaultclient create-account --name accountName \
 ```
 
 Or disable the ssl verification by using the option ```---noCaVerification```
-to the command line, like :
+to the command line, like:
 
 ```sh
 $> ./bin/vaultclient create-account --name accountName \
@@ -112,13 +120,13 @@ certificates are signed by a not well-known CA the connection will fail.
 ### Create an access key for the account
 
 You will need an access key to be able to use the Amazon aws cli, by using the
-following command :
+following command:
 
 ```sh
 $> ./bin/vaultclient generate-account-access-key --name accountName
 ```
 
-You will have an output like :
+You will have an output like:
 
 ```json
 {
@@ -137,7 +145,7 @@ secret key.
 ### Set up amazon aws cli
 
 With values of the access key previously generate, now configure the Amazon
-aws cli :
+aws cli:
 
 ```sh
 $> aws configure
@@ -159,7 +167,7 @@ $> aws --endpoint-url http://localhost:8600 iam create-user --user-name userName
 
 ### Create an access-key for your user
 
-To create your access key, run the following command :
+To create your access key, run the following command:
 
 ``` sh
 $> aws --endpoint-url http://localhost:8600 iam create-access-key --user-name userName
@@ -184,7 +192,7 @@ The response will print something like:
 (if you don't have one, you probably need to
 [install s3cmd](http://s3tools.org/s3cmd)).
 
-You will now configure s3cmd by using the following commands :
+You will now configure s3cmd by using the following commands:
 
 ```sh
 $> s3cmd --configure
