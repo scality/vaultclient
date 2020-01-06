@@ -169,7 +169,7 @@ Output example:
 ### Update account quota
 
 The following example shows how to update the quota with the value specified
-for the account named ```john```
+for the account named ```john```. The value given for quota is in bytes.
 
 ```sh
 vaultclient update-account-quota --account-name john --quota 10000
@@ -547,7 +547,7 @@ vaultclient generate-account-access-key --name "Acme corp"
 
 ```
 
-With this account access key, you can now start to use the Amazon AWS CLI.
+With this account access key, you can now start to use the AWS CLI.
 By setting AccessKeyId in the aws cli config file, or by command line.
 
 ### Create a user
