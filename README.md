@@ -70,12 +70,13 @@ $ bin/vaultclient create-account --name account0 --email d3v@null \
 ```
 
 To use it outside the S3 Connector's Docker container environment,
-Vaultclient needs a Node.js and Yarn envrionment
+Vaultclient needs an environment with Node.js 10.x and the latest
+version of Yarn installed.
 
-Recommended Node version: 10.16.x
+Recommended Node version: 10.x
 
-Node.js can be installed from [nodejs.org](https://nodejs.org/) and Yarn can be
-installed from [yarnpkg.com](https://yarnpkg.com/).
+Node.js can be installed from [nodejs.org](https://nodejs.org/en/download/) and
+Yarn can be installed from [yarnpkg.com](https://yarnpkg.com/en/docs/install).
 
 ## Installation
 
