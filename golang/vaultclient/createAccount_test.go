@@ -3,7 +3,6 @@ package vaultclient
 import (
 	"bytes"
 	"encoding/json"
-	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"net/url"
@@ -27,9 +26,8 @@ var (
 	mockCanonicalID = "cdc9948f9124efae674ed122d52ce4d83d18c53ed05dcbf3765db56a051d7496"
 	mockCreateDate  = "2020-04-20T01:54:54Z"
 	mockArn         = "arn:arn:aws:iam::893701217479:/name/"
+	mockTime, _     = time.Parse(time.RFC3339, mockCreateDate)
 )
-
-var mockTime, _ = time.Parse(time.RFC3339, mockCreateDate)
 
 func mockResponseBody(req *http.Request, t *testing.T) map[string]map[string]map[string]mockValue {
 	buf := new(bytes.Buffer)
@@ -38,9 +36,12 @@ func mockResponseBody(req *http.Request, t *testing.T) map[string]map[string]map
 	if err != nil {
 		t.Error(err)
 	}
-	quotaMax, err := strconv.ParseInt(v.Get("quotaMax"), 10, 64)
-	if err != nil {
-		t.Error(err)
+	var quotaMax int64
+	if v.Get("quotaMax") != "" {
+		quotaMax, err = strconv.ParseInt(v.Get("quotaMax"), 10, 64)
+		if err != nil {
+			t.Error(err)
+		}
 	}
 	return map[string]map[string]map[string]mockValue{
 		"account": map[string]map[string]mockValue{
@@ -58,10 +59,11 @@ func mockResponseBody(req *http.Request, t *testing.T) map[string]map[string]map
 }
 
 type createAccountTest struct {
-	name     *string
-	email    *string
-	quotaMax *int64
-	err      error
+	name        *string
+	email       *string
+	quotaMax    *int64
+	err         error
+	description string
 }
 
 func createAccountErrorMaker(errs []request.ErrInvalidParam) error {
@@ -73,38 +75,23 @@ func createAccountErrorMaker(errs []request.ErrInvalidParam) error {
 }
 
 var listCreateAccountTests = []createAccountTest{
-	createAccountTest{name: &mockName, email: &mockEmail, quotaMax: &mockQuotaMax, err: nil},
-	createAccountTest{name: aws.String(""), email: &mockEmail, quotaMax: &mockQuotaMax, err: createAccountErrorMaker([]request.ErrInvalidParam{request.NewErrParamMinLen("Name", 1)})},
-	createAccountTest{email: &mockEmail, quotaMax: &mockQuotaMax, err: createAccountErrorMaker([]request.ErrInvalidParam{request.NewErrParamRequired("Name")})},
+	createAccountTest{name: &mockName, email: &mockEmail, err: nil, description: "Should pass with valid name and email"},
+	createAccountTest{name: &mockName, email: &mockEmail, quotaMax: &mockQuotaMax, err: nil, description: "Should pass with valid quotaMax"},
 
-	createAccountTest{name: &mockName, email: aws.String(""), quotaMax: &mockQuotaMax, err: createAccountErrorMaker([]request.ErrInvalidParam{request.NewErrParamMinLen("Email", 1)})},
-	createAccountTest{name: &mockName, quotaMax: &mockQuotaMax, err: createAccountErrorMaker([]request.ErrInvalidParam{request.NewErrParamRequired("Email")})},
-}
-
-func descriptionString(v *string) string {
-	if v != nil {
-		if *v == "" {
-			return "empty"
-		}
-		return "\"" + *v + "\""
-	}
-	return "nil"
+	createAccountTest{name: aws.String(""), email: &mockEmail, quotaMax: &mockQuotaMax, err: createAccountErrorMaker([]request.ErrInvalidParam{request.NewErrParamMinLen("Name", 1)}), description: "Should fail if name is empty"},
+	createAccountTest{email: &mockEmail, quotaMax: &mockQuotaMax, err: createAccountErrorMaker([]request.ErrInvalidParam{request.NewErrParamRequired("Name")}), description: "Should fail if name is not set"},
+	createAccountTest{name: &mockName, email: aws.String(""), quotaMax: &mockQuotaMax, err: createAccountErrorMaker([]request.ErrInvalidParam{request.NewErrParamMinLen("Email", 1)}), description: "Should fail if email is empty"},
+	createAccountTest{name: &mockName, quotaMax: &mockQuotaMax, err: createAccountErrorMaker([]request.ErrInvalidParam{request.NewErrParamRequired("Email")}), description: "Should fail if email is not set"},
+	createAccountTest{name: &mockName, email: &mockEmail, quotaMax: aws.Int64(0), err: createAccountErrorMaker([]request.ErrInvalidParam{request.NewErrParamMinValue("QuotaMax", 1)}), description: "Should fail if quotaMax is set to 0"},
+	createAccountTest{err: createAccountErrorMaker([]request.ErrInvalidParam{request.NewErrParamRequired("Name"), request.NewErrParamRequired("Email")}), description: "Should fail if name and email are not set"},
 }
 
 func TestCreateAccount(t *testing.T) {
 
-	// setup (run before each `Convey` at this scope):
-	// Close the server when test finishes
 	Convey("Test CreateAccount", t, func() {
 
 		for _, tc := range listCreateAccountTests {
-			errorDescription := "no error"
-			if tc.err != nil {
-				errorDescription = tc.err.Error()
-			}
-			descName := descriptionString(tc.name)
-			descEmail := descriptionString(tc.email)
-			description := fmt.Sprintf("With name:%s, email:%s and quotaMax:\"%d\", should return %s", descName, descEmail, *tc.quotaMax, errorDescription)
+			description := tc.description
 			Convey(description, func() {
 				server := httptest.NewServer(http.HandlerFunc(func(res http.ResponseWriter, req *http.Request) {
 					// Send response to be tested
@@ -117,7 +104,6 @@ func TestCreateAccount(t *testing.T) {
 				}))
 
 				sess := session.Must(session.NewSession(&aws.Config{
-					// CredentialsChainVerboseErrors: aws.Bool(true),
 					Endpoint:   aws.String(server.URL),
 					Region:     aws.String("us-east-1"),
 					HTTPClient: server.Client(),
@@ -139,11 +125,16 @@ func TestCreateAccount(t *testing.T) {
 				} else {
 					So(*res.GetAccount().Email, ShouldEqual, *tc.email)
 					So(*res.GetAccount().Name, ShouldEqual, *tc.name)
-					So(*res.GetAccount().QuotaMax, ShouldEqual, *tc.quotaMax)
 					So(*res.GetAccount().ID, ShouldEqual, mockID)
 					So(*res.GetAccount().Arn, ShouldEqual, mockArn)
 					So(*res.GetAccount().CanonicalID, ShouldEqual, mockCanonicalID)
 					So(*res.GetAccount().CreateDate, ShouldEqual, mockTime)
+					// optional property
+					if tc.quotaMax == nil {
+						So(*res.GetAccount().QuotaMax, ShouldEqual, 0)
+					} else {
+						So(*res.GetAccount().QuotaMax, ShouldEqual, *tc.quotaMax)
+					}
 				}
 
 				defer server.Close()
