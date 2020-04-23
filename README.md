@@ -1,6 +1,7 @@
 # Vault Client Library
 
 [![CircleCI][badgepub]](https://circleci.com/gh/scality/vaultclient)
+[![Documentation][badgegodoc]](https://pkg.go.dev/github.com/scality/vaultclient/golang/vaultclient)
 
 This repository provides a client library for any service that relies on
 Vault. This repository also provides a CLI binary to interact with Vault.
@@ -191,5 +192,10 @@ client.createAccount('account0', { email: 'dev@null' }, (err, data) => {
 });
 ```
 
+## Golang client usage
+
+[Documentation](https://pkg.go.dev/github.com/scality/vaultclient/golang/vaultclient)
+
 [badgepub]: https://circleci.com/gh/scality/vaultclient.svg?style=svg
+[badgegodoc]: https://godoc.org/github.com/scality/vaultclient/golang/vaultclient?status.svg
 [badgepriv]: http://ci.ironmann.io/gh/scality/vaultclient.svg?style=svg&circle-token=40f1e9fe0ad184248c37cbf3d89b164c35fd1667
