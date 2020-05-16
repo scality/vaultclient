@@ -1,6 +1,7 @@
 package vaultclient
 
 import (
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
 )
@@ -39,9 +40,17 @@ func (s *DeleteAccountInput) SetAccountName(v string) *DeleteAccountInput {
 	return s
 }
 
-// DeleteAccount API operation delete Vault account
-func (c *Vault) DeleteAccount(input *DeleteAccountInput) (*DeleteAccountOutput, error) {
+// DeleteAccount API operation deletes Vault account
+// and adds the ability to pass a context and additional request options.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Vault) DeleteAccount(ctx aws.Context, input *DeleteAccountInput, opts ...request.Option) (*DeleteAccountOutput, error) {
 	req, out := c.DeleteAccountRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
 	return out, req.Send()
 }
 

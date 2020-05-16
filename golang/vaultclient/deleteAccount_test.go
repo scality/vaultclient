@@ -1,6 +1,7 @@
 package vaultclient
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -49,6 +50,7 @@ func TestDeleteAccount(t *testing.T) {
 		for _, tc := range listDeleteAccountTests {
 			description := tc.description
 			Convey(description, func() {
+				ctx := context.Background()
 				sess := session.Must(session.NewSession(&aws.Config{
 					Endpoint:   aws.String(server.URL),
 					Region:     aws.String("us-east-1"),
@@ -59,7 +61,7 @@ func TestDeleteAccount(t *testing.T) {
 				if tc.accountName != nil {
 					params.SetAccountName(*tc.accountName)
 				}
-				_, err := svc.DeleteAccount(params)
+				_, err := svc.DeleteAccount(ctx, params)
 				if tc.err != nil {
 					So(err.Error(), ShouldEqual, tc.err.Error())
 				} else {

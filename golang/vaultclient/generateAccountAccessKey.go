@@ -3,6 +3,7 @@ package vaultclient
 import (
 	"time"
 
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
 )
@@ -64,8 +65,16 @@ func (s *GenerateAccountAccessKeyInput) SetExternalSecretKey(v string) *Generate
 }
 
 // GenerateAccountAccessKey API operation generates a new access key for the account
-func (c *Vault) GenerateAccountAccessKey(input *GenerateAccountAccessKeyInput) (*GenerateAccountAccessKeyOutput, error) {
+// and adds the ability to pass a context and additional request options.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Vault) GenerateAccountAccessKey(ctx aws.Context, input *GenerateAccountAccessKeyInput, opts ...request.Option) (*GenerateAccountAccessKeyOutput, error) {
 	req, out := c.GenerateAccountAccessKeyRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
 	return out, req.Send()
 }
 

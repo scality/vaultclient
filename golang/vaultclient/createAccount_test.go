@@ -2,6 +2,7 @@ package vaultclient
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -109,6 +110,7 @@ func TestCreateAccount(t *testing.T) {
 		for _, tc := range listCreateAccountTests {
 			description := tc.description
 			Convey(description, func() {
+				ctx := context.Background()
 				sess := session.Must(session.NewSession(&aws.Config{
 					Endpoint:   aws.String(server.URL),
 					Region:     aws.String("us-east-1"),
@@ -128,7 +130,7 @@ func TestCreateAccount(t *testing.T) {
 				if tc.externalAccountID != nil {
 					params.SetExternalAccountID(*tc.externalAccountID)
 				}
-				res, err := svc.CreateAccount(params)
+				res, err := svc.CreateAccount(ctx, params)
 				if tc.err != nil {
 					So(err.Error(), ShouldEqual, tc.err.Error())
 				} else {

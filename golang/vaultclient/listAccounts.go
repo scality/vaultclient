@@ -1,6 +1,7 @@
 package vaultclient
 
 import (
+	"github.com/aws/aws-sdk-go/aws"
 	"github.com/aws/aws-sdk-go/aws/awsutil"
 	"github.com/aws/aws-sdk-go/aws/request"
 )
@@ -57,8 +58,16 @@ func (s *ListAccountsInput) SetMaxItems(v int64) *ListAccountsInput {
 }
 
 // ListAccounts API operation lists Vault accounts
-func (c *Vault) ListAccounts(input *ListAccountsInput) (*ListAccountsOutput, error) {
+// and adds the ability to pass a context and additional request options.
+//
+// The context must be non-nil and will be used for request cancellation. If
+// the context is nil a panic will occur. In the future the SDK may create
+// sub-contexts for http.Requests. See https://golang.org/pkg/context/
+// for more information on using Contexts.
+func (c *Vault) ListAccounts(ctx aws.Context, input *ListAccountsInput, opts ...request.Option) (*ListAccountsOutput, error) {
 	req, out := c.ListAccountsRequest(input)
+	req.SetContext(ctx)
+	req.ApplyOptions(opts...)
 	return out, req.Send()
 }
 

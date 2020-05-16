@@ -1,6 +1,7 @@
 package vaultclient
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -72,6 +73,7 @@ func TestListAccounts(t *testing.T) {
 		for _, tc := range listListAccountsTests {
 			description := tc.description
 			Convey(description, func() {
+				ctx := context.Background()
 				sess := session.Must(session.NewSession(&aws.Config{
 					Endpoint:   aws.String(server.URL),
 					Region:     aws.String("us-east-1"),
@@ -85,7 +87,7 @@ func TestListAccounts(t *testing.T) {
 				if tc.maxItems != nil {
 					params.SetMaxItems(*tc.maxItems)
 				}
-				res, err := svc.ListAccounts(params)
+				res, err := svc.ListAccounts(ctx, params)
 				if tc.err != nil {
 					So(err.Error(), ShouldEqual, tc.err.Error())
 				} else {

@@ -1,6 +1,7 @@
 package vaultclient
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -71,6 +72,7 @@ func TestGenerateAccountAccessKey(t *testing.T) {
 		for _, tc := range generateKeyTests {
 			description := tc.description
 			Convey(description, func() {
+				ctx := context.Background()
 				sess := session.Must(session.NewSession(&aws.Config{
 					Endpoint:   aws.String(server.URL),
 					Region:     aws.String("us-east-1"),
@@ -87,7 +89,7 @@ func TestGenerateAccountAccessKey(t *testing.T) {
 				if tc.externalAccessKey != nil {
 					params.SetExternalAccessKey(*tc.externalAccessKey)
 				}
-				res, err := svc.GenerateAccountAccessKey(params)
+				res, err := svc.GenerateAccountAccessKey(ctx, params)
 				if tc.err != nil {
 					So(err.Error(), ShouldEqual, tc.err.Error())
 				} else {
