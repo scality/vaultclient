@@ -29,9 +29,9 @@
   },
   "scripts": {
     "start": "node client.js",
-    "lint": "eslint $(git ls-files '*.js' ':!:golang')",
-    "lint_yml": "yamllint $(git ls-files '*.yml' ':!:golang')",
-    "lint_md": "mdlint $(git ls-files '*.md' ':!:golang')",
+    "lint": "eslint $(git ls-files '*.js')",
+    "lint_yml": "yamllint $(git ls-files '*.yml')",
+    "lint_md": "mdlint $(git ls-files '*.md')",
     "test": "mocha --exit tests/unit"
   }
 }
