@@ -116,6 +116,14 @@ program
     }));
 
 program
+    .command('generate-account-password')
+    .option('--name <NAME>')
+    .option('--password <PASSOWRD>')
+    .action(action.bind(null, 'generate-account-password', (client, args) => {
+        client.generateAccountPassword(args.name, args.password, handleVaultResponse);
+    }));
+
+program
     .command('generate-account-access-key')
     .option('--name <NAME>')
     .option('--accesskey <ExternalAccessKey>')

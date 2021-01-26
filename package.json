@@ -3,7 +3,7 @@
   "engines": {
     "node": ">=10"
   },
-  "version": "7.5.1",
+  "version": "7.9.0",
   "description": "Client library and binary for Vault, the user directory and key management service",
   "main": "index.js",
   "repository": "scality/vaultclient",
