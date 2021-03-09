@@ -148,18 +148,18 @@ program
 
 program
     .command('get-account')
-    .option('--arn <ARN>')
-    .option('--name <NAME>')
-    .option('--id <ACCOUNT ID')
-    .option('--canonicalId <CANONICAL ID>')
+    .option('--account-arn <ARN>')
+    .option('--account-name <Account Name>')
+    .option('--account-id <ACCOUNT ID')
+    .option('--canonical-id <CANONICAL ID>')
     .option('--email <EMAIL>')
     .action(action.bind(null, 'get-account', (client, args) => {
         client.getAccount({
-            arn: args.arn || undefined,
-            name: args.name || undefined,
-            id: args.id || undefined,
+            accountArn: args.accountArn || undefined,
+            accountName: args.accountName || undefined,
+            accountId: args.accountId || undefined,
             canonicalId: args.canonicalId || undefined,
-            emailAddress: args.emailAddress || undefined,
+            emailAddress: args.email || undefined,
         }, handleVaultResponse);
     }));
 
