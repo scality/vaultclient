@@ -105,14 +105,15 @@ program
     .option('--email <EMAIL>')
     .option('--quota <Quota>', 'Maximum quota for the account', parseInt)
     .option('--accountid <ExternalAccountID>')
+    .option('--cdTenantId <CloudDirectorTenantID>', 'cloud director tenant ID')
     .action(action.bind(null, 'create-account', (client, args) => {
         client.createAccount(
             args.name, {
             email: args.email,
             quota: args.quota || null,
-            externalAccountId: args.accountid || null
-        },
-            handleVaultResponse);
+            externalAccountId: args.accountid || null,
+            cdTenantId: args.cdTenantId,
+        }, handleVaultResponse);
     }));
 
 program
@@ -131,7 +132,7 @@ program
     .action(action.bind(null, 'generate-account-access-key', (client, args) => {
         client.generateAccountAccessKey(args.name, handleVaultResponse, {
             externalAccessKey: args.accesskey || null,
-            externalSecretKey: args.secretkey || null
+            externalSecretKey: args.secretkey || null,
         });
     }));
 
