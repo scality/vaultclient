@@ -139,10 +139,14 @@ program
     .command('list-accounts')
     .option('--marker [MARKER]', 'Marker for pagination')
     .option('--maxItems [MAXITEMS]', 'Max items for pagination', parseInt)
+    .option('--filterKey <string>', 'Filter for custom attributes')
+    .option('--filterKeyStartsWith <string>', 'Generic filter for custom attributes')
     .action(action.bind(null, 'list-accounts', (client, args) => {
         client.listAccounts({
             marker: args.marker,
             maxItems: args.maxItems,
+            filterKey: args.filterKey,
+            filterKeyStartsWith: args.filterKeyStartsWith,
         }, handleVaultResponse);
     }));
 
