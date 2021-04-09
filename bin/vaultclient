@@ -191,6 +191,14 @@ program
     }));
 
 program
+    .command('assume-role-backbeat')
+    .option('--role-arn <RoleArn>')
+    .option('--role-session-name <RoleSessionName>')
+    .action(action.bind(null, 'assume-role-backbeat', (client, args) => {
+        client.assumeRoleBackbeat(args.roleArn, args.roleSessionName, { reqUid: 'dummy:Serialized:Uids' }, handleVaultResponse);
+    }));
+
+program
     .command('*')
     .action(() => {
         program.outputHelp();
