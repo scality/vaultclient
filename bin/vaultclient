@@ -128,10 +128,12 @@ program
     .option('--name <NAME>')
     .option('--accesskey <ExternalAccessKey>')
     .option('--secretkey <ExternalSecretKey>')
+    .option('--durationSeconds <DurationSeconds>', 'Duration in number of seconds')
     .action(action.bind(null, 'generate-account-access-key', (client, args) => {
         client.generateAccountAccessKey(args.name, handleVaultResponse, {
             externalAccessKey: args.accesskey || null,
-            externalSecretKey: args.secretkey || null
+            externalSecretKey: args.secretkey || null,
+            durationSeconds: args.durationSeconds || null
         });
     }));
 
