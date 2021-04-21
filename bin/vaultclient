@@ -52,6 +52,22 @@ function readConfigFile(configFilePath) {
     }
 };
 
+/**
+ * Gets admin credentials via environment variables or via config file
+ *
+ * @param configFilePath - path to the admin config
+ * @returns {object} - admin credentials
+ */
+function getAdminConfig(configFilePath) {
+    if (process.env.ADMIN_ACCESS_KEY_ID && process.env.ADMIN_SECRET_ACCESS_KEY) {
+        return {
+            accessKey: process.env.ADMIN_ACCESS_KEY_ID,
+            secretKeyValue: process.env.ADMIN_SECRET_ACCESS_KEY,
+        }
+    }
+    return readConfigFile(configFilePath);
+}
+
 function action(cmd, fn, args) {
     if (typeof args !== 'object') {
         program.commands.find(c => c._name === cmd).outputHelp();
@@ -63,7 +79,7 @@ function action(cmd, fn, args) {
         const ca = args.parent.cafile ?
             fs.readFileSync(args.parent.cafile, 'ascii') : undefined;
         const untrusted = args.parent.noCaVerification ? true : false;
-        const config = readConfigFile(args.parent.config);
+        const config = getAdminConfig(args.parent.config);
         const accessKey = config.accessKey;
         const secretKey = config.secretKeyValue;
         let host = args.parent.host || process.env.VAULT_HOST || 'localhost';
