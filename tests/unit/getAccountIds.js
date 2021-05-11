@@ -49,7 +49,7 @@ function handler(req, res) {
     return res.end(JSON.stringify(output), null, 4);
 }
 
-describe.only('getAccountIds with mockup server', () => {
+describe('getAccountIds with mockup server', () => {
     let server;
     let client;
 
