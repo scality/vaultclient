@@ -40,12 +40,10 @@ function handler(req, res) {
         res.writeHead(errors.InvalidParameterValue.code);
         return res.end(JSON.stringify(errors.InvalidParameterValue));
     }
-    const output = inputArray.map(canId => {
-        return {
-            id: serverDB[canId],
-            canId,
-        }
-    });
+    const output = inputArray.map(canId => ({
+        id: serverDB[canId],
+        canId,
+    }));
     res.writeHead(200);
     return res.end(JSON.stringify(output), null, 4);
 }
