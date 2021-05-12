@@ -13,8 +13,6 @@ const canId2 =
     '1234567890123456789012345678901234567890123456789012345678901230';
 const canId3 =
     '2345678901234567890123456789012345678901234567890123456789012301';
-const canIdBad =
-    '2345678901234567890123456789012345678901234567890123456789012bad';
 
 const accountId1 = 'accountId1';
 const accountId2 = 'accountId2';
@@ -32,11 +30,11 @@ serverDB[canId3] = accountId3;
 function handler(req, res) {
     const index = req.url.indexOf('?');
     const data = querystring.parse(req.url.substring(index + 1));
-    let inputArray = data.canonicalIds;
+    let inputArray = data.req;
     if (!Array.isArray(inputArray)) {
         inputArray = [inputArray];
     }
-    if (inputArray.indexOf(canIdBad) !== -1) {
+    if (req.headers['x-scal-request-uids'] === 'failme') {
         res.writeHead(errors.InvalidParameterValue.code);
         return res.end(JSON.stringify(errors.InvalidParameterValue));
     }
@@ -77,8 +75,8 @@ describe('getAccountIds with mockup server', () => {
     });
 
     it('should return error when server returns an error', done => {
-        const canIds = [canId1, canId2, canIdBad];
-        client.getAccountIds(canIds, {}, err => {
+        const canIds = [canId1, canId2];
+        client.getAccountIds(canIds, { reqUid: 'failme' }, err => {
             assert(err);
             return done();
         });
