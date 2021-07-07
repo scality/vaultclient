@@ -36,7 +36,15 @@ function checkConfig(configObject) {
     }
 }
 
-function readConfigFile(configFilePath) {
+function readConfig(configFilePath) {
+    const accessKey = process.env.VAULT_ACCESS_KEY;
+    const secretKeyValue = process.env.VAULT_SECRET_KEY;
+    if (accessKey && secretKeyValue) {
+        return {
+            accessKey,
+            secretKeyValue,
+        };
+    }
     let actualPath = path.join(homedir(), '.vaultclient.conf');
     if (configFilePath) {
         actualPath = configFilePath;
@@ -63,7 +71,7 @@ function action(cmd, fn, args) {
         const ca = args.parent.cafile ?
             fs.readFileSync(args.parent.cafile, 'ascii') : undefined;
         const untrusted = args.parent.noCaVerification ? true : false;
-        const config = readConfigFile(args.parent.config);
+        const config = readConfig(args.parent.config);
         const accessKey = config.accessKey;
         const secretKey = config.secretKeyValue;
         let host = args.parent.host || process.env.VAULT_HOST || 'localhost';
