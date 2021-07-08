@@ -12,6 +12,10 @@ const vaultclient = require('../index');
 
 const version = require('../package.json').version;
 
+const internalServiceAccountId = '000000000000';
+const internalServiceAccountName = 'scality-internal-services';
+const internalServiceAccountEmail = 'scality@internal';
+
 program.version(version)
     .option('--host [HOST]', 'host where Vault is running (default to ' +
         'VAULT_HOST environment variable)')
@@ -198,6 +202,54 @@ program
     .option('--name <NAME>')
     .action(action.bind(null, 'delete-account', (client, args) => {
         client.deleteAccount(args.name, handleVaultResponse);
+    }));
+
+program
+    .command('ensure-internal-services-account')
+    .option('--accesskey <AccessKey>')
+    .option('--secretkey <SecretKey>')
+    .action(action.bind(null, 'ensure-internal-management-account', (client, args) => {
+        const ensureAccessKey = err => {
+            if (err) {
+                return handleVaultResponse(err);
+            }
+            const params = {
+                externalAccessKey: args.accesskey,
+                externalSecretKey: args.secretkey,
+            };
+            return client.generateAccountAccessKey(internalServiceAccountName,
+                (err, data) => {
+                    if (err && err.EntityAlreadyExists) {
+                        return handleVaultResponse(null, data);
+                    }
+                    return handleVaultResponse(err, data);
+                }, params);
+        };
+
+        client.getAccount({ accountId: internalServiceAccountId }, (err, data) => {
+            if (!err) {
+                if (data.name !== internalServiceAccountName || data.emailAddress !== internalServiceAccountEmail) {
+                    return handleVaultResponse({
+                        errorMessage: "An account already exists with id "+internalServiceAccountId,
+                        existingAccount: data,
+                    });
+                }
+
+                return ensureAccessKey();
+            }
+
+            if (err.NoSuchEntity) {
+                return client.createAccount(
+                    internalServiceAccountName, {
+                        email: internalServiceAccountEmail,
+                        externalAccountId: internalServiceAccountId,
+                        // TODO add flag here to not seed the account S3C-4656
+                    },
+                    ensureAccessKey);
+            }
+
+            return handleVaultResponse(err);
+        });
     }));
 
 program
