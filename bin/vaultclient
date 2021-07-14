@@ -251,7 +251,7 @@ program
                     internalServiceAccountName, {
                         email: internalServiceAccountEmail,
                         externalAccountId: internalServiceAccountId,
-                        // TODO add flag here to not seed the account S3C-4656
+                        disableSeed: true,
                     },
                     ensureAccessKey);
             }
