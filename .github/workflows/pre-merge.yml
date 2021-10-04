@@ -1,0 +1,36 @@
+---
+name: pre-merge
+
+on:
+  push:
+    branches:
+      - 'user/**'
+      - 'feature/**'
+      - 'improvement/**'
+      - 'bugfix/**'
+      - 'w/**'
+      - 'q/**'
+
+
+jobs:
+  tests:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '10'
+      - name: install dependencies
+        run: npm install
+      - name: run lint yml
+        run: npm run --silent lint_yml
+      - name: run lint
+        run: npm run --silent lint -- --max-warnings 0
+      - name: run lint_md
+        run: npm run --silent lint_md
+      - name: set host testing.local
+        run: sudo bash -c 'echo "127.0.0.1 testing.local" >> /etc/hosts'
+      - name: set host vaultclient.testing.local
+        run: sudo bash -c 'echo "127.0.0.1 vault.testing.local" >> /etc/hosts'
+      - name: run test
+        run: npm run test
