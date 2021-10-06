@@ -1,0 +1,35 @@
+---
+name: pre-merge
+
+on:
+  push:
+    branches:
+      - 'user/**'
+      - 'feature/**'
+      - 'improvement/**'
+      - 'bugfix/**'
+      - 'w/**'
+      - 'q/**'
+
+
+jobs:
+  test-states-syntax:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+      - name: install mocha
+        run: yarn global add mocha
+      - name: install dependencies
+        run: yarn install --frozen-lockfile
+      - name: run lint yml
+        run: yarn run --silent lint_yml
+      - name: run lint
+        run: yarn run --silent lint -- --max-warnings 0
+      - name: run lint_md
+        run: yarn run --silent lint_md
+      - name: set host testing.local
+        run: sudo bash -c 'echo "127.0.0.1 testing.local" >> /etc/hosts'
+      - name: set host vaultclient.testing.local
+        run: sudo bash -c 'echo "127.0.0.1 vault.testing.local" >> /etc/hosts'
+      - name: run test
+        run: yarn run test
