@@ -389,6 +389,32 @@ client.deleteAccountQuota('accountName', (err, result) => {
 
 The output is formatted the same as Vaultclient CLI.
 
+
+### Update account custom attributes
+
+The following example shows how to update an account's custom attributes.
+
+* Remove existing custom attributes:
+
+```js
+
+client.updateAccountAttributes('accountName', {}, (err, result) => {});
+
+```
+
+* Set custom attributes:
+
+```js
+
+client.updateAccountAttributes('accountName', {
+    attr: 'custom'
+}, (err, result) => {
+});
+
+```
+
+**note**: This API call will overwrite existing custom attributes.
+
 ### List accounts
 
 The following example shows how to list accounts:
