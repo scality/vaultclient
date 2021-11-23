@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const http = require('http');
-const IAMClient = require('../../lib/IAMClient.js');
+const IAMClient = require('../../lib/IAMClient');
 
 function handler(req, res) {
     res.writeHead(200);

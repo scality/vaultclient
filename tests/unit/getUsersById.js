@@ -5,7 +5,7 @@ const assert = require('assert');
 const { errors } = require('arsenal');
 const http = require('http');
 const querystring = require('querystring');
-const IAMClient = require('../../lib/IAMClient.js');
+const IAMClient = require('../../lib/IAMClient');
 
 
 const userId1 = 'userId1';
