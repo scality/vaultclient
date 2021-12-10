@@ -5,7 +5,7 @@
 const { createHmac } = require('crypto');
 const commander = require('commander');
 
-const IAMClient = require('../lib/IAMClient.js');
+const IAMClient = require('../lib/IAMClient');
 
 commander
     .version('0.0.1')
