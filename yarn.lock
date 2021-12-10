@@ -2589,7 +2589,7 @@ v8-compile-cache@^2.0.3:
 
 werelogs@scality/werelogs#8.1.0:
   version "8.1.0"
-  resolved "git+ssh://git@github.com/scality/werelogs.git#e8f828725642c54c511cdbe580b18f43d3589313"
+  resolved "https://github.com/scality/werelogs.git#e8f828725642c54c511cdbe580b18f43d3589313"
   dependencies:
     safe-json-stringify "1.0.3"
 
