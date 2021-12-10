@@ -2,7 +2,7 @@
 // const http = require('http');
 const assert = require('assert');
 const { errors } = require('arsenal');
-const IAMClient = require('../../lib/IAMClient.js');
+const IAMClient = require('../../lib/IAMClient');
 
 const log = { error() {} };
 const res = { statusCode: 400 };
