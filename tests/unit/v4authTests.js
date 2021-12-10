@@ -5,7 +5,7 @@ const http = require('http');
 const querystring = require('querystring');
 const { createHmac } = require('crypto');
 
-const IAMClient = require('../../lib/IAMClient.js');
+const IAMClient = require('../../lib/IAMClient');
 
 function handler(req, res) {
     const index = req.url.indexOf('?');
