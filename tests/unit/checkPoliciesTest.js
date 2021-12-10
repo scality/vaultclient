@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const http = require('http');
-const IAMClient = require('../../lib/IAMClient.js');
+const IAMClient = require('../../lib/IAMClient');
 
 const output = [{ isAllowed: true, arn: 'arn:aws:s3:::policybucket/obj' }];
 const requestContextParams = {
