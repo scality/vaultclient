@@ -5,7 +5,7 @@ const assert = require('assert');
 const { errors } = require('arsenal');
 const http = require('http');
 const querystring = require('querystring');
-const IAMClient = require('../../lib/IAMClient.js');
+const IAMClient = require('../../lib/IAMClient');
 
 const canId1 =
     '0123456789012345678901234567890123456789012345678901234567890123';
