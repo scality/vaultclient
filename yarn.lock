@@ -249,9 +249,9 @@ arraybuffer.slice@~0.0.7:
   resolved "https://registry.yarnpkg.com/arraybuffer.slice/-/arraybuffer.slice-0.0.7.tgz#3bbc4275dd584cc1b10809b89d4e8b63a69e7675"
   integrity sha512-wGUIVQXuehL5TCqQun8OW81jGzAWycqzFF8lFp+GOM5BXLYj3bKNsYC4daB7n6XjCqxQA/qgTJ+8ANR3acjrog==
 
-arsenal@scality/Arsenal#7.10.1:
-  version "7.10.1"
-  resolved "https://codeload.github.com/scality/Arsenal/tar.gz/ce7bba1f8d8b4078335f65e8eaa49f6454ddbf46"
+arsenal@scality/Arsenal#w/7.10/feature/ARSN-21/UpgradeToNode16:
+  version "7.10.6"
+  resolved "https://codeload.github.com/scality/Arsenal/tar.gz/10f0a934b0b8d5e58b1a989c30e391c5ad45ffbc"
   dependencies:
     "@hapi/joi" "^15.1.0"
     JSONStream "^1.0.0"
@@ -276,7 +276,7 @@ arsenal@scality/Arsenal#7.10.1:
     werelogs scality/werelogs#8.1.0
     xml2js "~0.4.23"
   optionalDependencies:
-    ioctl "2.0.0"
+    ioctl "^2.0.2"
 
 astral-regex@^1.0.0:
   version "1.0.0"
@@ -346,7 +346,7 @@ better-assert@~1.0.0:
   dependencies:
     callsite "1.0.0"
 
-bindings@^1.1.1:
+bindings@^1.5.0:
   version "1.5.0"
   resolved "https://registry.yarnpkg.com/bindings/-/bindings-1.5.0.tgz#10353c9e945334bc0511a6d90b38fbc7c9c504df"
   integrity sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==
@@ -1221,13 +1221,13 @@ invert-kv@^2.0.0:
   resolved "https://registry.yarnpkg.com/invert-kv/-/invert-kv-2.0.0.tgz#7393f5afa59ec9ff5f67a27620d11c226e3eec02"
   integrity sha512-wPVv/y/QQ/Uiirj/vh3oP+1Ww+AWehmi1g5fFWGPF6IpCBCDVrhgHRMvrLfdYcwDh3QJbGXDW4JAuzxElLSqKA==
 
-ioctl@2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/ioctl/-/ioctl-2.0.0.tgz#2aacbd73eb6ff9ad01fdf3ecc3390ee57781100e"
-  integrity sha1-Kqy9c+tv+a0B/fPswzkO5XeBEA4=
+ioctl@^2.0.2:
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/ioctl/-/ioctl-2.0.2.tgz#21543f661cb1b044761cbf721f5dde6be08ed060"
+  integrity sha512-GPEiU99bJb3Z50JDRujQ9t+q4JaRvc1UrD7F5/kHDVWlRA3L4TMwqbMw/XIu/BzqccFP8OfsK+JIXmlAvJDs1g==
   dependencies:
-    bindings "^1.1.1"
-    nan "^2.3.2"
+    bindings "^1.5.0"
+    nan "^2.14.0"
 
 ioredis@4.9.5:
   version "4.9.5"
@@ -1731,7 +1731,7 @@ mute-stream@0.0.7:
   resolved "https://registry.yarnpkg.com/mute-stream/-/mute-stream-0.0.7.tgz#3075ce93bc21b8fab43e1bc4da7e8115ed1e7bab"
   integrity sha1-MHXOk7whuPq0PhvE2n6BFe0ee6s=
 
-nan@^2.14.0, nan@^2.3.2:
+nan@^2.14.0:
   version "2.14.0"
   resolved "https://registry.yarnpkg.com/nan/-/nan-2.14.0.tgz#7818f722027b2459a86f0295d434d1fc2336c52c"
   integrity sha512-INOFj37C7k3AfaNTtX8RhsTw7qRy7eLET14cROi9+5HAVbbHuIWUHEauBv5qT4Av2tWasiTY1Jw6puUNqRJXQg==
