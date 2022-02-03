@@ -67,7 +67,8 @@ function getAdminConfig(configFilePath) {
         return {
             accessKey: process.env.ADMIN_ACCESS_KEY_ID,
             secretKeyValue: process.env.ADMIN_SECRET_ACCESS_KEY,
-        }
+            sessionToken: process.env.ADMIN_SESSION_TOKEN, // token is optional
+        };
     }
     return readConfigFile(configFilePath);
 }
@@ -88,6 +89,7 @@ function action(cmd, fn, args) {
         const accessKey = config.accessKey;
         const secretKey = config.secretKeyValue;
         let host = args.parent.host || process.env.VAULT_HOST || 'localhost';
+        const token = config.sessionToken;
         const client = new vaultclient.Client(host,
             Number.parseInt(args.parent.port ? args.parent.port :
                 process.env.VAULT_PORT, 10),
@@ -97,7 +99,10 @@ function action(cmd, fn, args) {
             ca,
             untrusted,
             accessKey,
-            secretKey);
+            secretKey,
+            null,
+            null,
+            token);
         fn(client, args);
     } catch (err) {
         //process.stderr.write(err.message + '\n');
@@ -188,6 +193,21 @@ program
             canonicalId: args.canonicalId || undefined,
             emailAddress: args.email || undefined,
         }, handleVaultResponse);
+    }));
+
+program
+    .command('get-accounts')
+    .option('--account-ids <ACCOUNT ID,ACCOUNT ID,...>')
+    .option('--canonical-ids <CANONICAL ID,CANONICAL ID,...>')
+    .option('--emails <EMAIL,EMAIL,...>')
+    .action(action.bind(null, 'get-accounts', (client, args) => {
+        client.enableIAMOnAdminRoutes().getAccounts(
+            args.accountIds ? args.accountIds.split(',') : null,
+            args.canonicalIds ? args.canonicalIds.split(',') : null,
+            args.emails ? args.emails.split(',') : null,
+            {},
+            handleVaultResponse,
+        );
     }));
 
 program
