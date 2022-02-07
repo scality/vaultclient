@@ -389,7 +389,6 @@ client.deleteAccountQuota('accountName', (err, result) => {
 
 The output is formatted the same as Vaultclient CLI.
 
-
 ### Update account custom attributes
 
 The following examples show the methods for updating an account's custom
