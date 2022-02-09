@@ -202,9 +202,9 @@ program
     .option('--emails <EMAIL,EMAIL,...>')
     .action(action.bind(null, 'get-accounts', (client, args) => {
         client.enableIAMOnAdminRoutes().getAccounts(
-            args.accountIds ? args.accountIds.split(',') : null,
-            args.canonicalIds ? args.canonicalIds.split(',') : null,
-            args.emails ? args.emails.split(',') : null,
+            args.accountIds?.split(',') || null,
+            args.canonicalIds?.canonicalIds.split(',') || null,
+            args.emails?.emails.split(',') || null,
             {},
             handleVaultResponse,
         );
