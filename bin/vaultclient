@@ -202,8 +202,8 @@ program
     .action(action.bind(null, 'get-accounts', (client, args) => {
         client.enableIAMOnAdminRoutes().getAccounts(
             args.accountIds?.split(',') || null,
-            args.canonicalIds?.canonicalIds.split(',') || null,
-            args.emails?.emails.split(',') || null,
+            args.canonicalIds?.split(',') || null,
+            args.emails?.split(',') || null,
             {},
             handleVaultResponse,
         );
