@@ -19,10 +19,10 @@ function hmac(stringToSign, key) {
     return createHmac('sha256', key).update(stringToSign, 'binary').digest();
 }
 
-describe.skip('IAMClient verifySignatureV4', () => {
+describe('IAMClient verifySignatureV4', () => {
     let server;
     let client;
-    const invalidRegions = ['  ', undefined, null];
+    const invalidRegions = [undefined, null];
     const accessKey = 'accessKey';
     const signature = hmac('signature', 'secret').toString('hex');
     const scopeDate = '20201010';
