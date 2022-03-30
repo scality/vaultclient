@@ -7,7 +7,7 @@ const https = require('https');
 const { errors } = require('arsenal');
 const querystring = require('querystring');
 const getCodeFromErr = require('../utils/getCodeFromErr');
-const IAMClient = require('../../lib/IAMClient.js');
+const IAMClient = require('../../lib/IAMClient');
 
 const httpPort = 8500;
 const httpsPort = 8600;

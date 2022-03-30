@@ -4,7 +4,7 @@ const { errors } = require('arsenal');
 const assert = require('assert');
 const http = require('http');
 const querystring = require('querystring');
-const IAMClient = require('../../lib/IAMClient.js');
+const IAMClient = require('../../lib/IAMClient');
 
 const testNames = [
     'should authenticate correct v2 request',
