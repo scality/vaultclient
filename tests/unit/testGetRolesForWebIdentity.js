@@ -3,7 +3,7 @@
 const assert = require('assert');
 const http = require('http');
 
-const IAMClient = require('../../lib/IAMClient.js');
+const IAMClient = require('../../lib/IAMClient');
 
 describe('get-roles-for-web-identity', () => {
     let server;
