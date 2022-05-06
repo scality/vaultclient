@@ -247,7 +247,7 @@ program
             };
             return client.generateAccountAccessKey(internalServiceAccountName,
                 (err, data) => {
-                    if (err && err.EntityAlreadyExists) {
+                    if (err && err.is.EntityAlreadyExists) {
                         return handleVaultResponse(null, data);
                     }
                     return handleVaultResponse(err, data);
@@ -266,7 +266,7 @@ program
                 return ensureAccessKey();
             }
 
-            if (err.NoSuchEntity) {
+            if (err.is.NoSuchEntity) {
                 return client.createAccount(
                     internalServiceAccountName, {
                         email: internalServiceAccountEmail,
