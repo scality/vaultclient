@@ -282,6 +282,13 @@ program
     }));
 
 program
+    .command('get-user-by-access-key')
+    .option('--access-key <Access Key>')
+    .action(action.bind(null, 'get-user-by-access-key', (client, args) => {
+        client.getUserByAccessKey(args.accessKey || undefined, handleVaultResponse);
+    }));
+
+program
     .command('*')
     .action(() => {
         program.outputHelp();
