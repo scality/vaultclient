@@ -38,7 +38,9 @@ function handler(req, res) {
     let output = null;
     try {
         res.writeHead(200);
-        output = JSON.stringify(serverDB[serverDB[data.accessKey].userId]);
+        const accessKeyObject = serverDB[data.accessKey];
+        const userObject = serverDB[accessKeyObject.userId];
+        output = JSON.stringify(userObject);
         return res.end(output, null, 4);
     } catch (e) {
         res.writeHead(errors.EntityDoesNotExist.code);
