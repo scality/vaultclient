@@ -11,7 +11,7 @@ function createCredentialsForARWWI(name, arn) {
     const options = {stdio : 'pipe' };
     const session = execSync(`curl -k -d "client_id=myclient" -d "username=${roleToAssume.name}" -d "password=123" -d "grant_type=password" "https://localhost:8443/auth/realms/myrealm/protocol/openid-connect/token"`, options);
     oidc[name] = JSON.parse(session.toString()).access_token;
-    const arwwi = execSync(`aws sts assume-role-with-web-identity --role-session-name session-name --role-arn arn:aws:iam::668147857971:role/scality-internal/${roleToAssume.arn}-role --endpoint-url http://localhost:8800 --web-identity-token "${oidc[name]}"`, options);
+    const arwwi = execSync(`aws sts assume-role-with-web-identity --role-session-name session-name --role-arn arn:aws:iam::545393165945:role/scality-internal/${roleToAssume.arn}-role --endpoint-url http://localhost:8800 --web-identity-token "${oidc[name]}"`, options);
     return {
         accessKey: JSON.parse(arwwi.toString()).Credentials.AccessKeyId,
         secretKey: JSON.parse(arwwi.toString()).Credentials.SecretAccessKey,
@@ -31,16 +31,18 @@ const clients = {
         expected: {
             'CheckPermissions': false,
             'CreateAccount': true,
-            'ListAccounts': true
+            'ListAccounts': true,
+            'GetAccount': true,
         }
     },
     account: {
-        client8500: new VaultClient('localhost', 8500, false, undefined, undefined, undefined, undefined, '84GLDHF00SNJP82ODRE6', 'd=ZtTnyzdjVAGhZIeIXdWmygW93c99rq+6pMd3Pj'),
-        client8600: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, '84GLDHF00SNJP82ODRE6', 'd=ZtTnyzdjVAGhZIeIXdWmygW93c99rq+6pMd3Pj'),
+        client8500: new VaultClient('localhost', 8500, false, undefined, undefined, undefined, undefined, 'Q79YIBI5L0S35VFUWBMA', 'LAzsT408QiMwZ7wUkkrsRzidPrkspJ+qIa0BiJIv'),
+        client8600: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, 'Q79YIBI5L0S35VFUWBMA', 'LAzsT408QiMwZ7wUkkrsRzidPrkspJ+qIa0BiJIv'),
         expected: {
             'CheckPermissions': true,
             'CreateAccount': false,
-            'ListAccounts': false
+            'ListAccounts': false,
+            'GetAccount': false,
         }
     },
     storage_manager: {
@@ -49,7 +51,8 @@ const clients = {
         expected: {
             'CheckPermissions': true,
             'CreateAccount': false,
-            'ListAccounts': false
+            'ListAccounts': false,
+            'GetAccount': true,
         }
     },
     storage_account_owner: {
@@ -58,7 +61,8 @@ const clients = {
         expected: {
             'CheckPermissions': true,
             'CreateAccount': false,
-            'ListAccounts': false
+            'ListAccounts': false,
+            'GetAccount': true,
         }
     },
     data_consumer: {
@@ -67,25 +71,28 @@ const clients = {
         expected: {
             'CheckPermissions': true,
             'CreateAccount': false,
-            'ListAccounts': false
+            'ListAccounts': false,
+            'GetAccount': true,
         }
     },
-    user: {
-        client8500: new VaultClient('localhost', 8500, false, undefined, undefined, undefined, undefined, 'XRSS4WVK0AMZ67URD3V6', 'ZcAezW+o//J0OkgSg8qtwF/aUbLtB3rU9Z2w/JrY'),
-        client8600: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, 'XRSS4WVK0AMZ67URD3V6', 'ZcAezW+o//J0OkgSg8qtwF/aUbLtB3rU9Z2w/JrY'),
-        expected: {
-            'CheckPermissions': true,
-            'CreateAccount': false,
-            'ListAccounts': false
-        }
-    },
+    // user: {
+    //     client8500: new VaultClient('localhost', 8500, false, undefined, undefined, undefined, undefined, 'XRSS4WVK0AMZ67URD3V6', 'ZcAezW+o//J0OkgSg8qtwF/aUbLtB3rU9Z2w/JrY'),
+    //     client8600: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, 'XRSS4WVK0AMZ67URD3V6', 'ZcAezW+o//J0OkgSg8qtwF/aUbLtB3rU9Z2w/JrY'),
+    //     expected: {
+    //         'CheckPermissions': true,
+    //         'CreateAccount': false,
+    //         'ListAccounts': false,
+    //         'GetAccount': false,
+    //     }
+    // },
     oidc_storage_manager: {
         client8500: new VaultClient('localhost', 8500, false),
         client8600: new VaultClient('localhost', 8600, false),
         expected: {
             'CheckPermissions': true,
             'CreateAccount': true,
-            'ListAccounts': true
+            'ListAccounts': true,
+            'GetAccount': false,
         }
     },
     oidc_storage_account_owner: {
@@ -94,7 +101,8 @@ const clients = {
         expected: {
             'CheckPermissions': true,
             'CreateAccount': false,
-            'ListAccounts': true
+            'ListAccounts': true,
+            'GetAccount': false,
         }
     },
     oidc_data_consumer: {
@@ -103,7 +111,8 @@ const clients = {
         expected: {
             'CheckPermissions': true,
             'CreateAccount': false,
-            'ListAccounts': true
+            'ListAccounts': true,
+            'GetAccount': false,
         }
     },
 };
@@ -122,6 +131,12 @@ const request = JSON.stringify([
         'generalResource': 'root',
         'specificResources': ['william'],
     },
+    {
+        'action': 'GetAccount',
+        'service': 'scality',
+        'generalResource': 'root',
+        'specificResources': ['AccountTest'],
+    },
 ]);
 
 function logResult(name, api, err, expecting, result) {
@@ -135,10 +150,15 @@ function logResult(name, api, err, expecting, result) {
 
 Object.keys(clients).forEach(clientName => {
     const _oidc = clientName.includes('oidc') ? oidc[clientName.replace('oidc_', '')] : undefined;
+
+    // OIDC-based + AuthV4 based calls (without admin access keys)
     clients[clientName].client8500.checkPermissions(request, _oidc, {}, (err, result) => {
         const api = 'CheckPermissions';
         logResult(clientName, api, err, clients[clientName].expected[api], result);
     });
+
+    // OIDC-based APIs
+    // Should be denied for non admin or non-oidc based calls
     clients[clientName].client8600.listAccounts({}, _oidc, (err, result) => {
         const api = 'ListAccounts';
         logResult(clientName, api, err, clients[clientName].expected[api], result);
@@ -147,6 +167,14 @@ Object.keys(clients).forEach(clientName => {
         email: Math.random().toString()+'test@scality.com',
     }, _oidc, (err, result) => {
         const api = 'CreateAccount';
+        logResult(clientName, api, err, clients[clientName].expected[api], result);
+    });
+
+    // Policy-based APIs
+    clients[clientName].client8600.getAccount({
+        accountName: 'AccountTest',
+    }, _oidc, (err, result) => {
+        const api = 'GetAccount';
         logResult(clientName, api, err, clients[clientName].expected[api], result);
     });
 });
