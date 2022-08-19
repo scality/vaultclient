@@ -130,12 +130,14 @@ program
     .option('--email <EMAIL>')
     .option('--quota <Quota>', 'Maximum quota for the account', parseInt)
     .option('--accountid <ExternalAccountID>')
+    .option('--canonicalid <ExternalCanonicalID>')
     .action(action.bind(null, 'create-account', (client, args) => {
         client.createAccount(
             args.name, {
             email: args.email,
             quota: args.quota || null,
-            externalAccountId: args.accountid || null
+            externalAccountId: args.accountid || null,
+            externalCanonicalId: args.canonicalid || null
         },
             handleVaultResponse);
     }));
