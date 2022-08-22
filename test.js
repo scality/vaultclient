@@ -54,93 +54,129 @@ const data_consumer = createCredentialsForARWWI('data_consumer', 'data-consumer'
 const clients = {
     admin: 
     {
-        client8500: new VaultClient('localhost', 8500, false, undefined, undefined, undefined, undefined, 'D4IT2AWSB588GO5J9T00', 'UEEu8tYlsOGGrgf4DAiSZD6apVNPUWqRiPG0nTB6'),
-        client8600: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, 'D4IT2AWSB588GO5J9T00', 'UEEu8tYlsOGGrgf4DAiSZD6apVNPUWqRiPG0nTB6'),
+        client: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, 'D4IT2AWSB588GO5J9T00', 'UEEu8tYlsOGGrgf4DAiSZD6apVNPUWqRiPG0nTB6'),
         expected: {
             'CheckPermissions': false,
             'CreateAccount': true,
             'ListAccounts': true,
             'GetAccount': true,
+            'DeleteAccount': true,
+            'GenerateAccountAccessKey': true,
+            'UpdateAccountAttributes': true,
+            'UpdateAccountQuota': true,
+            'DeleteAccountQuota': true,
         }
     },
     account: {
-        client8500: new VaultClient('localhost', 8500, false, undefined, undefined, undefined, undefined, accountAK, accountSK),
-        client8600: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, accountAK, accountSK),
+        client: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, accountAK, accountSK),
         expected: {
             'CheckPermissions': true,
             'CreateAccount': false,
             'ListAccounts': false,
             'GetAccount': false,
+            'DeleteAccount': false,
+            'GenerateAccountAccessKey': false,
+            'UpdateAccountAttributes': false,
+            'UpdateAccountQuota': false,
+            'DeleteAccountQuota': false,
         }
     },
     storage_manager: {
-        client8500: new VaultClient('localhost', 8500, false, undefined, undefined, undefined, undefined, storage_manager.accessKey, storage_manager.secretKey, undefined, undefined, undefined, storage_manager.securityToken),
-        client8600: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, storage_manager.accessKey, storage_manager.secretKey, undefined, undefined, undefined, storage_manager.securityToken),
+        client: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, storage_manager.accessKey, storage_manager.secretKey, undefined, undefined, undefined, storage_manager.securityToken),
         expected: {
             'CheckPermissions': true,
             'CreateAccount': false,
             'ListAccounts': false,
             'GetAccount': true,
+            'DeleteAccount': true,
+            'GenerateAccountAccessKey': true,
+            'UpdateAccountAttributes': true,
+            'UpdateAccountQuota': true,
+            'DeleteAccountQuota': true,
         }
     },
     storage_account_owner: {
-        client8500: new VaultClient('localhost', 8500, false, undefined, undefined, undefined, undefined, storage_account_owner.accessKey, storage_account_owner.secretKey, undefined, undefined, undefined, storage_account_owner.securityToken),
-        client8600: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, storage_account_owner.accessKey, storage_account_owner.secretKey, undefined, undefined, undefined, storage_account_owner.securityToken),
+        client: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, storage_account_owner.accessKey, storage_account_owner.secretKey, undefined, undefined, undefined, storage_account_owner.securityToken),
         expected: {
             'CheckPermissions': true,
             'CreateAccount': false,
             'ListAccounts': false,
             'GetAccount': true,
+            'DeleteAccount': true,
+            'GenerateAccountAccessKey': true,
+            'UpdateAccountAttributes': true,
+            'UpdateAccountQuota': true,
+            'DeleteAccountQuota': true,
         }
     },
     data_consumer: {
-        client8500: new VaultClient('localhost', 8500, false, undefined, undefined, undefined, undefined, data_consumer.accessKey, data_consumer.secretKey, undefined, undefined, undefined, data_consumer.securityToken),
-        client8600: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, data_consumer.accessKey, data_consumer.secretKey, undefined, undefined, undefined, data_consumer.securityToken),
+        client: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, data_consumer.accessKey, data_consumer.secretKey, undefined, undefined, undefined, data_consumer.securityToken),
         expected: {
             'CheckPermissions': true,
             'CreateAccount': false,
             'ListAccounts': false,
             'GetAccount': true,
+            'DeleteAccount': false,
+            'GenerateAccountAccessKey': false,
+            'UpdateAccountAttributes': false,
+            'UpdateAccountQuota': false,
+            'DeleteAccountQuota': false,
         }
     },
     user: {
-        client8500: new VaultClient('localhost', 8500, false, undefined, undefined, undefined, undefined, userAK, userSK),
-        client8600: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, userAK, userSK),
+        client: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, userAK, userSK),
         expected: {
             'CheckPermissions': true,
             'CreateAccount': false,
             'ListAccounts': false,
             'GetAccount': false,
+            'DeleteAccount': false,
+            'GenerateAccountAccessKey': false,
+            'UpdateAccountAttributes': false,
+            'UpdateAccountQuota': false,
+            'DeleteAccountQuota': false,
         }
     },
     oidc_storage_manager: {
-        client8500: new VaultClient('localhost', 8500, false),
-        client8600: new VaultClient('localhost', 8600, false),
+        client: new VaultClient('localhost', 8600, false),
         expected: {
             'CheckPermissions': true,
             'CreateAccount': true,
             'ListAccounts': true,
             'GetAccount': false,
+            'DeleteAccount': false,
+            'GenerateAccountAccessKey': false,
+            'UpdateAccountAttributes': false,
+            'UpdateAccountQuota': false,
+            'DeleteAccountQuota': false,
         }
     },
     oidc_storage_account_owner: {
-        client8500: new VaultClient('localhost', 8500, false),
-        client8600: new VaultClient('localhost', 8600, false),
+        client: new VaultClient('localhost', 8600, false),
         expected: {
             'CheckPermissions': true,
             'CreateAccount': false,
             'ListAccounts': true,
             'GetAccount': false,
+            'DeleteAccount': false,
+            'GenerateAccountAccessKey': false,
+            'UpdateAccountAttributes': false,
+            'UpdateAccountQuota': false,
+            'DeleteAccountQuota': false,
         }
     },
     oidc_data_consumer: {
-        client8500: new VaultClient('localhost', 8500, false),
-        client8600: new VaultClient('localhost', 8600, false),
+        client: new VaultClient('localhost', 8600, false),
         expected: {
             'CheckPermissions': true,
             'CreateAccount': false,
             'ListAccounts': true,
             'GetAccount': false,
+            'DeleteAccount': false,
+            'GenerateAccountAccessKey': false,
+            'UpdateAccountAttributes': false,
+            'UpdateAccountQuota': false,
+            'DeleteAccountQuota': false,
         }
     },
 };
@@ -151,16 +187,46 @@ const request = JSON.stringify([
         'action': 'CreateAccount',
         'service': 'scality',
         'generalResource': 'root',
-        'specificResources': ['william'],
+        'specificResources': ['*'],
     },
     {
         'action': 'DeleteAccount',
         'service': 'scality',
         'generalResource': 'root',
-        'specificResources': ['william'],
+        'specificResources': ['*'],
     },
     {
         'action': 'GetAccount',
+        'service': 'scality',
+        'generalResource': 'root',
+        'specificResources': ['AccountTest'],
+    },
+    {
+        'action': 'ListAccounts',
+        'service': 'scality',
+        'generalResource': 'root',
+        'specificResources': ['*'],
+    },
+    {
+        'action': 'GenerateAccountAccessKey',
+        'service': 'scality',
+        'generalResource': 'root',
+        'specificResources': ['AccountTest'],
+    },
+    {
+        'action': 'UpdateAccountAttributes',
+        'service': 'scality',
+        'generalResource': 'root',
+        'specificResources': ['AccountTest'],
+    },
+    {
+        'action': 'UpdateAccountQuota',
+        'service': 'scality',
+        'generalResource': 'root',
+        'specificResources': ['AccountTest'],
+    },
+    {
+        'action': 'DeleteAccountQuota',
         'service': 'scality',
         'generalResource': 'root',
         'specificResources': ['AccountTest'],
@@ -172,7 +238,7 @@ function logResult(name, api, err, expecting, result) {
         (err ? 'ERROR' : 'OK') === (expecting ? 'OK' : 'ERROR') ? '[OK]' : '[ERROR]',
         api,
         name,
-        //result, err,
+        // result, err,
     );
 }
 
@@ -180,18 +246,18 @@ Object.keys(clients).forEach(clientName => {
     const _oidc = clientName.includes('oidc') ? oidc[clientName.replace('oidc_', '')] : undefined;
 
     // OIDC-based + AuthV4 based calls (without admin access keys)
-    clients[clientName].client8500.checkPermissions(request, {}, (err, result) => {
+    clients[clientName].client.checkPermissions(request, {}, (err, result) => {
         const api = 'CheckPermissions';
         logResult(clientName, api, err, clients[clientName].expected[api], result);
     }, _oidc);
 
     // OIDC-based APIs
     // Should be denied for non admin or non-oidc based calls
-    clients[clientName].client8600.listAccounts({}, (err, result) => {
+    clients[clientName].client.listAccounts({}, (err, result) => {
         const api = 'ListAccounts';
         logResult(clientName, api, err, clients[clientName].expected[api], result);
     }, _oidc);
-    clients[clientName].client8600.createAccount('test'+Math.random().toString(), {
+    clients[clientName].client.createAccount('test'+Math.random().toString(), {
         email: Math.random().toString()+'test@scality.com',
     }, (err, result) => {
         const api = 'CreateAccount';
@@ -199,10 +265,55 @@ Object.keys(clients).forEach(clientName => {
     }, _oidc);
 
     // Policy-based APIs
-    clients[clientName].client8600.getAccount({
+    clients[clientName].client.getAccount({
         accountName: 'AccountTest',
     }, (err, result) => {
         const api = 'GetAccount';
+        logResult(clientName, api, err, clients[clientName].expected[api], result);
+    }, _oidc);
+
+    clients[clientName].client.deleteAccount('AccountTestTemp', (err, result) => {
+        const api = 'DeleteAccount';
+        // Hack to prevent having to sync account creations
+        if (err?.is.NoSuchEntity) {
+            err = null;
+        }
+        logResult(clientName, api, err, clients[clientName].expected[api], result);
+    }, _oidc);
+
+    clients[clientName].client.generateAccountAccessKey('AccountTest', (err, result) => {
+        const api = 'GenerateAccountAccessKey';
+        // Hack to prevent having to sync account creations
+        if (err?.is.NoSuchEntity) {
+            err = null;
+        }
+        logResult(clientName, api, err, clients[clientName].expected[api], result);
+    }, _oidc);
+
+    clients[clientName].client.updateAccountAttributes('AccountTest', {}, (err, result) => {
+        const api = 'UpdateAccountAttributes';
+        // Hack to prevent having to sync account creations
+        if (err?.is.NoSuchEntity) {
+            err = null;
+        }
+        logResult(clientName, api, err, clients[clientName].expected[api], result);
+    }, _oidc);
+
+    clients[clientName].client.updateAccountQuota('AccountTest', 1000, (err, result) => {
+        const api = 'UpdateAccountQuota';
+        // Hack to prevent having to sync account creations
+        if (err?.is.NoSuchEntity) {
+            err = null;
+        }
+        logResult(clientName, api, err, clients[clientName].expected[api], result);
+    }, _oidc);
+
+    clients[clientName].client.deleteAccountQuota('AccountTest', (err, result) => {
+        const api = 'DeleteAccountQuota';
+        // Hack to prevent having to sync account creations
+        if (err?.is.NoSuchEntity) {
+            err = null;
+        }
         logResult(clientName, api, err, clients[clientName].expected[api], result);
     }, _oidc);
 });
