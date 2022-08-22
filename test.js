@@ -11,7 +11,7 @@ function createCredentialsForARWWI(name, arn) {
     const options = {stdio : 'pipe' };
     const session = execSync(`curl -k -d "client_id=myclient" -d "username=${roleToAssume.name}" -d "password=123" -d "grant_type=password" "https://localhost:8443/auth/realms/myrealm/protocol/openid-connect/token"`, options);
     oidc[name] = JSON.parse(session.toString()).access_token;
-    const arwwi = execSync(`aws sts assume-role-with-web-identity --role-session-name session-name --role-arn arn:aws:iam::545393165945:role/scality-internal/${roleToAssume.arn}-role --endpoint-url http://localhost:8800 --web-identity-token "${oidc[name]}"`, options);
+    const arwwi = execSync(`aws sts assume-role-with-web-identity --role-session-name session-name --role-arn arn:aws:iam::551061040086:role/scality-internal/${roleToAssume.arn}-role --endpoint-url http://localhost:8800 --web-identity-token "${oidc[name]}"`, options);
     return {
         accessKey: JSON.parse(arwwi.toString()).Credentials.AccessKeyId,
         secretKey: JSON.parse(arwwi.toString()).Credentials.SecretAccessKey,
@@ -36,8 +36,8 @@ const clients = {
         }
     },
     account: {
-        client8500: new VaultClient('localhost', 8500, false, undefined, undefined, undefined, undefined, 'Q79YIBI5L0S35VFUWBMA', 'LAzsT408QiMwZ7wUkkrsRzidPrkspJ+qIa0BiJIv'),
-        client8600: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, 'Q79YIBI5L0S35VFUWBMA', 'LAzsT408QiMwZ7wUkkrsRzidPrkspJ+qIa0BiJIv'),
+        client8500: new VaultClient('localhost', 8500, false, undefined, undefined, undefined, undefined, 'IQBT9MHY24RUCTOFBCBH', 'V7Y1O0QnznRCSlCptEouY29Bks/RvNOJI47VFRRb'),
+        client8600: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, 'IQBT9MHY24RUCTOFBCBH', 'V7Y1O0QnznRCSlCptEouY29Bks/RvNOJI47VFRRb'),
         expected: {
             'CheckPermissions': true,
             'CreateAccount': false,
@@ -152,29 +152,29 @@ Object.keys(clients).forEach(clientName => {
     const _oidc = clientName.includes('oidc') ? oidc[clientName.replace('oidc_', '')] : undefined;
 
     // OIDC-based + AuthV4 based calls (without admin access keys)
-    clients[clientName].client8500.checkPermissions(request, _oidc, {}, (err, result) => {
+    clients[clientName].client8500.checkPermissions(request, {}, (err, result) => {
         const api = 'CheckPermissions';
         logResult(clientName, api, err, clients[clientName].expected[api], result);
-    });
+    }, _oidc);
 
     // OIDC-based APIs
     // Should be denied for non admin or non-oidc based calls
-    clients[clientName].client8600.listAccounts({}, _oidc, (err, result) => {
+    clients[clientName].client8600.listAccounts({}, (err, result) => {
         const api = 'ListAccounts';
         logResult(clientName, api, err, clients[clientName].expected[api], result);
-    });
+    }, _oidc);
     clients[clientName].client8600.createAccount('test'+Math.random().toString(), {
         email: Math.random().toString()+'test@scality.com',
-    }, _oidc, (err, result) => {
+    }, (err, result) => {
         const api = 'CreateAccount';
         logResult(clientName, api, err, clients[clientName].expected[api], result);
-    });
+    }, _oidc);
 
     // Policy-based APIs
     clients[clientName].client8600.getAccount({
         accountName: 'AccountTest',
-    }, _oidc, (err, result) => {
+    }, (err, result) => {
         const api = 'GetAccount';
         logResult(clientName, api, err, clients[clientName].expected[api], result);
-    });
+    }, _oidc);
 });
