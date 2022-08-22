@@ -1,17 +1,45 @@
 const VaultClient = require('./lib/IAMClient');
 const execSync = require('child_process').execSync;
 
+const execOptions = { stdio : 'pipe' };
 var oidc = {};
+var accountId = '';
+var accountAK = '';
+var accountSK = '';
+var userAK = '';
+var userSK = '';
+
+function boostrap() {
+    const accName = 'AccountTest';
+    try {
+        const access = execSync(`vaultclient generate-account-access-key --name ${accName}`, execOptions);
+        accountAK = JSON.parse(access.toString()).id;
+        accountSK = JSON.parse(access.toString()).value;
+        execSync(`AWS_ACCESS_KEY_ID=${accountAK} AWS_SECRET_ACCESS_KEY=${accountSK} aws iam delete-user --user-name ${accName}-user --endpoint http://localhost:8600`, execOptions);
+        execSync(`vaultclient delete-account --name ${accName}`, execOptions);
+    } catch(err) {}
+    const acc = execSync(`vaultclient create-account --name ${accName} --email ${accName}@scality.local`, execOptions);
+    accountId = JSON.parse(acc.toString()).account.id;
+    accountName = accName;
+    const access = execSync(`vaultclient generate-account-access-key --name ${accName}`, execOptions);
+    accountAK = JSON.parse(access.toString()).id;
+    accountSK = JSON.parse(access.toString()).value;
+    execSync(`AWS_ACCESS_KEY_ID=${accountAK} AWS_SECRET_ACCESS_KEY=${accountSK} aws iam create-user --user-name ${accName}-user --endpoint http://localhost:8600`, execOptions);
+    const user = execSync(`AWS_ACCESS_KEY_ID=${accountAK} AWS_SECRET_ACCESS_KEY=${accountSK} aws iam create-access-key --user-name ${accName}-user --endpoint-url http://localhost:8600`, execOptions);
+    userAK = JSON.parse(user.toString()).AccessKey.AccessKeyId;
+    userSK = JSON.parse(user.toString()).AccessKey.SecretAccessKey;
+}
+
+boostrap();
 
 function createCredentialsForARWWI(name, arn) {
     const roleToAssume = {
-        name,// process.env.name || 'storage_manager',
-        arn,// process.env.arn || 'storage-manager',
+        name,
+        arn,
     }
-    const options = {stdio : 'pipe' };
-    const session = execSync(`curl -k -d "client_id=myclient" -d "username=${roleToAssume.name}" -d "password=123" -d "grant_type=password" "https://localhost:8443/auth/realms/myrealm/protocol/openid-connect/token"`, options);
+    const session = execSync(`curl -k -d "client_id=myclient" -d "username=${roleToAssume.name}" -d "password=123" -d "grant_type=password" "https://localhost:8443/auth/realms/myrealm/protocol/openid-connect/token"`, execOptions);
     oidc[name] = JSON.parse(session.toString()).access_token;
-    const arwwi = execSync(`aws sts assume-role-with-web-identity --role-session-name session-name --role-arn arn:aws:iam::551061040086:role/scality-internal/${roleToAssume.arn}-role --endpoint-url http://localhost:8800 --web-identity-token "${oidc[name]}"`, options);
+    const arwwi = execSync(`aws sts assume-role-with-web-identity --role-session-name session-name --role-arn arn:aws:iam::${accountId}:role/scality-internal/${roleToAssume.arn}-role --endpoint-url http://localhost:8800 --web-identity-token "${oidc[name]}"`, execOptions);
     return {
         accessKey: JSON.parse(arwwi.toString()).Credentials.AccessKeyId,
         secretKey: JSON.parse(arwwi.toString()).Credentials.SecretAccessKey,
@@ -36,8 +64,8 @@ const clients = {
         }
     },
     account: {
-        client8500: new VaultClient('localhost', 8500, false, undefined, undefined, undefined, undefined, 'IQBT9MHY24RUCTOFBCBH', 'V7Y1O0QnznRCSlCptEouY29Bks/RvNOJI47VFRRb'),
-        client8600: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, 'IQBT9MHY24RUCTOFBCBH', 'V7Y1O0QnznRCSlCptEouY29Bks/RvNOJI47VFRRb'),
+        client8500: new VaultClient('localhost', 8500, false, undefined, undefined, undefined, undefined, accountAK, accountSK),
+        client8600: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, accountAK, accountSK),
         expected: {
             'CheckPermissions': true,
             'CreateAccount': false,
@@ -75,16 +103,16 @@ const clients = {
             'GetAccount': true,
         }
     },
-    // user: {
-    //     client8500: new VaultClient('localhost', 8500, false, undefined, undefined, undefined, undefined, 'XRSS4WVK0AMZ67URD3V6', 'ZcAezW+o//J0OkgSg8qtwF/aUbLtB3rU9Z2w/JrY'),
-    //     client8600: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, 'XRSS4WVK0AMZ67URD3V6', 'ZcAezW+o//J0OkgSg8qtwF/aUbLtB3rU9Z2w/JrY'),
-    //     expected: {
-    //         'CheckPermissions': true,
-    //         'CreateAccount': false,
-    //         'ListAccounts': false,
-    //         'GetAccount': false,
-    //     }
-    // },
+    user: {
+        client8500: new VaultClient('localhost', 8500, false, undefined, undefined, undefined, undefined, userAK, userSK),
+        client8600: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, userAK, userSK),
+        expected: {
+            'CheckPermissions': true,
+            'CreateAccount': false,
+            'ListAccounts': false,
+            'GetAccount': false,
+        }
+    },
     oidc_storage_manager: {
         client8500: new VaultClient('localhost', 8500, false),
         client8600: new VaultClient('localhost', 8600, false),
