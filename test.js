@@ -15,9 +15,13 @@ function boostrap() {
         const access = execSync(`vaultclient generate-account-access-key --name ${accName}`, execOptions);
         accountAK = JSON.parse(access.toString()).id;
         accountSK = JSON.parse(access.toString()).value;
-        execSync(`AWS_ACCESS_KEY_ID=${accountAK} AWS_SECRET_ACCESS_KEY=${accountSK} aws iam delete-user --user-name ${accName}-user --endpoint http://localhost:8600`, execOptions);
+        try {
+            execSync(`AWS_ACCESS_KEY_ID=${accountAK} AWS_SECRET_ACCESS_KEY=${accountSK} aws iam delete-user --user-name ${accName}-user --endpoint http://localhost:8600`, execOptions);
+        } catch (err) { }
         execSync(`vaultclient delete-account --name ${accName}`, execOptions);
-    } catch(err) {}
+    } catch (err) {
+        console.error(err)
+    }
     const acc = execSync(`vaultclient create-account --name ${accName} --email ${accName}@scality.local`, execOptions);
     accountId = JSON.parse(acc.toString()).account.id;
     accountName = accName;
@@ -82,7 +86,7 @@ const clients = {
         }
     },
     storage_manager: {
-        client: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, storage_manager.accessKey, storage_manager.secretKey, undefined, undefined, undefined, storage_manager.securityToken),
+        client: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, storage_manager.accessKey, storage_manager.secretKey, undefined, undefined, storage_manager.securityToken),
         expected: {
             'CheckPermissions': true,
             'CreateAccount': false,
@@ -96,7 +100,7 @@ const clients = {
         }
     },
     storage_account_owner: {
-        client: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, storage_account_owner.accessKey, storage_account_owner.secretKey, undefined, undefined, undefined, storage_account_owner.securityToken),
+        client: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, storage_account_owner.accessKey, storage_account_owner.secretKey, undefined, undefined, storage_account_owner.securityToken),
         expected: {
             'CheckPermissions': true,
             'CreateAccount': false,
@@ -110,7 +114,7 @@ const clients = {
         }
     },
     data_consumer: {
-        client: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, data_consumer.accessKey, data_consumer.secretKey, undefined, undefined, undefined, data_consumer.securityToken),
+        client: new VaultClient('localhost', 8600, false, undefined, undefined, undefined, undefined, data_consumer.accessKey, data_consumer.secretKey, undefined, undefined, data_consumer.securityToken),
         expected: {
             'CheckPermissions': true,
             'CreateAccount': false,
@@ -243,26 +247,28 @@ function logResult(name, api, err, expecting, result) {
 }
 
 Object.keys(clients).forEach(clientName => {
-    const _oidc = clientName.includes('oidc') ? oidc[clientName.replace('oidc_', '')] : undefined;
+    if (clientName.includes('oidc')) {
+        clients[clientName].client.setWebIdentityToken(oidc[clientName.replace('oidc_', '')]);
+    }
 
     // OIDC-based + AuthV4 based calls (without admin access keys)
     clients[clientName].client.checkPermissions(request, {}, (err, result) => {
         const api = 'CheckPermissions';
         logResult(clientName, api, err, clients[clientName].expected[api], result);
-    }, _oidc);
+    });
 
     // OIDC-based APIs
     // Should be denied for non admin or non-oidc based calls
     clients[clientName].client.listAccounts({}, (err, result) => {
         const api = 'ListAccounts';
         logResult(clientName, api, err, clients[clientName].expected[api], result);
-    }, _oidc);
-    clients[clientName].client.createAccount('test'+Math.random().toString(), {
-        email: Math.random().toString()+'test@scality.com',
+    });
+    clients[clientName].client.createAccount('test' + Math.random().toString(), {
+        email: Math.random().toString() + 'test@scality.com',
     }, (err, result) => {
         const api = 'CreateAccount';
         logResult(clientName, api, err, clients[clientName].expected[api], result);
-    }, _oidc);
+    });
 
     // Policy-based APIs
     clients[clientName].client.getAccount({
@@ -270,7 +276,7 @@ Object.keys(clients).forEach(clientName => {
     }, (err, result) => {
         const api = 'GetAccount';
         logResult(clientName, api, err, clients[clientName].expected[api], result);
-    }, _oidc);
+    });
 
     clients[clientName].client.deleteAccount('AccountTestTemp', (err, result) => {
         const api = 'DeleteAccount';
@@ -279,7 +285,7 @@ Object.keys(clients).forEach(clientName => {
             err = null;
         }
         logResult(clientName, api, err, clients[clientName].expected[api], result);
-    }, _oidc);
+    });
 
     clients[clientName].client.generateAccountAccessKey('AccountTest', (err, result) => {
         const api = 'GenerateAccountAccessKey';
@@ -288,7 +294,7 @@ Object.keys(clients).forEach(clientName => {
             err = null;
         }
         logResult(clientName, api, err, clients[clientName].expected[api], result);
-    }, _oidc);
+    });
 
     clients[clientName].client.updateAccountAttributes('AccountTest', {}, (err, result) => {
         const api = 'UpdateAccountAttributes';
@@ -297,7 +303,7 @@ Object.keys(clients).forEach(clientName => {
             err = null;
         }
         logResult(clientName, api, err, clients[clientName].expected[api], result);
-    }, _oidc);
+    });
 
     clients[clientName].client.updateAccountQuota('AccountTest', 1000, (err, result) => {
         const api = 'UpdateAccountQuota';
@@ -306,7 +312,7 @@ Object.keys(clients).forEach(clientName => {
             err = null;
         }
         logResult(clientName, api, err, clients[clientName].expected[api], result);
-    }, _oidc);
+    });
 
     clients[clientName].client.deleteAccountQuota('AccountTest', (err, result) => {
         const api = 'DeleteAccountQuota';
@@ -315,5 +321,5 @@ Object.keys(clients).forEach(clientName => {
             err = null;
         }
         logResult(clientName, api, err, clients[clientName].expected[api], result);
-    }, _oidc);
+    });
 });
