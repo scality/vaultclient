@@ -281,7 +281,7 @@ Object.keys(clients).forEach(clientName => {
     clients[clientName].client.deleteAccount('AccountTestTemp', (err, result) => {
         const api = 'DeleteAccount';
         // Hack to prevent having to sync account creations
-        if (err?.is.NoSuchEntity) {
+        if (err?.code === 'NoSuchEntity') {
             err = null;
         }
         logResult(clientName, api, err, clients[clientName].expected[api], result);
@@ -290,7 +290,7 @@ Object.keys(clients).forEach(clientName => {
     clients[clientName].client.generateAccountAccessKey('AccountTest', (err, result) => {
         const api = 'GenerateAccountAccessKey';
         // Hack to prevent having to sync account creations
-        if (err?.is.NoSuchEntity) {
+        if (err?.code === 'NoSuchEntity') {
             err = null;
         }
         logResult(clientName, api, err, clients[clientName].expected[api], result);
@@ -299,7 +299,7 @@ Object.keys(clients).forEach(clientName => {
     clients[clientName].client.updateAccountAttributes('AccountTest', {}, (err, result) => {
         const api = 'UpdateAccountAttributes';
         // Hack to prevent having to sync account creations
-        if (err?.is.NoSuchEntity) {
+        if (err?.code === 'NoSuchEntity') {
             err = null;
         }
         logResult(clientName, api, err, clients[clientName].expected[api], result);
@@ -308,7 +308,7 @@ Object.keys(clients).forEach(clientName => {
     clients[clientName].client.updateAccountQuota('AccountTest', 1000, (err, result) => {
         const api = 'UpdateAccountQuota';
         // Hack to prevent having to sync account creations
-        if (err?.is.NoSuchEntity) {
+        if (err?.code === 'NoSuchEntity') {
             err = null;
         }
         logResult(clientName, api, err, clients[clientName].expected[api], result);
@@ -317,7 +317,7 @@ Object.keys(clients).forEach(clientName => {
     clients[clientName].client.deleteAccountQuota('AccountTest', (err, result) => {
         const api = 'DeleteAccountQuota';
         // Hack to prevent having to sync account creations
-        if (err?.is.NoSuchEntity) {
+        if (err?.code === 'NoSuchEntity') {
             err = null;
         }
         logResult(clientName, api, err, clients[clientName].expected[api], result);
