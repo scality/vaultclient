@@ -136,8 +136,7 @@ program
             email: args.email,
             quota: args.quota || null,
             externalAccountId: args.accountid || null
-        },
-            handleVaultResponse);
+        }, handleVaultResponse);
     }));
 
 program
