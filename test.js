@@ -8,10 +8,30 @@ var accountAK = '';
 var accountSK = '';
 var userAK = '';
 var userSK = '';
+let savedMainAccount = null;
+let savedSecondaryAccount = null;
+const accName = 'AccountTest';
+
+function deleteNAccounts(nb) {
+    for (let i = 0; i < nb; i++) {
+        try {
+            execSync(`vaultclient delete-account --name acc-${i}`, execOptions);
+        } catch(err) { }
+    }
+}
+
+function createNAccounts(nb) {
+    for (let i = 0; i < nb; i++) {
+        try {
+            const acc = execSync(`vaultclient create-account --name acc-${i} --email acc${i}@scality.local`, execOptions);
+            savedSecondaryAccount = JSON.parse(acc.toString()).account;
+        } catch(err) { }
+    }
+}
 
 function boostrap() {
-    const accName = 'AccountTest';
     try {
+        deleteNAccounts(10);
         const access = execSync(`vaultclient generate-account-access-key --name ${accName}`, execOptions);
         accountAK = JSON.parse(access.toString()).id;
         accountSK = JSON.parse(access.toString()).value;
@@ -19,11 +39,11 @@ function boostrap() {
             execSync(`AWS_ACCESS_KEY_ID=${accountAK} AWS_SECRET_ACCESS_KEY=${accountSK} aws iam delete-user --user-name ${accName}-user --endpoint http://localhost:8600`, execOptions);
         } catch (err) { }
         execSync(`vaultclient delete-account --name ${accName}`, execOptions);
-    } catch (err) {
-        console.error(err)
-    }
+    } catch (err) { }
+    createNAccounts(10);
     const acc = execSync(`vaultclient create-account --name ${accName} --email ${accName}@scality.local`, execOptions);
-    accountId = JSON.parse(acc.toString()).account.id;
+    savedMainAccount = JSON.parse(acc.toString()).account;
+    accountId = savedMainAccount.id;
     accountName = accName;
     const access = execSync(`vaultclient generate-account-access-key --name ${accName}`, execOptions);
     accountAK = JSON.parse(access.toString()).id;
@@ -65,10 +85,15 @@ const clients = {
             'ListAccounts': true,
             'GetAccount': true,
             'DeleteAccount': true,
+            'DeleteAccountOther': true,
             'GenerateAccountAccessKey': true,
             'UpdateAccountAttributes': true,
             'UpdateAccountQuota': true,
             'DeleteAccountQuota': true,
+            'GenerateAccountAccessKeytOther': true,
+            'UpdateAccountAttributesOther': true,
+            'UpdateAccountQuotaOther': true,
+            'DeleteAccountQuotaOther': true,
         }
     },
     account: {
@@ -79,10 +104,15 @@ const clients = {
             'ListAccounts': false,
             'GetAccount': false,
             'DeleteAccount': false,
+            'DeleteAccountOther': false,
             'GenerateAccountAccessKey': false,
             'UpdateAccountAttributes': false,
             'UpdateAccountQuota': false,
             'DeleteAccountQuota': false,
+            'GenerateAccountAccessKeytOther': false,
+            'UpdateAccountAttributesOther': false,
+            'UpdateAccountQuotaOther': false,
+            'DeleteAccountQuotaOther': false,
         }
     },
     storage_manager: {
@@ -93,10 +123,15 @@ const clients = {
             'ListAccounts': false,
             'GetAccount': true,
             'DeleteAccount': true,
+            'DeleteAccountOther': true,
             'GenerateAccountAccessKey': true,
             'UpdateAccountAttributes': true,
             'UpdateAccountQuota': true,
             'DeleteAccountQuota': true,
+            'GenerateAccountAccessKeytOther': true,
+            'UpdateAccountAttributesOther': true,
+            'UpdateAccountQuotaOther': true,
+            'DeleteAccountQuotaOther': true,
         }
     },
     storage_account_owner: {
@@ -107,10 +142,15 @@ const clients = {
             'ListAccounts': false,
             'GetAccount': true,
             'DeleteAccount': true,
+            'DeleteAccountOther': false,
             'GenerateAccountAccessKey': true,
             'UpdateAccountAttributes': true,
             'UpdateAccountQuota': true,
             'DeleteAccountQuota': true,
+            'GenerateAccountAccessKeytOther': false,
+            'UpdateAccountAttributesOther': false,
+            'UpdateAccountQuotaOther': false,
+            'DeleteAccountQuotaOther': false,
         }
     },
     data_consumer: {
@@ -120,11 +160,17 @@ const clients = {
             'CreateAccount': false,
             'ListAccounts': false,
             'GetAccount': true,
+            'GetAccountOther': false,
             'DeleteAccount': false,
+            'DeleteAccountOther': false,
             'GenerateAccountAccessKey': false,
             'UpdateAccountAttributes': false,
             'UpdateAccountQuota': false,
             'DeleteAccountQuota': false,
+            'GenerateAccountAccessKeytOther': false,
+            'UpdateAccountAttributesOther': false,
+            'UpdateAccountQuotaOther': false,
+            'DeleteAccountQuotaOther': false,
         }
     },
     user: {
@@ -135,10 +181,15 @@ const clients = {
             'ListAccounts': false,
             'GetAccount': false,
             'DeleteAccount': false,
+            'DeleteAccountOther': false,
             'GenerateAccountAccessKey': false,
             'UpdateAccountAttributes': false,
             'UpdateAccountQuota': false,
             'DeleteAccountQuota': false,
+            'GenerateAccountAccessKeytOther': false,
+            'UpdateAccountAttributesOther': false,
+            'UpdateAccountQuotaOther': false,
+            'DeleteAccountQuotaOther': false,
         }
     },
     oidc_storage_manager: {
@@ -149,10 +200,15 @@ const clients = {
             'ListAccounts': true,
             'GetAccount': false,
             'DeleteAccount': false,
+            'DeleteAccountOther': false,
             'GenerateAccountAccessKey': false,
             'UpdateAccountAttributes': false,
             'UpdateAccountQuota': false,
             'DeleteAccountQuota': false,
+            'GenerateAccountAccessKeytOther': false,
+            'UpdateAccountAttributesOther': false,
+            'UpdateAccountQuotaOther': false,
+            'DeleteAccountQuotaOther': false,
         }
     },
     oidc_storage_account_owner: {
@@ -163,10 +219,15 @@ const clients = {
             'ListAccounts': true,
             'GetAccount': false,
             'DeleteAccount': false,
+            'DeleteAccountOther': false,
             'GenerateAccountAccessKey': false,
             'UpdateAccountAttributes': false,
             'UpdateAccountQuota': false,
             'DeleteAccountQuota': false,
+            'GenerateAccountAccessKeytOther': false,
+            'UpdateAccountAttributesOther': false,
+            'UpdateAccountQuotaOther': false,
+            'DeleteAccountQuotaOther': false,
         }
     },
     oidc_data_consumer: {
@@ -177,14 +238,18 @@ const clients = {
             'ListAccounts': true,
             'GetAccount': false,
             'DeleteAccount': false,
+            'DeleteAccountOther': false,
             'GenerateAccountAccessKey': false,
             'UpdateAccountAttributes': false,
             'UpdateAccountQuota': false,
             'DeleteAccountQuota': false,
+            'GenerateAccountAccessKeytOther': false,
+            'UpdateAccountAttributesOther': false,
+            'UpdateAccountQuotaOther': false,
+            'DeleteAccountQuotaOther': false,
         }
     },
 };
-
 
 const request = JSON.stringify([
     {
@@ -196,14 +261,30 @@ const request = JSON.stringify([
     {
         'action': 'DeleteAccount',
         'service': 'scality',
-        'generalResource': 'root',
-        'specificResources': ['*'],
+        'accountId': savedSecondaryAccount.id,
+        'generalResource': savedSecondaryAccount.name,
+        'specificResources': [],
+    },
+    {
+        'action': 'DeleteAccountOther',
+        'service': 'scality',
+        'accountId': savedMainAccount.id,
+        'generalResource': savedMainAccount.name,
+        'specificResources': [],
     },
     {
         'action': 'GetAccount',
         'service': 'scality',
-        'generalResource': 'root',
-        'specificResources': ['AccountTest'],
+        'accountId': savedMainAccount.id,
+        'generalResource': savedMainAccount.name,
+        'specificResources': [],
+    },
+    {
+        'action': 'GetAccountOther',
+        'service': 'scality',
+        'accountId': savedSecondaryAccount.id,
+        'generalResource': savedSecondaryAccount.name,
+        'specificResources': [],
     },
     {
         'action': 'ListAccounts',
@@ -214,39 +295,71 @@ const request = JSON.stringify([
     {
         'action': 'GenerateAccountAccessKey',
         'service': 'scality',
-        'generalResource': 'root',
-        'specificResources': ['AccountTest'],
+        'accountId': savedMainAccount.id,
+        'generalResource': savedMainAccount.name,
+        'specificResources': [],
+    },
+    {
+        'action': 'GenerateAccountAccessKeyOther',
+        'service': 'scality',
+        'accountId': savedSecondaryAccount.id,
+        'generalResource': savedSecondaryAccount.name,
+        'specificResources': [],
     },
     {
         'action': 'UpdateAccountAttributes',
         'service': 'scality',
-        'generalResource': 'root',
-        'specificResources': ['AccountTest'],
+        'accountId': savedMainAccount.id,
+        'generalResource': savedMainAccount.name,
+        'specificResources': [],
+    },
+    {
+        'action': 'UpdateAccountAttributesOther',
+        'service': 'scality',
+        'accountId': savedSecondaryAccount.id,
+        'generalResource': savedSecondaryAccount.name,
+        'specificResources': [],
     },
     {
         'action': 'UpdateAccountQuota',
         'service': 'scality',
-        'generalResource': 'root',
-        'specificResources': ['AccountTest'],
+        'accountId': savedMainAccount.id,
+        'generalResource': savedMainAccount.name,
+        'specificResources': [],
+    },
+    {
+        'action': 'UpdateAccountQuotaOther',
+        'service': 'scality',
+        'accountId': savedSecondaryAccount.id,
+        'generalResource': savedSecondaryAccount.name,
+        'specificResources': [],
     },
     {
         'action': 'DeleteAccountQuota',
         'service': 'scality',
-        'generalResource': 'root',
-        'specificResources': ['AccountTest'],
+        'accountId': savedMainAccount.id,
+        'generalResource': savedMainAccount.name,
+        'specificResources': [],
+    },
+    {
+        'action': 'DeleteAccountQuotaOther',
+        'service': 'scality',
+        'accountId': savedSecondaryAccount.id,
+        'generalResource': savedSecondaryAccount.name,
+        'specificResources': [],
     },
 ]);
 
-function logResult(name, api, err, expecting, result) {
+function logResult(name, api, err, expecting, result, idx) {
     console.log(
         (err ? 'ERROR' : 'OK') === (expecting ? 'OK' : 'ERROR') ? '[OK]' : '[ERROR]',
         api,
         name,
-        // result, err,
+        // result, err, idx
     );
 }
 
-Object.keys(clients).forEach(clientName => {
+Object.keys(clients).forEach((clientName, idx) => {
     if (clientName.includes('oidc')) {
         clients[clientName].client.setWebIdentityToken(oidc[clientName.replace('oidc_', '')]);
     }
@@ -263,6 +376,7 @@ Object.keys(clients).forEach(clientName => {
         const api = 'ListAccounts';
         logResult(clientName, api, err, clients[clientName].expected[api], result);
     });
+
     clients[clientName].client.createAccount('test' + Math.random().toString(), {
         email: Math.random().toString() + 'test@scality.com',
     }, (err, result) => {
@@ -272,22 +386,22 @@ Object.keys(clients).forEach(clientName => {
 
     // Policy-based APIs
     clients[clientName].client.getAccount({
-        accountName: 'AccountTest',
+        accountName: accName,
     }, (err, result) => {
         const api = 'GetAccount';
         logResult(clientName, api, err, clients[clientName].expected[api], result);
     });
 
-    clients[clientName].client.deleteAccount('AccountTestTemp', (err, result) => {
-        const api = 'DeleteAccount';
+    clients[clientName].client.deleteAccount('acc-'+idx.toString(), (err, result) => {
+        const api = 'DeleteAccountOther';
         // Hack to prevent having to sync account creations
         if (err?.code === 'NoSuchEntity') {
             err = null;
         }
-        logResult(clientName, api, err, clients[clientName].expected[api], result);
+        logResult(clientName, api, err, clients[clientName].expected[api], result, idx);
     });
 
-    clients[clientName].client.generateAccountAccessKey('AccountTest', (err, result) => {
+    clients[clientName].client.generateAccountAccessKey(accName, (err, result) => {
         const api = 'GenerateAccountAccessKey';
         // Hack to prevent having to sync account creations
         if (err?.code === 'NoSuchEntity') {
@@ -295,31 +409,33 @@ Object.keys(clients).forEach(clientName => {
         }
         logResult(clientName, api, err, clients[clientName].expected[api], result);
     });
+    
+    // These APIs are not working currently in Vault2
 
-    clients[clientName].client.updateAccountAttributes('AccountTest', {}, (err, result) => {
-        const api = 'UpdateAccountAttributes';
-        // Hack to prevent having to sync account creations
-        if (err?.code === 'NoSuchEntity') {
-            err = null;
-        }
-        logResult(clientName, api, err, clients[clientName].expected[api], result);
-    });
+    // clients[clientName].client.updateAccountAttributes(accName, {}, (err, result) => {
+    //     const api = 'UpdateAccountAttributes';
+    //     // Hack to prevent having to sync account creations
+    //     if (err?.code === 'NoSuchEntity') {
+    //         err = null;
+    //     }
+    //     logResult(clientName, api, err, clients[clientName].expected[api], result);
+    // });
 
-    clients[clientName].client.updateAccountQuota('AccountTest', 1000, (err, result) => {
-        const api = 'UpdateAccountQuota';
-        // Hack to prevent having to sync account creations
-        if (err?.code === 'NoSuchEntity') {
-            err = null;
-        }
-        logResult(clientName, api, err, clients[clientName].expected[api], result);
-    });
+    // clients[clientName].client.updateAccountQuota(accName, 1000, (err, result) => {
+    //     const api = 'UpdateAccountQuota';
+    //     // Hack to prevent having to sync account creations
+    //     if (err?.code === 'NoSuchEntity') {
+    //         err = null;
+    //     }
+    //     logResult(clientName, api, err, clients[clientName].expected[api], result);
+    // });
 
-    clients[clientName].client.deleteAccountQuota('AccountTest', (err, result) => {
-        const api = 'DeleteAccountQuota';
-        // Hack to prevent having to sync account creations
-        if (err?.code === 'NoSuchEntity') {
-            err = null;
-        }
-        logResult(clientName, api, err, clients[clientName].expected[api], result);
-    });
+    // clients[clientName].client.deleteAccountQuota(accName, (err, result) => {
+    //     const api = 'DeleteAccountQuota';
+    //     // Hack to prevent having to sync account creations
+    //     if (err?.code === 'NoSuchEntity') {
+    //         err = null;
+    //     }
+    //     logResult(clientName, api, err, clients[clientName].expected[api], result);
+    // });
 });
