@@ -245,6 +245,24 @@ program
     }));
 
 program
+    .command('delete-account-attribute')
+    .option('--account-name <string>')
+    .option('--account-id <string>')
+    .option('--account-arn <string>')
+    .option('--canonical-id <string>')
+    .option('--key <account attribute key | string>')
+    .action(action.bind(null, 'delete-account-attribute', (client, args) => {
+        client.deleteAccountAttribute({
+            accountName: args.accountName || undefined,
+            accountId: args.accountId || undefined,
+            accountArn: args.accountArn || undefined,
+            canonicalId: args.canonicalId || undefined,
+            key: args.key || undefined,
+        }, handleVaultResponse);
+    }));
+
+
+program
     .command('delete-account')
     .option('--name <NAME>')
     .action(action.bind(null, 'delete-account', (client, args) => {
