@@ -228,6 +228,25 @@ program
     }));
 
 program
+    .command('add-account-attribute')
+    .option('--account-name <string>')
+    .option('--account-id <string>')
+    .option('--account-arn <string>')
+    .option('--canonical-id <string>')
+    .option('--key <account attribute key | string>')
+    .option('--value <account attribute value | string>')
+    .action(action.bind(null, 'add-account-attribute', (client, args) => {
+        client.addAccountAttribute({
+            accountName: args.accountName || undefined,
+            accountId: args.accountId || undefined,
+            accountArn: args.accountArn || undefined,
+            canonicalId: args.canonicalId || undefined,
+            key: args.key || undefined,
+            value: args.value || undefined,
+        }, handleVaultResponse);
+    }));
+
+program
     .command('delete-account')
     .option('--name <NAME>')
     .action(action.bind(null, 'delete-account', (client, args) => {
