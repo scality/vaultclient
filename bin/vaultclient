@@ -130,12 +130,14 @@ program
     .option('--email <EMAIL>')
     .option('--quota <Quota>', 'Maximum quota for the account', parseInt)
     .option('--accountid <ExternalAccountID>')
+    .option('--canonicalid <ExternalCanonicalID>')
     .action(action.bind(null, 'create-account', (client, args) => {
         client.createAccount(
             args.name, {
             email: args.email,
             quota: args.quota || null,
-            externalAccountId: args.accountid || null
+            externalAccountId: args.accountid || null,
+            externalCanonicalId: args.canonicalid || null
         },
             handleVaultResponse);
     }));
@@ -224,6 +226,43 @@ program
     .action(action.bind(null, 'delete-account-quota', (client, args) => {
         client.deleteAccountQuota(args.accountName, handleVaultResponse);
     }));
+
+program
+    .command('add-account-attribute')
+    .option('--account-name <string>')
+    .option('--account-id <string>')
+    .option('--account-arn <string>')
+    .option('--canonical-id <string>')
+    .option('--key <account attribute key | string>')
+    .option('--value <account attribute value | string>')
+    .action(action.bind(null, 'add-account-attribute', (client, args) => {
+        client.addAccountAttribute({
+            accountName: args.accountName || undefined,
+            accountId: args.accountId || undefined,
+            accountArn: args.accountArn || undefined,
+            canonicalId: args.canonicalId || undefined,
+            key: args.key || undefined,
+            value: args.value || undefined,
+        }, handleVaultResponse);
+    }));
+
+program
+    .command('delete-account-attribute')
+    .option('--account-name <string>')
+    .option('--account-id <string>')
+    .option('--account-arn <string>')
+    .option('--canonical-id <string>')
+    .option('--key <account attribute key | string>')
+    .action(action.bind(null, 'delete-account-attribute', (client, args) => {
+        client.deleteAccountAttribute({
+            accountName: args.accountName || undefined,
+            accountId: args.accountId || undefined,
+            accountArn: args.accountArn || undefined,
+            canonicalId: args.canonicalId || undefined,
+            key: args.key || undefined,
+        }, handleVaultResponse);
+    }));
+
 
 program
     .command('delete-account')
