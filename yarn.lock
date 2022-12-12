@@ -155,6 +155,11 @@
   resolved "https://registry.yarnpkg.com/@types/json5/-/json5-0.0.29.tgz#ee28707ae94e11d2b827bcbe5270bcea7f3e71ee"
   integrity sha1-7ihweulOEdK4J7y+UnC86n8+ce4=
 
+"@types/node@^18.11.9":
+  version "18.11.12"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-18.11.12.tgz#89e7f8aa8c88abf432f9bd594888144d7dba10aa"
+  integrity sha512-FgD3NtTAKvyMmD44T07zz2fEf+OKwutgBCEVM8GcvMGVGaDktiLNTDvPwC/LUe3PinMW+X6CuLOF2Ui1mAlSXg==
+
 "@types/utf8@^3.0.1":
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/@types/utf8/-/utf8-3.0.1.tgz#bf081663d4fff05ee63b41f377a35f8b189f7e5b"
@@ -251,6 +256,15 @@ agentkeepalive@^4.1.3:
   version "4.1.3"
   resolved "https://registry.yarnpkg.com/agentkeepalive/-/agentkeepalive-4.1.3.tgz#360a09d743a1f4fde749f9ba07caa6575d08259a"
   integrity sha512-wn8fw19xKZwdGPO47jivonaHRTd+nGOMP1z11sgGeQzDy2xd5FG0R67dIMcKHDE2cJ5y+YXV30XVGUBPRSY7Hg==
+  dependencies:
+    debug "^4.1.0"
+    depd "^1.1.2"
+    humanize-ms "^1.2.1"
+
+agentkeepalive@^4.2.1:
+  version "4.2.1"
+  resolved "https://registry.yarnpkg.com/agentkeepalive/-/agentkeepalive-4.2.1.tgz#a7975cbb9f83b367f06c90cc51ff28fe7d499717"
+  integrity sha512-Zn4cw2NEqd+9fiSVWMscnjyQ1a8Yfoc5oBajLeo5w+YBHgDUcEBY2hS4YpTz6iN5f/2zQiktcuM6tS8x1p9dpA==
   dependencies:
     debug "^4.1.0"
     depd "^1.1.2"
@@ -1471,6 +1485,11 @@ fast-levenshtein@~2.0.6:
   resolved "https://registry.yarnpkg.com/fast-levenshtein/-/fast-levenshtein-2.0.6.tgz#3d8a5c66883a16a30ca8643e851f19baa7797917"
   integrity sha1-PYpcZog6FqMMqGQ+hR8Zuqd5eRc=
 
+fast-safe-stringify@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/fast-safe-stringify/-/fast-safe-stringify-2.1.1.tgz#c406a83b6e70d9e35ce3b30a81141df30aeba884"
+  integrity sha512-W+KJc2dmILlPplD/H4K9l9LcAHAfPtP6BY84uVLXQ6Evcz9Lcg33Y2z1IVblT6xdY54PXYVHEv+0Wpq8Io6zkA==
+
 "fcntl@github:scality/node-fcntl#0.2.0":
   version "0.2.0"
   resolved "https://codeload.github.com/scality/node-fcntl/tar.gz/ae7493da46fb353eff0c4cb79e2cce838197c066"
@@ -1834,6 +1853,13 @@ http-signature@~1.2.0:
     assert-plus "^1.0.0"
     jsprim "^1.2.2"
     sshpk "^1.7.0"
+
+"httpagent@git+https://github.com/scality/httpagent#1.0.4":
+  version "1.0.4"
+  resolved "git+https://github.com/scality/httpagent#e14a16f9882c15900ef1e3a6ada341d5cbe3eb48"
+  dependencies:
+    "@types/node" "^18.11.9"
+    agentkeepalive "^4.2.1"
 
 https-proxy-agent@^2.2.0:
   version "2.2.4"
@@ -3403,7 +3429,7 @@ safe-json-stringify@1.0.3:
   resolved "https://registry.yarnpkg.com/safe-json-stringify/-/safe-json-stringify-1.0.3.tgz#3cb6717660a086d07cb5bd9b7a6875bcf67bd05e"
   integrity sha1-PLZxdmCghtB8tb2bemh1vPZ70F4=
 
-safe-json-stringify@^1.0.3:
+safe-json-stringify@^1.0.3, safe-json-stringify@^1.2.0:
   version "1.2.0"
   resolved "https://registry.yarnpkg.com/safe-json-stringify/-/safe-json-stringify-1.2.0.tgz#356e44bc98f1f93ce45df14bcd7c01cda86e0afd"
   integrity sha512-gH8eh2nZudPQO6TytOvbxnuhYBOvDBBLW52tz5q6X58lJcd/tkmqFR+5Z9adS8aJtURSXWThWy/xJtJwixErvg==
@@ -4054,17 +4080,18 @@ verror@1.10.0:
     core-util-is "1.0.2"
     extsprintf "^1.2.0"
 
-"werelogs@git+https://github.com/scality/werelogs#8.1.0":
-  version "8.1.0"
-  resolved "git+https://github.com/scality/werelogs#e8f828725642c54c511cdbe580b18f43d3589313"
-  dependencies:
-    safe-json-stringify "1.0.3"
-
 werelogs@scality/werelogs#8.1.0:
   version "8.1.0"
   resolved "https://codeload.github.com/scality/werelogs/tar.gz/e8f828725642c54c511cdbe580b18f43d3589313"
   dependencies:
     safe-json-stringify "1.0.3"
+
+werelogs@scality/werelogs#8.1.2:
+  version "8.1.2"
+  resolved "https://codeload.github.com/scality/werelogs/tar.gz/c9952528699978e4b09164c67922b4fbcfd4654f"
+  dependencies:
+    fast-safe-stringify "^2.1.1"
+    safe-json-stringify "^1.2.0"
 
 werelogs@scality/werelogs#GA7.2.0.5:
   version "7.2.0"
