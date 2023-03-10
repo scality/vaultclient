@@ -342,9 +342,9 @@ arraybuffer.slice@~0.0.7:
   resolved "https://registry.yarnpkg.com/arraybuffer.slice/-/arraybuffer.slice-0.0.7.tgz#3bbc4275dd584cc1b10809b89d4e8b63a69e7675"
   integrity sha512-wGUIVQXuehL5TCqQun8OW81jGzAWycqzFF8lFp+GOM5BXLYj3bKNsYC4daB7n6XjCqxQA/qgTJ+8ANR3acjrog==
 
-"arsenal@git+https://github.com/scality/Arsenal#7.10.45":
-  version "7.10.45"
-  resolved "git+https://github.com/scality/Arsenal#bd0a199ffa5e9efe4de27aefc854d8bd8b4b2d46"
+"arsenal@git+https://github.com/scality/Arsenal#upgrade-prom-client":
+  version "7.10.44"
+  resolved "git+https://github.com/scality/Arsenal#30e03aa0f428a7a48a5bd94eed22891c32c34dd5"
   dependencies:
     "@types/async" "^3.2.12"
     "@types/utf8" "^3.0.1"
