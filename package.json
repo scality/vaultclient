@@ -14,7 +14,7 @@
   },
   "homepage": "https://github.com/scality/vaultclient#readme",
   "dependencies": {
-    "arsenal": "git+https://github.com/scality/Arsenal#8.1.62",
+    "arsenal": "git+https://github.com/scality/Arsenal#8.1.87",
     "commander": "2.20.0",
     "httpagent": "git+https://github.com/scality/httpagent#1.0.5",
     "werelogs": "scality/werelogs#8.1.2",
