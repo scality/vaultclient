@@ -54,13 +54,13 @@ declare class VaultClient {
      * @param {string} accountName - account name
      * @param {object} options - additional creation params
      * @param {string} options.email - account email
-     * @param {string} options.quota - maximum quota for the account
+     * @param {string} [options.quota] - maximum quota for the account
      * @param {VaultClient~requestCallback} callback - callback
      * @returns {undefined}
      */
     createAccount(accountName: string, options: {
         email: string;
-        quota: string;
+        quota?: string;
     }, callback: any): undefined;
     /**
      * Create a password for an account

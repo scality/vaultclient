@@ -1959,9 +1959,10 @@ http-proxy-agent@^5.0.0:
     agent-base "6"
     debug "4"
 
-"httpagent@git+https://github.com/scality/httpagent#1.0.5":
-  version "1.0.5"
-  resolved "git+https://github.com/scality/httpagent#ec4e28f05001eaa6528daa174dbeab9e1df40ff6"
+"httpagent@git+https://github.com/scality/httpagent#1.0.6":
+  version "1.0.6"
+  uid "66e97ab93532d79dbddcf6c4ea4df849b84c33c9"
+  resolved "git+https://github.com/scality/httpagent#66e97ab93532d79dbddcf6c4ea4df849b84c33c9"
   dependencies:
     agentkeepalive "^4.2.1"
 
@@ -4033,10 +4034,10 @@ typedarray-to-buffer@~3.1.5:
   dependencies:
     is-typedarray "^1.0.0"
 
-typescript@^5.0.2:
-  version "5.0.2"
-  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.0.2.tgz#891e1a90c5189d8506af64b9ef929fca99ba1ee5"
-  integrity sha512-wVORMBGO/FAs/++blGNeAVdbNKtIh1rbBL2EyQ1+J9lClJ93KiiKe8PmFIVdXhHcyv44SL9oglmfeSsndo0jRw==
+typescript@^4.7.3:
+  version "4.9.5"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-4.9.5.tgz#095979f9bcc0d09da324d58d03ce8f8374cbe65a"
+  integrity sha512-1FXk9E2Hm+QzZQ7z+McJiHL4NW1F2EzMu9Nq9i3zAaGqibafqYwCVU6WyWAuyQRRzOlxou8xZSyXLEN8oKj24g==
 
 typewise-core@^1.2, typewise-core@^1.2.0:
   version "1.2.0"

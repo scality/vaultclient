@@ -16,8 +16,8 @@
   "dependencies": {
     "arsenal": "git+https://github.com/scality/Arsenal#8.1.87",
     "commander": "2.20.0",
-    "httpagent": "git+https://github.com/scality/httpagent#1.0.5",
-    "typescript": "^5.0.2",
+    "httpagent": "git+https://github.com/scality/httpagent#1.0.6",
+    "typescript": "^4.7.3",
     "werelogs": "scality/werelogs#8.1.2",
     "xml2js": "0.4.19"
   },
