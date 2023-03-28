@@ -596,9 +596,9 @@ arraybuffer.slice@~0.0.7:
   resolved "https://registry.yarnpkg.com/arraybuffer.slice/-/arraybuffer.slice-0.0.7.tgz#3bbc4275dd584cc1b10809b89d4e8b63a69e7675"
   integrity sha512-wGUIVQXuehL5TCqQun8OW81jGzAWycqzFF8lFp+GOM5BXLYj3bKNsYC4daB7n6XjCqxQA/qgTJ+8ANR3acjrog==
 
-"arsenal@git+https://github.com/scality/Arsenal#1f5343fd73f6504fbbcb0d170484d7275fcec1ea":
+"arsenal@git+https://github.com/scality/Arsenal#81bd18d05c349b9fddf39430a6a6dea28795bc97":
   version "8.1.90"
-  resolved "git+https://github.com/scality/Arsenal#1f5343fd73f6504fbbcb0d170484d7275fcec1ea"
+  resolved "git+https://github.com/scality/Arsenal#81bd18d05c349b9fddf39430a6a6dea28795bc97"
   dependencies:
     "@azure/identity" "^3.1.1"
     "@azure/storage-blob" "^12.12.0"
@@ -630,7 +630,7 @@ arraybuffer.slice@~0.0.7:
     simple-glob "^0.2.0"
     socket.io "2.4.1"
     socket.io-client "2.4.0"
-    sproxydclient "github:scality/sproxydclient#5d9400fa0c6b4379969a3551bec0435dd94a3ea7"
+    sproxydclient "github:scality/sproxydclient#df6c19fc89d6a49bfb721734e9fd8b8962b94724"
     utf8 "3.0.0"
     uuid "^3.0.1"
     werelogs scality/werelogs#8.1.2
@@ -3718,9 +3718,9 @@ sprintf-js@~1.0.2:
   resolved "https://registry.yarnpkg.com/sprintf-js/-/sprintf-js-1.0.3.tgz#04e6926f662895354f3dd015203633b857297e2c"
   integrity sha1-BOaSb2YolTVPPdAVIDYzuFcpfiw=
 
-"sproxydclient@github:scality/sproxydclient#5d9400fa0c6b4379969a3551bec0435dd94a3ea7":
-  version "8.0.7"
-  resolved "https://codeload.github.com/scality/sproxydclient/tar.gz/5d9400fa0c6b4379969a3551bec0435dd94a3ea7"
+"sproxydclient@github:scality/sproxydclient#df6c19fc89d6a49bfb721734e9fd8b8962b94724":
+  version "8.0.8"
+  resolved "https://codeload.github.com/scality/sproxydclient/tar.gz/df6c19fc89d6a49bfb721734e9fd8b8962b94724"
   dependencies:
     async "^3.2.0"
     httpagent "github:scality/httpagent#1.0.6"
