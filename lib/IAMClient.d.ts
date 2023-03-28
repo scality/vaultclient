@@ -92,11 +92,11 @@ declare class VaultClient {
      * Update Quota of an account
      *
      * @param {string} accountName - account name
-     * @param {integer} quota - maximum quota for the account
+     * @param {Number} quota - maximum quota for the account
      * @param {VaultClient~requestCallback} callback - callback
      * @returns {undefined}
      */
-    updateAccountQuota(accountName: string, quota: integer, callback: any): undefined;
+    updateAccountQuota(accountName: string, quota: number, callback: any): undefined;
     /**
      * Delete Quota of an account
      *
