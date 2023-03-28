@@ -11,19 +11,19 @@ declare class VaultClient {
      * @param {boolean} [ignoreCa] - Ignore authority
      * @param {string} [accessKey] - accessKey for v4 signature
      * @param {string} [secretKeyValue] - secretKeyValue for v4 signature
-     * @param {Werelogs.API} [logApi] - object providing a constructor function
+     * @param {werelogs.API} [logApi] - object providing a constructor function
      *                                  for the Logger object
      * @param {string} [path] - prefix requests with this path
      * @param {string} [sessionToken] - session token for v4 signature
      */
-    constructor(host: string, port?: number, useHttps?: boolean, key?: string, cert?: string, ca?: string, ignoreCa?: boolean, accessKey?: string, secretKeyValue?: string, logApi?: Werelogs.API, path?: string, sessionToken?: string);
+    constructor(host: string, port?: number, useHttps?: boolean, key?: string, cert?: string, ca?: string, ignoreCa?: boolean, accessKey?: string, secretKeyValue?: string, logApi?: werelogs.API, path?: string, sessionToken?: string);
     serverHost: string;
     serverPort: number;
     _key: string;
     _cert: string;
     _ca: string;
     useHttps: boolean;
-    _agent: HttpAgent.Agent | HttpsAgent.Agent;
+    _agent: HttpsAgent.Agent | HttpAgent.Agent;
     accessKey: string;
     secretKeyValue: string;
     sessionToken: string;
@@ -384,6 +384,6 @@ declare class VaultClient {
      */
     handleResponse(res: object, ret: string, log: object, cb: any): undefined;
 }
-import { http as HttpAgent } from "httpagent";
 import { https as HttpsAgent } from "httpagent";
+import { http as HttpAgent } from "httpagent";
 //# sourceMappingURL=IAMClient.d.ts.map
