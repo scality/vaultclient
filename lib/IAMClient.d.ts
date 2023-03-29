@@ -1,3 +1,4 @@
+/// <reference types="arsenal/node_modules/werelogs" />
 export = VaultClient;
 declare class VaultClient {
     /**
@@ -11,23 +12,23 @@ declare class VaultClient {
      * @param {boolean} [ignoreCa] - Ignore authority
      * @param {string} [accessKey] - accessKey for v4 signature
      * @param {string} [secretKeyValue] - secretKeyValue for v4 signature
-     * @param {Werelogs.API} [logApi] - object providing a constructor function
+     * @param {werelogs.API} [logApi] - object providing a constructor function
      *                                  for the Logger object
      * @param {string} [path] - prefix requests with this path
      * @param {string} [sessionToken] - session token for v4 signature
      */
-    constructor(host: string, port?: number, useHttps?: boolean, key?: string, cert?: string, ca?: string, ignoreCa?: boolean, accessKey?: string, secretKeyValue?: string, logApi?: Werelogs.API, path?: string, sessionToken?: string);
+    constructor(host: string, port?: number, useHttps?: boolean, key?: string, cert?: string, ca?: string, ignoreCa?: boolean, accessKey?: string, secretKeyValue?: string, logApi?: werelogs.API, path?: string, sessionToken?: string);
     serverHost: string;
     serverPort: number;
     _key: string;
     _cert: string;
     _ca: string;
     useHttps: boolean;
-    _agent: HttpAgent.Agent | HttpsAgent.Agent;
+    _agent: HttpsAgent.Agent | HttpAgent.Agent;
     accessKey: string;
     secretKeyValue: string;
     sessionToken: string;
-    logApi: any;
+    logApi: werelogs.API | typeof werelogs;
     log: any;
     _path: string;
     useAuthenticatedAdminRoutes: boolean;
@@ -54,13 +55,13 @@ declare class VaultClient {
      * @param {string} accountName - account name
      * @param {object} options - additional creation params
      * @param {string} options.email - account email
-     * @param {string} options.quota - maximum quota for the account
+     * @param {string} [options.quota] - maximum quota for the account
      * @param {VaultClient~requestCallback} callback - callback
      * @returns {undefined}
      */
     createAccount(accountName: string, options: {
         email: string;
-        quota: string;
+        quota?: string;
     }, callback: any): undefined;
     /**
      * Create a password for an account
@@ -92,11 +93,11 @@ declare class VaultClient {
      * Update Quota of an account
      *
      * @param {string} accountName - account name
-     * @param {integer} quota - maximum quota for the account
+     * @param {Number} quota - maximum quota for the account
      * @param {VaultClient~requestCallback} callback - callback
      * @returns {undefined}
      */
-    updateAccountQuota(accountName: string, quota: integer, callback: any): undefined;
+    updateAccountQuota(accountName: string, quota: number, callback: any): undefined;
     /**
      * Delete Quota of an account
      *
@@ -384,6 +385,7 @@ declare class VaultClient {
      */
     handleResponse(res: object, ret: string, log: object, cb: any): undefined;
 }
-import { http as HttpAgent } from "httpagent";
 import { https as HttpsAgent } from "httpagent";
+import { http as HttpAgent } from "httpagent";
+import werelogs = require("werelogs");
 //# sourceMappingURL=IAMClient.d.ts.map
