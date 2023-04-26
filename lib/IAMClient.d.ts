@@ -109,12 +109,12 @@ declare class VaultClient {
     /**
      * Update account custom attributes
      *
-     * @param {string} name - account name
+     * @param {string} accountName - account name
      * @param {object} customAttributes - custom attributes
      * @param {VaultClient~requestCallback} callback - callback
      * @returns {undefined}
      */
-    updateAccountAttributes(name: string, customAttributes: object, callback: any): undefined;
+    updateAccountAttributes(accountName: string, customAttributes: object, callback: any): undefined;
     /**
      * Add account attribute
      *
@@ -189,7 +189,7 @@ declare class VaultClient {
      * Get account
      *
      * @param {object} options - Additional search params
-     * @param {string} [options.name] - Account Name
+     * @param {string} [options.accountName] - Account Name
      * @param {string} [options.accountId] - Account ID
      * @param {string} [options.canonicalId] - Canonical ID
      * @param {string} [options.emailAddress] - E-mail Address
@@ -197,7 +197,7 @@ declare class VaultClient {
      * @return {undefined}
      */
     getAccount(options: {
-        name?: string;
+        accountName?: string;
         accountId?: string;
         canonicalId?: string;
         emailAddress?: string;
