@@ -2,6 +2,8 @@
 name: pre-merge
 
 on:
+  workflow_dispatch:
+
   push:
     branches:
       - 'user/**'
