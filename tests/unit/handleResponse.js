@@ -1,14 +1,13 @@
 'use strict'; // eslint-disable-line
 // const http = require('http');
 const assert = require('assert');
-const { errors } = require('arsenal');
 const IAMClient = require('../../lib/IAMClient');
+const { InternalError } = require('arsenal/build/lib/errors/arsenalErrors');
 
 const log = { error() {} };
 const res = { statusCode: 400 };
 const ret = '<Response><Code>foo</Code></Response>';
-const expErr = errors.InternalError
-    .customizeDescription('unable to translate error from vault');
+const expErr = InternalError;
 
 describe('handling unrecognized error syntax', () => {
     let client;

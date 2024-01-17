@@ -13,6 +13,9 @@ const httpPort = 8500;
 const httpsPort = 8600;
 const httpsPortTwoWay = 8601;
 
+const defaultAccessKey = 'D4IT2AWSB588GO5J9T00';
+const defaultSecretKey = 'UEEu8tYlsOGGrgf4DAiSZD6apVNPUWqRiPG0nTB6';
+
 const accountName = 'account_name';
 const accountOptions = { email: 'acc@oun.t', password: 'pwd' };
 
@@ -39,14 +42,18 @@ const testNames = [
 ];
 
 const testClients = [
-    new IAMClient('localhost', httpPort),
-    new IAMClient('localhost', httpPort, false),
+    new IAMClient('localhost', httpPort, undefined, undefined, undefined, undefined, undefined,
+    defaultAccessKey, defaultSecretKey),
+    new IAMClient('localhost', httpPort, false, undefined, undefined, undefined, undefined,
+    defaultAccessKey, defaultSecretKey),
     new IAMClient('vault.testing.local', httpsPort, true, undefined, undefined,
-        fs.readFileSync('tests/utils/ca.crt', 'ascii')),
+        fs.readFileSync('tests/utils/ca.crt', 'ascii'), undefined,
+        defaultAccessKey, defaultSecretKey),
     new IAMClient('vault.testing.local', httpsPortTwoWay, true,
         fs.readFileSync('tests/utils/test.key', 'ascii'),
         fs.readFileSync('tests/utils/test.crt', 'ascii'),
-        fs.readFileSync('tests/utils/ca.crt', 'ascii')),
+        fs.readFileSync('tests/utils/ca.crt', 'ascii'),
+        undefined, defaultAccessKey, defaultSecretKey),
 ];
 
 function extractPost(req, cb) {

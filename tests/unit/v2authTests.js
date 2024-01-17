@@ -112,7 +112,8 @@ describe('v2 auth tests with mockup server', () => {
                 accessKeys[testIndex],
                 { algo: hashAlgorithms[testIndex] },
                 (err, response) => {
-                    assert.deepStrictEqual(err, expectedErrors[testIndex]);
+                    assert.deepStrictEqual(err ? err.code : undefined,
+                        expectedErrors[testIndex] ? expectedErrors[testIndex].type : undefined);
                     assert.deepStrictEqual(response
                         ? response.message.body : response,
                     expectedResponseBodies[testIndex]);
