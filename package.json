@@ -27,7 +27,7 @@
     "eslint-config-scality": "scality/Guidelines#8.2.0",
     "eslint-plugin-import": "^2.18.0",
     "mocha": "6.1.4",
-    "typescript": "^4.7.3"
+    "typescript": "^5.3.3"
   },
   "scripts": {
     "start": "node client.js",

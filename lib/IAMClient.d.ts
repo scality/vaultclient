@@ -32,7 +32,7 @@ declare class VaultClient {
     log: any;
     _path: string;
     useAuthenticatedAdminRoutes: boolean;
-    enableIAMOnAdminRoutes(): VaultClient;
+    enableIAMOnAdminRoutes(): this;
     /**
      * Set the configuration for the werelogs logger
      * @param {object} config - A configuration object for werelogs
@@ -158,6 +158,7 @@ declare class VaultClient {
     /**
      * Get accounts using account ids, canonical ids or email addresses
      *
+     * @overload
      * @param {array|undefined} accountIds - Account ids, exclusive with
      *  emailAddresses and canonicalIds
      * @param {array|undefined} emailAddresses - Email addresses, exclusive
@@ -170,6 +171,33 @@ declare class VaultClient {
      * @return {undefined}
      */
     getAccounts(accountIds: any[] | undefined, emailAddresses: any[] | undefined, canonicalIds: any[] | undefined, options: {
+        reqUid?: string;
+    }, callback: Function): undefined;
+    /**
+     * Get accounts using account ids, canonical ids, email addresses
+     * or account names
+     *
+     * @overload - New signature that adds filter accountNames
+     * @param {object} filter - Contains one of the account filters
+     * @param {array|undefined} [filter.accountIds] - Account ids, exclusive with
+     *  emailAddresses, canonicalIds and accountNames
+     * @param {array|undefined} [filter.emailAddresses] - Email addresses, exclusive
+     *  with account ids, canonicalIds and accountNames
+     * @param {array|undefined} [filter.canonicalIds] - Canonical ids, exclusive with
+     *  account ids, emailAddresses and accountNames
+     * @param {array|undefined} [filter.accountNames] - Account Names, exclusive with
+     *  account ids, emailAddresses and canonicalIds. Do not use with vault2.
+     * @param {object} options - Options
+     * @param {string} [options.reqUid] - Request uid
+     * @param {function} callback - Callback(err, result)
+     * @return {undefined}
+     */
+    getAccounts(filter: {
+        accountIds?: any[] | undefined;
+        emailAddresses?: any[] | undefined;
+        canonicalIds?: any[] | undefined;
+        accountNames?: any[] | undefined;
+    }, options: {
         reqUid?: string;
     }, callback: Function): undefined;
     /**
