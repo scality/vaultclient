@@ -35,3 +35,5 @@ jobs:
         run: sudo bash -c 'echo "127.0.0.1 vault.testing.local" >> /etc/hosts'
       - name: run test
         run: yarn run test
+      - name: check types are synced with js
+        run: yarn gen-types && git --no-pager diff --exit-code lib/
