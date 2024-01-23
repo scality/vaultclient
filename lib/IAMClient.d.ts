@@ -156,21 +156,24 @@ declare class VaultClient {
         key?: string;
     }, callback: Function): undefined;
     /**
-     * Get accounts using account ids, canonical ids or email addresses
+     * Get accounts using account ids or names, canonical ids or email addresses
      *
-     * @param {array|undefined} accountIds - Account ids, exclusive with
-     *  emailAddresses and canonicalIds
+     * @param {array|undefined} accounts - Account ids or names (depending on options.accountNames),
+     * exclusive with emailAddresses and canonicalIds
      * @param {array|undefined} emailAddresses - Email addresses, exclusive
-     *  with account ids and canonicalIds
+     *  with account ids or names and canonicalIds
      * @param {array|undefined} canonicalIds - Canonical ids, exclusive with
-     *  account ids and emailAddresses
+     *  account ids or names and emailAddresses
      * @param {object} options - Options
      * @param {string} [options.reqUid] - Request uid
+     * @param {boolean} [options.accountNames] - Flag to consider first arg `accounts`
+     * as `accountNames` instead of `accountIds`
      * @param {function} callback - Callback(err, result)
      * @return {undefined}
      */
-    getAccounts(accountIds: any[] | undefined, emailAddresses: any[] | undefined, canonicalIds: any[] | undefined, options: {
+    getAccounts(accounts: any[] | undefined, emailAddresses: any[] | undefined, canonicalIds: any[] | undefined, options: {
         reqUid?: string;
+        accountNames?: boolean;
     }, callback: Function): undefined;
     /**
      * List accounts
