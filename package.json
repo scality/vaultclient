@@ -37,6 +37,6 @@
     "lint_yml": "yamllint $(git ls-files '*.yml')",
     "lint_md": "mdlint $(git ls-files '*.md')",
     "test": "mocha --exit tests/unit",
-    "gen-types": "rm -f lib/IAMClient.d.ts && tsc --declaration --emitDeclarationOnly"
+    "gen-types": "rm -f lib/IAMClient.d.ts && rm -f lib/constants.d.ts && tsc --declaration --emitDeclarationOnly"
   }
 }

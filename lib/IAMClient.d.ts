@@ -1,4 +1,3 @@
-/// <reference types="arsenal/node_modules/werelogs" />
 export = VaultClient;
 declare class VaultClient {
     /**
@@ -32,6 +31,9 @@ declare class VaultClient {
     log: any;
     _path: string;
     useAuthenticatedAdminRoutes: boolean;
+    setCustomEndpointForSignature(host: any, path: any): void;
+    _host: any;
+    __path: any;
     enableIAMOnAdminRoutes(): VaultClient;
     /**
      * Set the configuration for the werelogs logger
@@ -313,7 +315,7 @@ declare class VaultClient {
     /**
      * Get policy evaluation (without authentication first)
      * @param {Object} requestContextParams - parameters needed to construct
-     * requestContext in Vault, can be an array of request contexts
+     * requestContext in Vault
      * @param {Object} requestContextParams.constantParams -
      * params that have the
      * same value for each requestContext to be constructed in Vault
@@ -348,6 +350,7 @@ declare class VaultClient {
         logger?: werelogs.RequestLogger;
     }, callback: Function): undefined;
     healthcheck(reqUid: any, callback: any): void;
+    _signRequest(iamAuthenticate: any, req: any, options: any, path: any): Promise<void>;
     /**
      * @param {string} method - CRUD method chosen for the request
      * @param {string} path - RESTful URL for the request
