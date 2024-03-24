@@ -94,20 +94,43 @@ declare class VaultClient {
     /**
      * Update Quota of an account
      *
-     * @param {string} accountName - account name
      * @param {number} quota - maximum quota for the account
+     * @param {object} options - additional creation params
+     * @param {string} [options.accountName] - account name
+     * @param {boolean} [options.ci] - test flag
      * @param {VaultClient~requestCallback} callback - callback
      * @returns {undefined}
      */
-    updateAccountQuota(accountName: string, quota: number, callback: any): undefined;
+    updateAccountQuota(quota: number, options: {
+        accountName?: string;
+        ci?: boolean;
+    }, callback: any): undefined;
     /**
      * Delete Quota of an account
      *
-     * @param {string} accountName - account name
+     * @param {object} options - additional creation params
+     * @param {string} [options.accountName] - account name
+     * @param {boolean} [options.ci] - test flag
      * @param {VaultClient~requestCallback} callback - callback
      * @returns {undefined}
      */
-    deleteAccountQuota(accountName: string, callback: any): undefined;
+    deleteAccountQuota(options: {
+        accountName?: string;
+        ci?: boolean;
+    }, callback: any): undefined;
+    /**
+     * Get Quota of an account
+     *
+     * @param {object} options - additional creation params
+     * @param {string} [options.accountName] - account name
+     * @param {boolean} [options.ci] - test flag
+     * @param {VaultClient~requestCallback} callback - callback
+     * @returns {undefined}
+     */
+    getAccountQuota(options: {
+        accountName?: string;
+        ci?: boolean;
+    }, callback: any): undefined;
     /**
      * Update account custom attributes
      *

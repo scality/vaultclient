@@ -213,20 +213,25 @@ program
 
 program
     .command('update-account-quota')
-    .option('--account-name <NAME>', 'Name of the account')
     .option('--quota <QUOTA>', 'Maximum quota for the account', parseInt)
+    .option('--account-name <NAME>', 'Name of the account')
     .action(action.bind(null, 'update-account-quota', (client, args) => {
-        client.updateAccountQuota(args.accountName, args.quota,
-            handleVaultResponse);
+        client.updateAccountQuota(args.quota, {accountName: args.accountName || undefined}, handleVaultResponse);
     }));
 
 program
     .command('delete-account-quota')
     .option('--account-name <NAME>', 'Name of the account')
     .action(action.bind(null, 'delete-account-quota', (client, args) => {
-        client.deleteAccountQuota(args.accountName, handleVaultResponse);
+        client.deleteAccountQuota({accountName: args.accountName || undefined}, handleVaultResponse);
     }));
 
+program
+    .command('get-account-quota')
+    .option('--account-name <NAME>', 'Name of the account')
+    .action(action.bind(null, 'get-account-quota', (client, args) => {
+        client.getAccountQuota({accountName: args.accountName || undefined}, handleVaultResponse);
+    }));
 program
     .command('add-account-attribute')
     .option('--account-name <string>')
