@@ -360,6 +360,7 @@ declare class VaultClient {
         logger?: werelogs.RequestLogger;
     }, callback: Function): undefined;
     healthcheck(reqUid: any, callback: any): void;
+    report(reqUid: any, callback: any): void;
     _signRequest(iamAuthenticate: any, req: any, options: any, path: any): Promise<void>;
     /**
      * @param {string} method - CRUD method chosen for the request
