@@ -89,6 +89,7 @@ function action(cmd, fn, args) {
         const secretKey = config.secretKeyValue;
         let host = args.parent.host || process.env.VAULT_HOST || 'localhost';
         const token = config.sessionToken;
+        const parameterValidation = args.parameterValidation || true;
         const client = new vaultclient.Client(host,
             Number.parseInt(args.parent.port ? args.parent.port :
                 process.env.VAULT_PORT, 10),
@@ -101,7 +102,8 @@ function action(cmd, fn, args) {
             secretKey,
             null,
             null,
-            token);
+            token,
+            parameterValidation);
         fn(client, args);
     } catch (err) {
         //process.stderr.write(err.message + '\n');
@@ -215,18 +217,26 @@ program
     .command('update-account-quota')
     .option('--account-name <NAME>', 'Name of the account')
     .option('--quota <QUOTA>', 'Maximum quota for the account', parseInt)
+    .option('--parameter-validation', 'Disable validation of quota')
     .action(action.bind(null, 'update-account-quota', (client, args) => {
-        client.updateAccountQuota(args.accountName, args.quota,
-            handleVaultResponse);
+        client.updateAccountQuota(args.accountName, args.quota, handleVaultResponse);
     }));
 
 program
     .command('delete-account-quota')
     .option('--account-name <NAME>', 'Name of the account')
+    .option('--parameter-validation', 'Disable validation of quota')
     .action(action.bind(null, 'delete-account-quota', (client, args) => {
         client.deleteAccountQuota(args.accountName, handleVaultResponse);
     }));
 
+program
+    .command('get-account-quota')
+    .option('--account-name <NAME>', 'Name of the account')
+    .option('--parameter-validation', 'Disable validation of quota')
+    .action(action.bind(null, 'get-account-quota', (client, args) => {
+        client.getAccountQuota(args.accountName, handleVaultResponse);
+    }));
 program
     .command('add-account-attribute')
     .option('--account-name <string>')
@@ -286,7 +296,7 @@ program
             };
             return client.generateAccountAccessKey(internalServiceAccountName,
                 (err, data) => {
-                    if (err && err.is.EntityAlreadyExists) {
+                    if (err && err.EntityAlreadyExists) {
                         return handleVaultResponse(null, data);
                     }
                     return handleVaultResponse(err, data);
@@ -305,7 +315,7 @@ program
                 return ensureAccessKey();
             }
 
-            if (err.is.NoSuchEntity) {
+            if (err.NoSuchEntity) {
                 return client.createAccount(
                     internalServiceAccountName, {
                         email: internalServiceAccountEmail,
