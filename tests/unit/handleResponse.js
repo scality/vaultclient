@@ -7,7 +7,6 @@ const { InternalError } = require('arsenal/build/lib/errors/arsenalErrors');
 const log = { error() {} };
 const res = { statusCode: 400 };
 const ret = '<Response><Code>foo</Code></Response>';
-const expErr = InternalError;
 
 describe('handling unrecognized error syntax', () => {
     let client;
@@ -18,7 +17,8 @@ describe('handling unrecognized error syntax', () => {
 
     it('should return Internal Error for unrecognized errors', done => {
         client.handleResponse(res, ret, log, err => {
-            assert.deepStrictEqual(err, expErr);
+            assert.strictEqual(err.code, InternalError.code);
+            assert.strictEqual(err.description, InternalError.description);
             return done();
         });
     });
