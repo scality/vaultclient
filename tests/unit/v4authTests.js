@@ -8,11 +8,26 @@ const { createHmac } = require('crypto');
 const IAMClient = require('../../lib/IAMClient');
 
 function handler(req, res) {
-    const index = req.url.indexOf('?');
-    const data = querystring.parse(req.url.substring(index + 1));
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.write(JSON.stringify(data));
-    res.end();
+    if (req.method === 'POST' && req.headers['content-type'] === 'application/json') {
+        let body = '';
+
+        req.on('data', chunk => {
+            body += chunk;
+        });
+
+        req.on('end', () => {
+            const data = JSON.parse(body);
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.write(JSON.stringify(data));
+            res.end();
+        });
+    } else {
+        const index = req.url.indexOf('?');
+        const data = querystring.parse(req.url.substring(index + 1));
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.write(JSON.stringify(data));
+        res.end();
+    }
 }
 
 function hmac(stringToSign, key) {
@@ -22,6 +37,7 @@ function hmac(stringToSign, key) {
 describe('IAMClient verifySignatureV4', () => {
     let server;
     let client;
+    let clientWithPost;
     const invalidRegions = [undefined, null];
     const accessKey = 'accessKey';
     const signature = hmac('signature', 'secret').toString('hex');
@@ -31,6 +47,8 @@ describe('IAMClient verifySignatureV4', () => {
     beforeEach('start server', done => {
         server = http.createServer(handler).listen(8500, () => {
             client = new IAMClient('127.0.0.1', 8500);
+            clientWithPost = new IAMClient('127.0.0.1', 8500);
+            clientWithPost.setSupportsPostAuthV4();
             done();
         }).on('error', done);
     });
@@ -41,6 +59,18 @@ describe('IAMClient verifySignatureV4', () => {
         it('should set no region when invalid region is provided',
             done => {
                 client.verifySignatureV4('signature', signature, accessKey,
+                    region, scopeDate, { reqUid: 'requid' }, (err, resp) => {
+                        assert.ifError(err);
+                        assert(resp);
+                        const responseBody = resp.message.body;
+                        assert.strictEqual(responseBody.region, noRegion);
+                        done();
+                    });
+            });
+
+        it('should set no region when invalid region is provided (post)',
+            done => {
+                clientWithPost.verifySignatureV4('signature', signature, accessKey,
                     region, scopeDate, { reqUid: 'requid' }, (err, resp) => {
                         assert.ifError(err);
                         assert(resp);
