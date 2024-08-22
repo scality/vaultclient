@@ -16,8 +16,9 @@ declare class VaultClient {
      * @param {string} [path] - prefix requests with this path
      * @param {string} [sessionToken] - session token for v4 signature
      * @param {boolean} [parameterValidation] - flag that will enable param validation
+     * @param {boolean} [supportsPostAuthV4] - flag that will enable POST requests for AuthV4
      */
-    constructor(host: string, port?: number, useHttps?: boolean, key?: string, cert?: string, ca?: string, ignoreCa?: boolean, accessKey?: string, secretKeyValue?: string, logApi?: werelogs.API, path?: string, sessionToken?: string, parameterValidation?: boolean);
+    constructor(host: string, port?: number, useHttps?: boolean, key?: string, cert?: string, ca?: string, ignoreCa?: boolean, accessKey?: string, secretKeyValue?: string, logApi?: werelogs.API, path?: string, sessionToken?: string, parameterValidation?: boolean, supportsPostAuthV4?: boolean);
     serverHost: string;
     serverPort: number;
     _key: string;
@@ -33,6 +34,8 @@ declare class VaultClient {
     _path: string;
     useAuthenticatedAdminRoutes: boolean;
     parameterValidation: boolean;
+    supportsPostAuthV4: boolean;
+    setSupportsPostAuthV4(supports?: boolean): void;
     setCustomEndpointForSignature(host: any, path: any): void;
     _host: any;
     __path: any;
