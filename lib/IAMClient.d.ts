@@ -244,7 +244,8 @@ declare class VaultClient {
     }, callback: any): undefined;
     /**
      * Verify AWS request signature using V4 auth (contrary to v2, hash is
-     * always sha256)
+     * always sha256). Issue a GET request for authentication, and POST for
+     * authentication with request context (authorization against IAM policies).
      *
      * @param {string} stringToSign - string to sign as built from the request
      * @param {string} signature - the user-computed signature as provided by
@@ -254,6 +255,7 @@ declare class VaultClient {
      * @param {string} scopeDate - the date from which the signature is valid
      * @param {object} options - additional verification params
      * @param {string} [options.reqUid] - the request UID
+     * @param {string} [options.get] - use GET http verb, even if request contexts are passed
      * @param {string} [options.requestContext] - the requestContext to perform
      * @param {string} [options.securityToken] - Token for temporary credentials
      * authorization against IAM policies. This is a stringified version of a
@@ -263,6 +265,7 @@ declare class VaultClient {
      */
     verifySignatureV4(stringToSign: string, signature: string, accessKey: string, region?: string, scopeDate: string, options: {
         reqUid?: string;
+        get?: string;
         requestContext?: string;
         securityToken?: string;
     }, callback: any): undefined;
