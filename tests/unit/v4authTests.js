@@ -8,11 +8,26 @@ const { createHmac } = require('crypto');
 const IAMClient = require('../../lib/IAMClient');
 
 function handler(req, res) {
-    const index = req.url.indexOf('?');
-    const data = querystring.parse(req.url.substring(index + 1));
-    res.writeHead(200, { 'Content-Type': 'application/json' });
-    res.write(JSON.stringify(data));
-    res.end();
+    if (req.method === 'POST' && req.headers['content-type'] === 'application/json') {
+        let body = '';
+
+        req.on('data', chunk => {
+            body += chunk;
+        });
+
+        req.on('end', () => {
+            const data = JSON.parse(body);
+            res.writeHead(200, { 'Content-Type': 'application/json' });
+            res.write(JSON.stringify(data));
+            res.end();
+        });
+    } else {
+        const index = req.url.indexOf('?');
+        const data = querystring.parse(req.url.substring(index + 1));
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.write(JSON.stringify(data));
+        res.end();
+    }
 }
 
 function hmac(stringToSign, key) {
@@ -42,6 +57,18 @@ describe('IAMClient verifySignatureV4', () => {
             done => {
                 client.verifySignatureV4('signature', signature, accessKey,
                     region, scopeDate, { reqUid: 'requid' }, (err, resp) => {
+                        assert.ifError(err);
+                        assert(resp);
+                        const responseBody = resp.message.body;
+                        assert.strictEqual(responseBody.region, noRegion);
+                        done();
+                    });
+            });
+
+        it('should set no region when invalid region is provided (get)',
+            done => {
+                client.verifySignatureV4('signature', signature, accessKey,
+                    region, scopeDate, { reqUid: 'requid', get: true }, (err, resp) => {
                         assert.ifError(err);
                         assert(resp);
                         const responseBody = resp.message.body;
