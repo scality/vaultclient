@@ -1,7 +1,7 @@
 export const httpClientFreeSocketTimeout: 55000;
 export namespace InternalError {
-    const code: number;
-    const description: string;
-    const InternalError: boolean;
+    let code: number;
+    let description: string;
+    let InternalError: boolean;
 }
 //# sourceMappingURL=constants.d.ts.map
