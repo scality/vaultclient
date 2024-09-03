@@ -55,8 +55,8 @@ describe('IAMClient verifySignatureV4', () => {
     invalidRegions.forEach(region => {
         it('should set no region when invalid region is provided',
             done => {
-                client.verifySignatureV4('signature', signature, accessKey,
-                    region, scopeDate, { reqUid: 'requid' }, (err, resp) => {
+                client.verifySignatureV4('signature', signature, accessKey, region, scopeDate, { reqUid: 'requid' },
+                    (err, resp) => {
                         assert.ifError(err);
                         assert(resp);
                         const responseBody = resp.message.body;

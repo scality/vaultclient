@@ -44,9 +44,7 @@ describe('checkPolicies Test', () => {
     afterEach('stop server', () => { server.close(); });
 
     it('should retrieve checkPolicies response', done => {
-        client.checkPolicies(requestContextParams, userArn,
-            { reqUid: '123' },
-            (err, response) => {
+        client.checkPolicies(requestContextParams, userArn, { reqUid: '123' }, (err, response) => {
                 assert.deepStrictEqual(response.message.body, output);
                 done();
             });

@@ -402,8 +402,7 @@ function verifySignatureV4(index, callback) {
             }
         }
     }
-    client.verifySignatureV4('signature', signature,
-        accessKey, region, scopeDate, { reqUid: 'toto' }, err => {
+    client.verifySignatureV4('signature', signature, accessKey, region, scopeDate, { reqUid: 'toto' }, err => {
             if (!error && !err) {
                 return callback(null, index + 1);
             }

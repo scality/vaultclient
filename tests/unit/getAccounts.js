@@ -9,7 +9,7 @@ const canonicalIds = ['canId1', 'canId2'];
 const emailAddresses = ['email1', 'email2'];
 const accountNames = ['name1', 'name2'];
 const opt = { reqUid: 'test.getAccounts.reqUid' };
-const optAccountNames = Object.assign({}, opt, { accountNames: true });
+const optAccountNames = { ...opt, accountNames: true };
 const mockCB = () => {};
 
 const expectedData = {
@@ -48,7 +48,7 @@ describe('getAccounts', () => {
             assert.strictEqual(contentType, null);
             assert.deepStrictEqual(
                 data,
-                Object.assign({}, expectedData, { [name]: args[0] || args[1] || args[2] }),
+                { ...expectedData, [name]: args[0] || args[1] || args[2] },
             );
         }));
     });

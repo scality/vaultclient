@@ -111,8 +111,7 @@ describe('getAccountProperties with mockup server', () => {
 
     testNames.forEach((currentValue, testIndex) => {
         it(testNames[testIndex], done => {
-            client.getEmailAddresses(testOutputKeys[testIndex], {},
-                (err, value) => {
+            client.getEmailAddresses(testOutputKeys[testIndex], {}, (err, value) => {
                     assert(!err);
                     assert.deepStrictEqual(
                         value.message.body,
