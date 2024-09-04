@@ -3,7 +3,7 @@
 ## Steps
 
 1. [Before starting](#before-starting)
-2. [Downloads and set-up](#downloads-and-set-up)
+2. [Downloads and set-up](#downloads-and-setup)
     1. [Vault Client](#vault-client)
     2. [Aws cli](#aws-cli)
     3. [Vault Server](#vault-server)

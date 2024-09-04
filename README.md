@@ -1,6 +1,6 @@
 # Vault Client Library
 
-[![CircleCI][badgepub]](https://circleci.com/gh/scality/vaultclient)
+[![CircleCI](https://circleci.com/gh/scality/vaultclient?style=svg)](https://circleci.com/gh/circleci/circleci-docs)
 
 This repository provides a client library for any service that relies on
 Vault. This repository also provides a CLI binary to interact with Vault.
@@ -190,6 +190,3 @@ client.createAccount('account0', { email: 'dev@null' }, (err, data) => {
     console.log(data);
 });
 ```
-
-[badgepub]: https://circleci.com/gh/scality/vaultclient.svg?style=svg
-[badgepriv]: http://ci.ironmann.io/gh/scality/vaultclient.svg?style=svg&circle-token=40f1e9fe0ad184248c37cbf3d89b164c35fd1667
