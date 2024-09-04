@@ -1,7 +1,7 @@
 {
   "name": "vaultclient",
   "engines": {
-    "node": ">=16"
+    "node": ">=20"
   },
   "version": "8.4.0",
   "description": "Client library and binary for Vault, the user directory and key management service",
