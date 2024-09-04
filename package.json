@@ -17,19 +17,14 @@
     "@aws-crypto/sha256-universal": "^5.2.0",
     "@smithy/signature-v4": "^4.1.0",
     "commander": "^11.0.0",
-    "httpagent": "git+https://github.com/scality/httpagent#5acb093635060ec8289c891e2d525535bef93bec",
+    "httpagent": "git+https://github.com/scality/httpagent#99e159de4763134f9369c14c32c6eac0689d2b13",
     "werelogs": "scality/werelogs#0ab4ca3470a2f03f34d33fdc2689fda414f7c206",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {
-    "@babel/eslint-parser": "^7.25.1",
-    "arsenal": "git+https://github.com/scality/Arsenal#8.1.135",
-    "eslint": "8.57.0",
-    "eslint-config-airbnb": "^19.0.4",
-    "eslint-config-scality": "scality/Guidelines#8.2.1",
-    "eslint-plugin-import": "^2.30.0",
-    "mocha": "^10.7.3",
-    "typescript": "^5.5.4"
+    "eslint": "^9.9.1",
+    "eslint-config-scality": "scality/Guidelines#666b90495dc7e9a401a37ba4d58c7eba89db90ac",
+    "mocha": "^10.7.3"
   },
   "scripts": {
     "start": "node client.js",
