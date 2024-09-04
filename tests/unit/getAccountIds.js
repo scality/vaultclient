@@ -1,11 +1,10 @@
- 
-'use strict';  
+'use strict';
 
 const assert = require('assert');
-const { errors } = require('arsenal');
 const http = require('http');
 const querystring = require('querystring');
 const IAMClient = require('../../lib/IAMClient');
+const { InvalidParameterValue } = require('../../lib/constants');
 
 const canId1 =
     '0123456789012345678901234567890123456789012345678901234567890123';
@@ -35,8 +34,8 @@ function handler(req, res) {
         inputArray = [inputArray];
     }
     if (req.headers['x-scal-request-uids'] === 'failme') {
-        res.writeHead(errors.InvalidParameterValue.code);
-        return res.end(JSON.stringify(errors.InvalidParameterValue));
+        res.writeHead(InvalidParameterValue.code);
+        return res.end(JSON.stringify(InvalidParameterValue));
     }
     const output = inputArray.map(canId => ({
         id: serverDB[canId],

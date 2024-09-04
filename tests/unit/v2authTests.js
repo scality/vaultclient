@@ -1,10 +1,10 @@
 'use strict';
 
-const { errors } = require('arsenal');
 const assert = require('assert');
 const http = require('http');
 const querystring = require('querystring');
 const IAMClient = require('../../lib/IAMClient');
+const { Forbidden } = require('../../lib/constants');
 
 const testNames = [
     'should authenticate correct v2 request',
@@ -40,7 +40,7 @@ const correctDictResponse = {
     accountDisplayName: 'TestAccount',
 };
 
-const wrongSigError = errors.Forbidden;
+const wrongSigError = Forbidden;
 
 const expectedErrors = [
     null,
@@ -112,8 +112,8 @@ describe('v2 auth tests with mockup server', () => {
                 accessKeys[testIndex],
                 { algo: hashAlgorithms[testIndex] },
                 (err, response) => {
-                    assert.deepStrictEqual(err ? err.code : undefined,
-                        expectedErrors[testIndex] ? expectedErrors[testIndex].type : undefined);
+                    assert.deepStrictEqual(err ? err.Forbidden : undefined,
+                        expectedErrors[testIndex] ? true : undefined);
                     assert.deepStrictEqual(response
                         ? response.message.body : response,
                     expectedResponseBodies[testIndex]);

@@ -2,7 +2,7 @@
 
 const assert = require('assert');
 const IAMClient = require('../../lib/IAMClient');
-const { InternalError } = require('arsenal/build/lib/errors/arsenalErrors');
+const { InternalError } = require('../../lib/constants');
 
 const log = { error() {} };
 const res = { statusCode: 400 };

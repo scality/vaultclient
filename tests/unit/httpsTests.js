@@ -4,10 +4,10 @@ const assert = require('assert');
 const fs = require('fs');
 const http = require('http');
 const https = require('https');
-const { errors } = require('arsenal');
 const querystring = require('querystring');
 const getCodeFromErr = require('../utils/getCodeFromErr');
 const IAMClient = require('../../lib/IAMClient');
+const { WrongFormat } = require('../../lib/constants');
 
 const httpPort = 8500;
 const httpsPort = 8600;
@@ -69,7 +69,7 @@ function handler(req, res) {
             if (err || (body && (body.name !== accountName
                         || body.emailAddress !== accountOptions.email))) {
                 const code = getCodeFromErr(body);
-                res.writeHead(errors.WrongFormat.code,
+                res.writeHead(WrongFormat.code,
                     { 'Content-type': 'text/javascript' });
                 return res.end(`<Error><Code>${code}</Code></Error>`);
             }

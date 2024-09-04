@@ -1,10 +1,10 @@
 'use strict';
 
 const assert = require('assert');
-const { errors } = require('arsenal');
 const http = require('http');
 const querystring = require('querystring');
 const IAMClient = require('../../lib/IAMClient');
+const { InvalidParameterValue } = require('../../lib/constants');
 
 
 const userId1 = 'userId1';
@@ -48,8 +48,8 @@ function handler(req, res) {
     }
 
     if (inputArray.indexOf(userBadId) !== -1) {
-        res.writeHead(errors.InvalidParameterValue.code);
-        return res.end(JSON.stringify(errors.InvalidParameterValue));
+        res.writeHead(InvalidParameterValue.code);
+        return res.end(JSON.stringify(InvalidParameterValue));
     }
     const output = inputArray.map(id => serverDB[id]);
 
