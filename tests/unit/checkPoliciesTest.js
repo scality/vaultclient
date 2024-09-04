@@ -1,4 +1,4 @@
-'use strict'; // eslint-disable-line
+'use strict';
 
 const assert = require('assert');
 const http = require('http');
@@ -45,8 +45,8 @@ describe('checkPolicies Test', () => {
 
     it('should retrieve checkPolicies response', done => {
         client.checkPolicies(requestContextParams, userArn, { reqUid: '123' }, (err, response) => {
-                assert.deepStrictEqual(response.message.body, output);
-                done();
-            });
+            assert.deepStrictEqual(response.message.body, output);
+            done();
+        });
     });
 });

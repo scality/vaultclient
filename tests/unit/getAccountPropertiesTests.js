@@ -1,5 +1,5 @@
-/* eslint-disable operator-linebreak */
-'use strict'; // eslint-disable-line
+ 
+'use strict';
 
 const assert = require('assert');
 const http = require('http');
@@ -112,13 +112,13 @@ describe('getAccountProperties with mockup server', () => {
     testNames.forEach((currentValue, testIndex) => {
         it(testNames[testIndex], done => {
             client.getEmailAddresses(testOutputKeys[testIndex], {}, (err, value) => {
-                    assert(!err);
-                    assert.deepStrictEqual(
-                        value.message.body,
-                        testExpecteds[testIndex],
-                    );
-                    done();
-                });
+                assert(!err);
+                assert.deepStrictEqual(
+                    value.message.body,
+                    testExpecteds[testIndex],
+                );
+                done();
+            });
         });
     });
 });

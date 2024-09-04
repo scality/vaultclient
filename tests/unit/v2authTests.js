@@ -1,4 +1,4 @@
-'use strict'; // eslint-disable-line
+'use strict';
 
 const { errors } = require('arsenal');
 const assert = require('assert');
@@ -56,7 +56,7 @@ const responseBodies = [
     null,
 ];
 
-// eslint-disable-next-line consistent-return
+ 
 function processRequest(requestObject) {
     for (let i = 0; i < stringsToSign.length; i += 1) {
         if (requestObject.stringToSign === stringsToSign[i]

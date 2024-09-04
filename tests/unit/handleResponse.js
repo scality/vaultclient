@@ -1,5 +1,5 @@
-'use strict'; // eslint-disable-line
-// const http = require('http');
+'use strict';
+
 const assert = require('assert');
 const IAMClient = require('../../lib/IAMClient');
 const { InternalError } = require('arsenal/build/lib/errors/arsenalErrors');

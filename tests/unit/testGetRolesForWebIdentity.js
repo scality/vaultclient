@@ -1,4 +1,4 @@
-'use strict'; // eslint-disable-line
+'use strict';
 
 const assert = require('assert');
 const http = require('http');
@@ -32,7 +32,7 @@ describe('get-roles-for-web-identity', () => {
         ['maxItems', 1500,
             'maxItems need to be a value between 1 and 1000 included'],
     ].forEach(test => {
-        // eslint-disable-next-line consistent-return
+         
         it(`invalid param ${test[0]}(${test[1]})`, next => {
             const webIdentityToken = 'test';
             try {

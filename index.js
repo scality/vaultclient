@@ -1,5 +1,4 @@
-/* eslint-disable global-require */
-'use strict'; // eslint-disable-line
+'use strict';
 
 const Client = require('./lib/IAMClient');
 

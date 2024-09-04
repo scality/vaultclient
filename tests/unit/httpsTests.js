@@ -1,4 +1,4 @@
-'use strict'; // eslint-disable-line
+'use strict';
 
 const assert = require('assert');
 const fs = require('fs');
@@ -43,9 +43,9 @@ const testNames = [
 
 const testClients = [
     new IAMClient('localhost', httpPort, undefined, undefined, undefined, undefined, undefined,
-    defaultAccessKey, defaultSecretKey),
+        defaultAccessKey, defaultSecretKey),
     new IAMClient('localhost', httpPort, false, undefined, undefined, undefined, undefined,
-    defaultAccessKey, defaultSecretKey),
+        defaultAccessKey, defaultSecretKey),
     new IAMClient('vault.testing.local', httpsPort, true, undefined, undefined,
         fs.readFileSync('tests/utils/ca.crt', 'ascii'), undefined,
         defaultAccessKey, defaultSecretKey),

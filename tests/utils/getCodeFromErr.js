@@ -1,4 +1,4 @@
-'use strict'; // eslint-disable-line
+'use strict';
 
 /**
  * This function retrieve the arsenal error name from the error object

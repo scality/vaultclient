@@ -1,5 +1,5 @@
-/* eslint-disable operator-linebreak */
-'use strict'; // eslint-disable-line
+ 
+'use strict';  
 
 const assert = require('assert');
 const { errors } = require('arsenal');

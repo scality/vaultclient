@@ -1,6 +1,6 @@
-/* eslint-disable prefer-destructuring */
+ 
 
-'use strict'; // eslint-disable-line
+'use strict';
 
 const { createHmac } = require('crypto');
 const commander = require('commander');
@@ -403,19 +403,19 @@ function verifySignatureV4(index, callback) {
         }
     }
     client.verifySignatureV4('signature', signature, accessKey, region, scopeDate, { reqUid: 'toto' }, err => {
-            if (!error && !err) {
-                return callback(null, index + 1);
-            }
-            if (error && err) {
-                return callback(null, index + 1);
-            }
-            nbError += 1;
-            if (error) {
-                const ret = 'Should not verify not valid signature v4';
-                return callback(ret, index);
-            }
-            return callback('Should verify valid signature v4', index);
-        });
+        if (!error && !err) {
+            return callback(null, index + 1);
+        }
+        if (error && err) {
+            return callback(null, index + 1);
+        }
+        nbError += 1;
+        if (error) {
+            const ret = 'Should not verify not valid signature v4';
+            return callback(ret, index);
+        }
+        return callback('Should verify valid signature v4', index);
+    });
 }
 
 function getEmails(index, callback) {
