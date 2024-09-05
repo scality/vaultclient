@@ -56,7 +56,6 @@ const responseBodies = [
     null,
 ];
 
- 
 function processRequest(requestObject) {
     for (let i = 0; i < stringsToSign.length; i += 1) {
         if (requestObject.stringToSign === stringsToSign[i]

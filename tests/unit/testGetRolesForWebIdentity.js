@@ -32,7 +32,6 @@ describe('get-roles-for-web-identity', () => {
         ['maxItems', 1500,
             'maxItems need to be a value between 1 and 1000 included'],
     ].forEach(test => {
-         
         it(`invalid param ${test[0]}(${test[1]})`, next => {
             const webIdentityToken = 'test';
             try {
