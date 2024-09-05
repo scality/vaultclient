@@ -17,14 +17,15 @@
     "@aws-crypto/sha256-universal": "^5.2.0",
     "@smithy/signature-v4": "^4.1.0",
     "commander": "^11.0.0",
-    "httpagent": "git+https://github.com/scality/httpagent#99e159de4763134f9369c14c32c6eac0689d2b13",
-    "werelogs": "scality/werelogs#0ab4ca3470a2f03f34d33fdc2689fda414f7c206",
+    "httpagent": "git+https://github.com/scality/httpagent#1.1.0",
+    "werelogs": "scality/werelogs#8.2.0",
     "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "eslint": "^9.9.1",
-    "eslint-config-scality": "scality/Guidelines#666b90495dc7e9a401a37ba4d58c7eba89db90ac",
-    "mocha": "^10.7.3"
+    "eslint-config-scality": "scality/Guidelines#8.3.0",
+    "mocha": "^10.7.3",
+    "typescript": "^5.5.4"
   },
   "scripts": {
     "start": "node client.js",

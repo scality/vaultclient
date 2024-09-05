@@ -503,7 +503,7 @@ escape-string-regexp@^4.0.0:
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz#14ba83a5d373e3d311e5afca29cf5bfad965bf34"
   integrity sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==
 
-eslint-config-scality@scality/Guidelines#666b90495dc7e9a401a37ba4d58c7eba89db90ac:
+eslint-config-scality@scality/Guidelines#666b90495dc7e9a401a37ba4d58c7eba89db90ac, eslint-config-scality@scality/Guidelines#8.3.0:
   version "8.3.0"
   resolved "https://codeload.github.com/scality/Guidelines/tar.gz/666b90495dc7e9a401a37ba4d58c7eba89db90ac"
   dependencies:
@@ -723,9 +723,9 @@ he@^1.2.0:
   resolved "https://registry.yarnpkg.com/he/-/he-1.2.0.tgz#84ae65fa7eafb165fddb61566ae14baf05664f0f"
   integrity sha512-F/1DnUGPopORZi0ni+CvrCgHQ5FyEAHRLSApuYWMmrbSwoN2Mn/7k+Gl38gJnR7yyDZk6WLXwiGod1JOWNDKGw==
 
-"httpagent@git+https://github.com/scality/httpagent#99e159de4763134f9369c14c32c6eac0689d2b13":
+"httpagent@git+https://github.com/scality/httpagent#1.1.0":
   version "1.1.0"
-  resolved "git+https://github.com/scality/httpagent#99e159de4763134f9369c14c32c6eac0689d2b13"
+  resolved "git+https://github.com/scality/httpagent#8f9958eb9cde086db7819a86582fba640a5f8876"
   dependencies:
     agentkeepalive "^4.5.0"
 
@@ -1180,6 +1180,11 @@ type-check@^0.4.0, type-check@~0.4.0:
   dependencies:
     prelude-ls "^1.2.1"
 
+typescript@^5.5.4:
+  version "5.5.4"
+  resolved "https://registry.yarnpkg.com/typescript/-/typescript-5.5.4.tgz#d9852d6c82bad2d2eda4fd74a5762a8f5909e9ba"
+  integrity sha512-Mtq29sKDAEYP7aljRgtPOpTvOfbwRWlS6dPRzwjdE+C0R4brX/GUyhHSecbHMFLNBLcJIPt9nl9yG5TZ1weH+Q==
+
 uc.micro@^1.0.1, uc.micro@^1.0.5:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/uc.micro/-/uc.micro-1.0.6.tgz#9c411a802a409a91fc6cf74081baba34b24499ac"
@@ -1192,9 +1197,9 @@ uri-js@^4.2.2:
   dependencies:
     punycode "^2.1.0"
 
-werelogs@scality/werelogs#0ab4ca3470a2f03f34d33fdc2689fda414f7c206:
-  version "8.1.6"
-  resolved "https://codeload.github.com/scality/werelogs/tar.gz/0ab4ca3470a2f03f34d33fdc2689fda414f7c206"
+werelogs@scality/werelogs#8.2.0:
+  version "8.2.0"
+  resolved "https://codeload.github.com/scality/werelogs/tar.gz/7bf334cea94002d118f27d7ec1c7a5af74b51b8d"
   dependencies:
     fast-safe-stringify "^2.1.1"
     safe-json-stringify "^1.2.0"
