@@ -36,7 +36,7 @@ declare class VaultClient {
     setCustomEndpointForSignature(host: any, path: any): void;
     _host: any;
     __path: any;
-    enableIAMOnAdminRoutes(): VaultClient;
+    enableIAMOnAdminRoutes(): this;
     /**
      * Set the configuration for the werelogs logger
      * @param {object} config - A configuration object for werelogs
