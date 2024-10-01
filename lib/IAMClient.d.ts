@@ -359,6 +359,21 @@ declare class VaultClient {
         reqUid: string;
         logger?: werelogs.RequestLogger;
     }, callback: Function): undefined;
+    /**
+     * Retrieves the default encryption key id for the given account's canonical id,
+     * or creates one if it does not exist.
+     *
+     * @param {String} canonicalId - The canonical id of the account.
+     * @param {Object} options - Additional arguments.
+     * @param {string} options.reqUid - The request UID.
+     * @param {Function} callback
+     * - `error` (Error|null) - error object if the operation failed, otherwise null.
+     * - `result` (Object) - result object on success, containing raw response data and HTTP status code.
+     * @returns {void}
+     */
+    getOrCreateEncryptionKeyId(canonicalId: string, options: {
+        reqUid: string;
+    }, callback: Function): void;
     healthcheck(reqUid: any, callback: any): void;
     report(reqUid: any, callback: any): void;
     _signRequest(iamAuthenticate: any, req: any, options: any, path: any): Promise<void>;
