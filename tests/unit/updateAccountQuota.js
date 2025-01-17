@@ -18,13 +18,13 @@ describe('updateAccountQuota', () => {
 
     it('should call the request method with the correct parameters when options are provided', () => {
         client = createClient(true);
-        const quota = 100;
+        const quota = BigInt(100);
         const accountName = 'exampleAccount';
 
         const expectedData = {
             Action: 'UpdateAccountQuota',
             Version: '2010-05-08',
-            quotaMax: quota,
+            quotaMax: quota.toString(),
             AccountName: 'exampleAccount',
         };
 
@@ -37,12 +37,12 @@ describe('updateAccountQuota', () => {
 
     it('should call the request method with the correct parameters when options are not provided', () => {
         client = createClient(true);
-        const quota = 100;
+        const quota = BigInt(100);
 
         const expectedData = {
             Action: 'UpdateAccountQuota',
             Version: '2010-05-08',
-            quotaMax: quota,
+            quotaMax: quota.toString(),
         };
 
         client.updateAccountQuota(undefined, quota, () => {});
@@ -54,31 +54,31 @@ describe('updateAccountQuota', () => {
 
     it('should throw an error if the quota is not a strictly positive number', () => {
         client = createClient(true);
-        const quota = -100;
+        const quota = BigInt(-100);
 
         assert.throws(() => {
             client.updateAccountQuota(undefined, quota, () => {});
-        }, /Quota must be a strictly positive number/);
+        }, /Quota must be a strictly positive bigint/);
     });
 
 
     it('should throw an error if the quota provided is 0', () => {
         client = createClient(true);
-        const quota = 0;
+        const quota = BigInt(0);
 
         assert.throws(() => {
             client.updateAccountQuota(undefined, quota, () => {});
-        }, /Quota must be a strictly positive number/);
+        }, /Quota must be a strictly positive bigint/);
     });
 
     it('should not throw an error even when the quota is not a strictly positive number if ci is true', () => {
         client = createClient(false);
-        const quota = -100;
+        const quota = BigInt(-100);
 
         const expectedData = {
             Action: 'UpdateAccountQuota',
             Version: '2010-05-08',
-            quotaMax: quota,
+            quotaMax: quota.toString(),
         };
 
         client.updateAccountQuota(undefined, quota, () => {});
@@ -91,12 +91,12 @@ describe('updateAccountQuota', () => {
 
     it('should not throw an error even when the quota is 0 if ci is true', () => {
         client = createClient(false);
-        const quota = 0;
+        const quota = BigInt(0);
 
         const expectedData = {
             Action: 'UpdateAccountQuota',
             Version: '2010-05-08',
-            quotaMax: quota,
+            quotaMax: quota.toString(),
         };
 
         client.updateAccountQuota(undefined, quota, () => {});
@@ -108,7 +108,7 @@ describe('updateAccountQuota', () => {
 
     it('should throw an error if accountName is not a string', () => {
         client = createClient(true);
-        const quota = 100;
+        const quota = BigInt(100);
         const accountName = 123;
 
         assert.throws(() => {
