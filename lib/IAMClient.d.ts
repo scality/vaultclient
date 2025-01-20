@@ -36,7 +36,7 @@ declare class VaultClient {
     setCustomEndpointForSignature(host: any, path: any): void;
     _host: any;
     __path: any;
-    enableIAMOnAdminRoutes(): this;
+    enableIAMOnAdminRoutes(): VaultClient;
     /**
      * Set the configuration for the werelogs logger
      * @param {object} config - A configuration object for werelogs
@@ -97,11 +97,11 @@ declare class VaultClient {
      * Update Quota of an account
      *
      * @param {string} accountName - account name
-     * @param {bigint} quota - maximum quota for the account
+     * @param {bigint | number} quota - maximum quota for the account
      * @param {VaultClient~requestCallback} callback - callback
      * @returns {undefined}
      */
-    updateAccountQuota(accountName: string, quota: bigint, callback: any): undefined;
+    updateAccountQuota(accountName: string, quota: bigint | number, callback: any): undefined;
     /**
      * Delete Quota of an account
      *
