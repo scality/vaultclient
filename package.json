@@ -29,6 +29,7 @@
     "eslint-config-scality": "scality/Guidelines#8.2.0",
     "eslint-plugin-import": "^2.18.0",
     "mocha": "6.1.4",
+    "sinon": "^19.0.2",
     "typescript": "^4.7.3"
   },
   "scripts": {
