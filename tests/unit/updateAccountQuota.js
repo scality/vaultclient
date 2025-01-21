@@ -1,5 +1,7 @@
 const assert = require('assert');
 const IAMClient = require('../../lib/IAMClient');
+const sinon = require('sinon');
+const VaultClient = require('../../lib/IAMClient');
 
 describe('updateAccountQuota', () => {
     let client;
@@ -114,5 +116,58 @@ describe('updateAccountQuota', () => {
         assert.throws(() => {
             client.updateAccountQuota(accountName, quota, () => {});
         }, /the account name, if set, should be a string/);
+    });
+});
+
+describe('UpdateAccountQuota Response Parsing', () => {
+    let client;
+    let requestStub;
+
+    beforeEach(() => {
+        client = new VaultClient('127.0.0.1', 8500);
+        requestStub = sinon.stub(client, 'request');
+    });
+
+    afterEach(() => {
+        sinon.restore();
+    });
+
+    it('should properly parse bigint quota value from response', done => {
+        requestStub.callsFake((method, path, auth, callback) => {
+            callback(null, { quota: '9007199254740992' }); // max safe integer + 1
+        });
+
+        client.updateAccountQuota('testAccount', BigInt(100), (err, response) => {
+            assert.strictEqual(err, null);
+            assert.strictEqual(typeof response.quota, 'bigint');
+            assert.strictEqual(response.quota, BigInt('9007199254740992'));
+            done();
+        });
+    });
+
+    it('should handle null quota in response', done => {
+        requestStub.callsFake((method, path, auth, callback) => {
+            callback(null, { quota: null });
+        });
+
+        client.updateAccountQuota('testAccount', BigInt(100), (err, response) => {
+            assert.strictEqual(err, null);
+            assert.strictEqual(typeof response.quota, 'bigint');
+            assert.strictEqual(response.quota, BigInt(0));
+            done();
+        });
+    });
+
+    it('should handle undefined quota in response', done => {
+        requestStub.callsFake((method, path, auth, callback) => {
+            callback(null, {});
+        });
+
+        client.updateAccountQuota('testAccount', BigInt(100), (err, response) => {
+            assert.strictEqual(err, null);
+            assert.strictEqual(typeof response.quota, 'bigint');
+            assert.strictEqual(response.quota, BigInt(0));
+            done();
+        });
     });
 });

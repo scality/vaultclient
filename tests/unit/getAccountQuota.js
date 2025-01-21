@@ -90,13 +90,13 @@ describe('GetAccountQuota Response Parsing', () => {
     it('should properly parse bigint quota value from response', done => {
         // Configure request stub to simulate API response
         requestStub.callsFake((method, path, auth, callback) => {
-            callback(null, { quota: '1000000000000' }); // 1 trillion
+            callback(null, { quota: '9007199254740992' }); // max safe integer + 1
         });
 
         client.getAccountQuota('testAccount', (err, response) => {
             assert.strictEqual(err, null);
             assert.strictEqual(typeof response.quota, 'bigint');
-            assert.strictEqual(response.quota, BigInt('1000000000000'));
+            assert.strictEqual(response.quota, BigInt('9007199254740992'));
             done();
         });
     });
@@ -146,7 +146,7 @@ describe('GetAccountQuota Response Parsing', () => {
         });
 
         try {
-            client.getAccountQuota('testAccount', (err, response) => {
+            client.getAccountQuota('testAccount', () => {
                 done('Should throw an error');
             });
         } catch (err) {
