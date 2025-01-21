@@ -1,5 +1,7 @@
 const assert = require('assert');
 const IAMClient = require('../../lib/IAMClient');
+const VaultClient = require('../../lib/IAMClient');
+const sinon = require('sinon');
 
 describe('GetAccountQuota', () => {
     let client;
@@ -69,5 +71,162 @@ describe('GetAccountQuota', () => {
         assert.strictEqual(lastRequestData.path, '/');
         assert.strictEqual(lastRequestData.iamAuthenticate, true);
         assert.deepStrictEqual(lastRequestData.data, expectedData);
+    });
+});
+
+describe('GetAccountQuota Response Parsing', () => {
+    let client;
+    let requestStub;
+
+    beforeEach(() => {
+        client = new VaultClient('127.0.0.1', 8500);
+        requestStub = sinon.stub(client, 'request');
+    });
+
+    afterEach(() => {
+        sinon.restore();
+    });
+
+    it('should properly parse bigint quota value from response', done => {
+        // Configure request stub to simulate API response
+        requestStub.callsFake((method, path, auth, callback) => {
+            callback(null, { quota: '1000000000000' }); // 1 trillion
+        });
+
+        client.getAccountQuota('testAccount', (err, response) => {
+            assert.strictEqual(err, null);
+            assert.strictEqual(typeof response.quota, 'bigint');
+            assert.strictEqual(response.quota, BigInt('1000000000000'));
+            done();
+        });
+    });
+
+    it('should handle null quota in response', done => {
+        requestStub.callsFake((method, path, auth, callback) => {
+            callback(null, { quota: null });
+        });
+
+        client.getAccountQuota('testAccount', (err, response) => {
+            assert.strictEqual(err, null);
+            assert.strictEqual(typeof response.quota, 'bigint');
+            assert.strictEqual(response.quota, BigInt(0));
+            done();
+        });
+    });
+
+    it('should handle undefined quota in response', done => {
+        requestStub.callsFake((method, path, auth, callback) => {
+            callback(null, {});
+        });
+
+        client.getAccountQuota('testAccount', (err, response) => {
+            assert.strictEqual(err, null);
+            assert.strictEqual(typeof response.quota, 'bigint');
+            assert.strictEqual(response.quota, BigInt(0));
+            done();
+        });
+    });
+
+    it('should handle empty string quota in response', done => {
+        requestStub.callsFake((method, path, auth, callback) => {
+            callback(null, { quota: '' });
+        });
+
+        client.getAccountQuota('testAccount', (err, response) => {
+            assert.strictEqual(err, null);
+            assert.strictEqual(typeof response.quota, 'bigint');
+            assert.strictEqual(response.quota, BigInt(0));
+            done();
+        });
+    });
+
+    it('should handle invalid string quota in response', done => {
+        requestStub.callsFake((method, path, auth, callback) => {
+            callback(null, { quota: 'not-a-number' });
+        });
+
+        try {
+            client.getAccountQuota('testAccount', (err, response) => {
+                done('Should throw an error');
+            });
+        } catch (err) {
+            assert.strictEqual(err.message, 'Cannot convert not-a-number to a BigInt');
+            done();
+        }
+    });
+
+    it('should handle large quota values without precision loss', done => {
+        const largeQuota = '9007199254740991'; // Maximum safe integer in JavaScript
+        requestStub.callsFake((method, path, auth, callback) => {
+            callback(null, { quota: largeQuota });
+        });
+
+        client.getAccountQuota('testAccount', (err, response) => {
+            assert.strictEqual(err, null);
+            assert.strictEqual(typeof response.quota, 'bigint');
+            assert.strictEqual(response.quota, BigInt(largeQuota));
+            assert.strictEqual(response.quota.toString(), largeQuota);
+            done();
+        });
+    });
+
+    it('should propagate error from request', done => {
+        const testError = new Error('Request failed');
+        testError.code = 'RequestError';
+
+        requestStub.callsFake((method, path, auth, callback) => {
+            callback(testError);
+        });
+
+        client.getAccountQuota('testAccount', (err, response) => {
+            assert.strictEqual(err.code, 'RequestError');
+            assert.strictEqual(response, undefined);
+            done();
+        });
+    });
+
+    it('should handle zero quota value', done => {
+        requestStub.callsFake((method, path, auth, callback) => {
+            callback(null, { quota: '0' });
+        });
+
+        client.getAccountQuota('testAccount', (err, response) => {
+            assert.strictEqual(err, null);
+            assert.strictEqual(typeof response.quota, 'bigint');
+            assert.strictEqual(response.quota, BigInt(0));
+            done();
+        });
+    });
+
+    it('should handle negative quota value', done => {
+        requestStub.callsFake((method, path, auth, callback) => {
+            callback(null, { quota: '-1000' });
+        });
+
+        client.getAccountQuota('testAccount', (err, response) => {
+            assert.strictEqual(err, null);
+            assert.strictEqual(typeof response.quota, 'bigint');
+            assert.strictEqual(response.quota, BigInt(-1000));
+            done();
+        });
+    });
+
+    it('should verify request parameters', () => {
+        requestStub.callsFake((method, path, auth, callback) => {
+            callback(null, { quota: '1000' });
+        });
+
+        client.getAccountQuota('testAccount', () => {});
+
+        assert(requestStub.calledOnce);
+        const args = requestStub.firstCall.args;
+        assert.strictEqual(args[0], 'POST');
+        assert.strictEqual(args[1], '/');
+        assert.strictEqual(args[2], true);
+        assert.deepStrictEqual(args[4], {
+            Action: 'GetAccountQuota',
+            Version: '2010-05-08',
+            AccountName: 'testAccount'
+        });
     });
 });
