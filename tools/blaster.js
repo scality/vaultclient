@@ -19,7 +19,7 @@ options.port = '8500';
 options.nOps = 100;
 
 if (program.host) {
-    options.host = programhost;
+    options.host = program.host;
 }
 if (program.port) {
     options.port = program.port;
