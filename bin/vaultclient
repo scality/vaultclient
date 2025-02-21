@@ -6,7 +6,7 @@ const EOL = require('os').eol;
 const fs = require('fs');
 const homedir = require('os').homedir;
 const path = require('path');
-const program = require('commander');
+const { program } = require('commander');
 
 const vaultclient = require('../index');
 
