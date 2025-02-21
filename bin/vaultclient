@@ -73,8 +73,8 @@ function getAdminConfig(configFilePath) {
     return readConfigFile(configFilePath);
 }
 
-function action(cmd, fn, args) {
-    const args = cmd.optsWithGlobals();
+function action(cmd, fn, args, cmds) {
+    const args = cmds.optsWithGlobals();
     if (typeof args !== 'object') {
         program.commands.find(c => c._name === cmd).outputHelp();
         process.exit(-1);
