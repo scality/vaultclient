@@ -25,7 +25,7 @@ describe('list-accounts', () => {
 
     [
         ['marker', -1, 'Marker must be a string'],
-        ['maxItems', '6', 'maxItems need to be a number'],
+        ['maxItems', '6', 'maxItems need to be a number\n\n\'string\' !== \'number\'\n'],
         ['maxItems', parseInt('test', 10), 'maxItems must be a number'],
         ['maxItems', 0,
             'maxItems need to be a value between 1 and 1000 included'],
