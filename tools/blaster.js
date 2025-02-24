@@ -1,11 +1,11 @@
 'use strict';
 
 const { createHmac } = require('crypto');
-const commander = require('commander');
+const { program } = require('commander');
 
 const IAMClient = require('../lib/IAMClient');
 
-commander
+program
     .version('0.0.1')
     .option('-P, --port <port>', 'Port number', parseInt)
     .option('-H, --host [host]', 'Host name')
@@ -18,14 +18,14 @@ options.host = 'localhost';
 options.port = '8500';
 options.nOps = 100;
 
-if (commander.host) {
-    options.host = commander.host;
+if (program.host) {
+    options.host = program.host;
 }
-if (commander.port) {
-    options.port = commander.port;
+if (program.port) {
+    options.port = program.port;
 }
-if (commander.nOps) {
-    options.nOps = commander.nOps;
+if (program.nOps) {
+    options.nOps = program.nOps;
 }
 
 process.stdout.write(

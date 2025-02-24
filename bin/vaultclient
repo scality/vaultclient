@@ -6,7 +6,7 @@ const EOL = require('os').eol;
 const fs = require('fs');
 const homedir = require('os').homedir;
 const path = require('path');
-const program = require('commander');
+const { program } = require('commander');
 
 const vaultclient = require('../index');
 
@@ -73,25 +73,22 @@ function getAdminConfig(configFilePath) {
     return readConfigFile(configFilePath);
 }
 
-function action(cmd, fn, args) {
-    if (typeof args !== 'object') {
-        program.commands.find(c => c._name === cmd).outputHelp();
-        process.exit(-1);
-    }
+function action(cmd, fn, _, options) {
+    const args = options.optsWithGlobals();
 
     try {
-        const useHttps = !!args.parent.https;
-        const ca = args.parent.cafile ?
-            fs.readFileSync(args.parent.cafile, 'ascii') : undefined;
-        const untrusted = args.parent.noCaVerification ? true : false;
-        const config = getAdminConfig(args.parent.config);
+        const useHttps = !!args.https;
+        const ca = args.cafile ?
+            fs.readFileSync(args.cafile, 'ascii') : undefined;
+        const untrusted = args.noCaVerification ? true : false;
+        const config = getAdminConfig(args.config);
         const accessKey = config.accessKey;
         const secretKey = config.secretKeyValue;
-        let host = args.parent.host || process.env.VAULT_HOST || 'localhost';
+        let host = args.host || process.env.VAULT_HOST || 'localhost';
         const token = config.sessionToken;
         const parameterValidation = args.parameterValidation || true;
         const client = new vaultclient.Client(host,
-            Number.parseInt(args.parent.port ? args.parent.port :
+            Number.parseInt(args.port ? args.port :
                 process.env.VAULT_PORT, 10),
             useHttps,
             undefined,
