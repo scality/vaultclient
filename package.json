@@ -1,7 +1,7 @@
 {
   "name": "vaultclient",
   "engines": {
-    "node": ">=16"
+    "node": ">=20"
   },
   "version": "7.10.15",
   "description": "Client library and binary for Vault, the user directory and key management service",
@@ -15,9 +15,9 @@
   "homepage": "https://github.com/scality/vaultclient#readme",
   "dependencies": {
     "agentkeepalive": "^4.1.3",
-    "arsenal": "git+https://github.com/scality/Arsenal#7.10.46",
+    "arsenal": "git+https://github.com/scality/Arsenal#8.2.5",
     "commander": "2.20.0",
-    "werelogs": "git+https://github.com/scality/werelogs#8.1.0",
+    "werelogs": "git+https://github.com/scality/werelogs#8.2.2",
     "xml2js": "0.4.19"
   },
   "devDependencies": {
