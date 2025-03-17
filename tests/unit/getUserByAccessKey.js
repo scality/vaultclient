@@ -37,9 +37,9 @@ function handler(req, res) {
 
     let output = null;
     try {
-        res.writeHead(200);
         const accessKeyObject = serverDB[data.accessKey];
         const userObject = serverDB[accessKeyObject.userId];
+        res.writeHead(200);
         output = JSON.stringify(userObject);
         return res.end(output, null, 4);
     } catch (e) {
