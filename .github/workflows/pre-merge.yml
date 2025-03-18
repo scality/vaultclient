@@ -1,7 +1,7 @@
 ---
 name: pre-merge
 
-on:
+on:  # yamllint disable-line rule:truthy
   push:
     branches-ignore:
       - development/**
