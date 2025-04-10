@@ -25,4 +25,11 @@ export namespace WrongFormat {
     export { description_3 as description };
     export let WrongFormat: boolean;
 }
+export namespace EntityDoesNotExist {
+    let code_4: number;
+    export { code_4 as code };
+    let description_4: string;
+    export { description_4 as description };
+    export let EntityDoesNotExist: boolean;
+}
 //# sourceMappingURL=constants.d.ts.map

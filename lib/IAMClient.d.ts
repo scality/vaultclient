@@ -326,6 +326,14 @@ declare class VaultClient {
         logger?: werelogs.RequestLogger;
     }, callback: Function): undefined;
     /**
+     * A getter of User given one of his access keys
+     * @param {string} accessKey - the access key
+     * @param {Function} callback - the callback handling the response object
+     * and the error, if there is one
+     * @returns {undefined}
+     */
+    getUserByAccessKey(accessKey: string, callback: Function): undefined;
+    /**
      * Get policy evaluation (without authentication first)
      * @param {Object} requestContextParams - parameters needed to construct
      * requestContext in Vault
