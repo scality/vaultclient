@@ -52,26 +52,16 @@ describe('updateAccountQuota', () => {
         assert.deepStrictEqual(lastRequestData.data, expectedData);
     });
 
-    it('should throw an error if the quota is not a strictly positive number', () => {
+    it('should throw an error if the quota is not a positive number', () => {
         client = createClient(true);
         const quota = -100;
 
         assert.throws(() => {
             client.updateAccountQuota(undefined, quota, () => {});
-        }, /Quota must be a strictly positive number/);
+        }, /Quota must be a positive number/);
     });
 
-
-    it('should throw an error if the quota provided is 0', () => {
-        client = createClient(true);
-        const quota = 0;
-
-        assert.throws(() => {
-            client.updateAccountQuota(undefined, quota, () => {});
-        }, /Quota must be a strictly positive number/);
-    });
-
-    it('should not throw an error even when the quota is not a strictly positive number if ci is true', () => {
+    it('should not throw an error even when the quota is not a positive number if ci is true', () => {
         client = createClient(false);
         const quota = -100;
 
