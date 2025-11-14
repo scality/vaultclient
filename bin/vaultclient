@@ -334,6 +334,42 @@ program
     }));
 
 program
+    .command('create-super-admin-login-profile')
+    .option('--username <USERNAME>')
+    .option('--password <PASSWORD>')
+    .action(action.bind(null, 'create-super-admin-login-profile', (client, args) => {
+        client.createSuperAdminLoginProfile(args.username, args.password, handleVaultResponse);
+    }));
+
+program
+    .command('get-super-admin-login-profile')
+    .option('--username <USERNAME>')
+    .action(action.bind(null, 'get-super-admin-login-profile', (client, args) => {
+        client.getSuperAdminLoginProfile(args.username, handleVaultResponse);
+    }));
+
+program
+    .command('update-super-admin-password')
+    .option('--username <USERNAME>')
+    .option('--new-password <NEW_PASSWORD>')
+    .action(action.bind(null, 'update-super-admin-password', (client, args) => {
+        client.updateSuperAdminPassword(args.username, args.newPassword, handleVaultResponse);
+    }));
+
+program
+    .command('delete-super-admin-login-profile')
+    .option('--username <USERNAME>')
+    .action(action.bind(null, 'delete-super-admin-login-profile', (client, args) => {
+        client.deleteSuperAdminLoginProfile(args.username, handleVaultResponse);
+    }));
+
+program
+    .command('list-super-admin-login-profiles')
+    .action(action.bind(null, 'list-super-admin-login-profiles', (client) => {
+        client.listSuperAdminLoginProfiles(handleVaultResponse);
+    }));
+
+program
     .command('*')
     .action(() => {
         program.outputHelp();
