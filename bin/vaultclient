@@ -234,6 +234,29 @@ program
     .action(action.bind(null, 'get-account-quota', (client, args) => {
         client.getAccountQuota(args.accountName, handleVaultResponse);
     }));
+
+program
+    .command('update-account-limits')
+    .option('--account-name <NAME>', 'Name of the account')
+    .option('--limits <JSON>', 'Limits configuration as JSON string')
+    .action(action.bind(null, 'update-account-limits', (client, args) => {
+        let limits;
+        try {
+            limits = JSON.parse(args.limits);
+        } catch (err) {
+            console.error('Error: limits must be valid JSON');
+            process.exit(1);
+        }
+        client.updateAccountLimits(args.accountName, limits, handleVaultResponse);
+    }));
+
+program
+    .command('delete-account-limits')
+    .option('--account-name <NAME>', 'Name of the account')
+    .action(action.bind(null, 'delete-account-limits', (client, args) => {
+        client.deleteAccountLimits(args.accountName, handleVaultResponse);
+    }));
+
 program
     .command('add-account-attribute')
     .option('--account-name <string>')
