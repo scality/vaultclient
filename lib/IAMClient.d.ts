@@ -111,6 +111,23 @@ declare class VaultClient {
      */
     deleteAccountQuota(accountName: string, callback: any): undefined;
     /**
+     * Update limits for an account
+     *
+     * @param {string} accountName - account name
+     * @param {object} limits - limits configuration object
+     * @param {VaultClient~requestCallback} callback - callback
+     * @returns {undefined}
+     */
+    updateAccountLimits(accountName: string, limits: object, callback: any): undefined;
+    /**
+     * Delete limits for an account
+     *
+     * @param {string} accountName - account name
+     * @param {VaultClient~requestCallback} callback - callback
+     * @returns {undefined}
+     */
+    deleteAccountLimits(accountName: string, callback: any): undefined;
+    /**
      * Get Quota of an account
      *
      * @param {string} accountName - account name
