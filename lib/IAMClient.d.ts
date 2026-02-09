@@ -59,13 +59,13 @@ declare class VaultClient {
      * @param {string} accountName - account name
      * @param {object} options - additional creation params
      * @param {string} options.email - account email
-     * @param {string} [options.quota] - maximum quota for the account
+     * @param {string|number|bigint} [options.quota] - maximum quota for the account
      * @param {VaultClient~requestCallback} callback - callback
      * @returns {undefined}
      */
     createAccount(accountName: string, options: {
         email: string;
-        quota?: string;
+        quota?: string | number | bigint;
     }, callback: any): undefined;
     /**
      * Create a password for an account
@@ -97,11 +97,11 @@ declare class VaultClient {
      * Update Quota of an account
      *
      * @param {string} accountName - account name
-     * @param {number} quota - maximum quota for the account
+     * @param {string|number|bigint} quota - maximum quota for the account
      * @param {VaultClient~requestCallback} callback - callback
      * @returns {undefined}
      */
-    updateAccountQuota(accountName: string, quota: number, callback: any): undefined;
+    updateAccountQuota(accountName: string, quota: string | number | bigint, callback: any): undefined;
     /**
      * Delete Quota of an account
      *
