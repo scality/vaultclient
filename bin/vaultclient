@@ -127,7 +127,7 @@ program
     .command('create-account')
     .option('--name <NAME>')
     .option('--email <EMAIL>')
-    .option('--quota <Quota>', 'Maximum quota for the account', parseInt)
+    .option('--quota <Quota>', 'Maximum quota for the account', BigInt)
     .option('--accountid <ExternalAccountID>')
     .option('--canonicalid <ExternalCanonicalID>')
     .action(action.bind(null, 'create-account', (client, args) => {
@@ -213,7 +213,7 @@ program
 program
     .command('update-account-quota')
     .option('--account-name <NAME>', 'Name of the account')
-    .option('--quota <QUOTA>', 'Maximum quota for the account', parseInt)
+    .option('--quota <QUOTA>', 'Maximum quota for the account', BigInt)
     .option('--parameter-validation', 'Disable validation of quota')
     .action(action.bind(null, 'update-account-quota', (client, args) => {
         client.updateAccountQuota(args.accountName, args.quota, handleVaultResponse);
