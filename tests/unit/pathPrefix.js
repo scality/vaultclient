@@ -1,6 +1,7 @@
 'use strict';
 
 const assert = require('assert');
+const { createHmac, createHash } = require('crypto');
 const http = require('http');
 const IAMClient = require('../../lib/IAMClient');
 
@@ -46,7 +47,6 @@ describe('path prefix test with path parameter set', () => {
 // be computed with the IAM canonical path '/' — which is what Vault
 // verifies against. A mismatch causes InvalidAccessKeyId (VLTCLT-37).
 describe('V4 signature with proxyPath must use IAM canonical path', () => {
-    const { createHmac, createHash } = require('crypto');
     const proxyPath = '/_/backbeat/iam';
     const iamCanonicalPath = '/';
     const accessKey = 'TESTACCESSKEY00000001';
