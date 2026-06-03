@@ -258,6 +258,9 @@ declare class VaultClient {
      * @param {string} [options.securityToken] - Token for temporary credentials
      * authorization against IAM policies. This is a stringified version of a
      * RequestContext class.  See Arsenal for class details.
+     * @param {string} [options.targetAccount] - canonical id of the account
+     *                             that owns the resource being targeted by
+     *                             the request (e.g. the bucket owner)
      * @param {VaultClient~requestCallback} callback - callback
      * @returns {undefined}
      */
@@ -266,6 +269,7 @@ declare class VaultClient {
         reqUid?: string;
         requestContext?: string;
         securityToken?: string;
+        targetAccount?: string;
     }, callback: any): undefined;
     /**
      * Verify AWS request signature using V4 auth (contrary to v2, hash is
@@ -285,6 +289,9 @@ declare class VaultClient {
      * @param {string} [options.securityToken] - Token for temporary credentials
      * authorization against IAM policies. This is a stringified version of a
      * RequestContext class.  See Arsenal for class details.
+     * @param {string} [options.targetAccount] - canonical id of the account
+     *                             that owns the resource being targeted by
+     *                             the request (e.g. the bucket owner)
      * @param {VaultClient~requestCallback} callback - callback
      * @returns {undefined}
      */
@@ -293,6 +300,7 @@ declare class VaultClient {
         get?: string;
         requestContext?: string;
         securityToken?: string;
+        targetAccount?: string;
     }, callback: any): undefined;
     /**
      * A getter for Account email addresses provided a dictionary of canonical
