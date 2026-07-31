@@ -136,6 +136,20 @@ declare class VaultClient {
      */
     getAccountLimits(accountName: string, callback: any): undefined;
     /**
+     * A getter for account rate limit configuration given a list of canonicalIDs
+     * @param {String[]} canonicalIds - list of canonicalIDs
+     * @param {Object} options - additional arguments
+     * @param {string} options.reqUid - the request UID
+     * @param {werelogs.RequestLogger} [options.logger] - Logger instance
+     * @param {Function} callback - the callback handling the response object
+     * and the error, if there is one
+     * @returns {undefined}
+     */
+    getAccountLimitsByCanonicalIds(canonicalIds: string[], options: {
+        reqUid: string;
+        logger?: werelogs.RequestLogger;
+    }, callback: Function): undefined;
+    /**
      * Get Quota of an account
      *
      * @param {string} accountName - account name
