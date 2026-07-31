@@ -31,17 +31,11 @@ describe('IAMClient - deleteAccountLimits', () => {
         });
     });
 
-    it('should call the request method with the correct parameters when accountName is not provided', () => {
+    it('should throw an error when accountName is not provided', () => {
         client = createClient(true);
-        client.deleteAccountLimits(undefined, () => {});
-
-        assert.strictEqual(lastRequestData.method, 'POST');
-        assert.strictEqual(lastRequestData.path, '/');
-        assert.strictEqual(lastRequestData.iamAuthenticate, true);
-        assert.deepStrictEqual(lastRequestData.data, {
-            Action: 'DeleteAccountLimits',
-            Version: '2010-05-08',
-        });
+        assert.throws(() => {
+            client.deleteAccountLimits(undefined, () => {});
+        }, /the account name should be a string/);
     });
 
     it('should throw an error if accountName is not a string', () => {
@@ -49,7 +43,7 @@ describe('IAMClient - deleteAccountLimits', () => {
         const accountName = 123;
         assert.throws(() => {
             client.deleteAccountLimits(accountName, () => {});
-        }, /the account name, if set, should be a string/);
+        }, /the account name should be a string/);
     });
 
     it('should call the request method when wrong options are provided and parameterValidation is false', () => {

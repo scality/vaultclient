@@ -35,21 +35,13 @@ describe('updateAccountLimits', () => {
         assert.deepStrictEqual(lastRequestData.data, expectedData);
     });
 
-    it('should call the request method with the correct parameters when accountName is not provided', () => {
+    it('should throw when accountName is not provided', () => {
         client = createClient(true);
         const limits = { rateLimit: 1000 };
-
-        const expectedData = {
-            Action: 'UpdateAccountLimits',
-            Version: '2010-05-08',
-            limits: JSON.stringify(limits),
-        };
-
-        client.updateAccountLimits(undefined, limits, () => {});
-        assert.strictEqual(lastRequestData.method, 'POST');
-        assert.strictEqual(lastRequestData.path, '/');
-        assert.strictEqual(lastRequestData.iamAuthenticate, true);
-        assert.deepStrictEqual(lastRequestData.data, expectedData);
+        assert.throws(
+            () => client.updateAccountLimits(undefined, limits, () => {})
+            , /the account name should be a string/
+        );
     });
 
     it('should handle complex limits object correctly', () => {
@@ -82,7 +74,7 @@ describe('updateAccountLimits', () => {
 
         assert.throws(() => {
             client.updateAccountLimits(accountName, limits, () => {});
-        }, /Limits must be an object/);
+        }, /limits must be an object/);
     });
 
     it('should throw an error if limits is null', () => {
@@ -92,7 +84,7 @@ describe('updateAccountLimits', () => {
 
         assert.throws(() => {
             client.updateAccountLimits(accountName, limits, () => {});
-        }, /Limits must be an object/);
+        }, /limits must be an object/);
     });
 
     it('should not throw an error if limits is not an object and parameterValidation is false', () => {
@@ -121,7 +113,7 @@ describe('updateAccountLimits', () => {
 
         assert.throws(() => {
             client.updateAccountLimits(accountName, limits, () => {});
-        }, /the account name, if set, should be a string/);
+        }, /the account name should be a string/);
     });
 
     it('should not throw an error if accountName is not a string and parameterValidation is false', () => {

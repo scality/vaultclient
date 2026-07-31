@@ -32,18 +32,12 @@ describe('GetAccountLimits', () => {
         assert.deepStrictEqual(lastRequestData.data, expectedData);
     });
 
-    it('should call the request method with default parameters when accountName is not provided', () => {
+    it('should throw an error when accountName is not provided', () => {
         client = createClient(true);
         const callback = () => {};
-        client.getAccountLimits(undefined, callback);
-        const expectedData = {
-            Action: 'GetAccountLimits',
-            Version: '2010-05-08',
-        };
-        assert.strictEqual(lastRequestData.method, 'POST');
-        assert.strictEqual(lastRequestData.path, '/');
-        assert.strictEqual(lastRequestData.iamAuthenticate, true);
-        assert.deepStrictEqual(lastRequestData.data, expectedData);
+        assert.throws(() => {
+            client.getAccountLimits(undefined, callback);
+        }, /the account name should be a string/);
     });
 
     it('should throw an error if accountName is not a string', () => {
@@ -52,7 +46,7 @@ describe('GetAccountLimits', () => {
         const callback = () => {};
         assert.throws(() => {
             client.getAccountLimits(accountName, callback);
-        }, /the account name, if set, should be a string/);
+        }, /the account name should be a string/);
     });
 
     it('should not throw an error if accountName is not a string and parameterValidation is false', () => {
