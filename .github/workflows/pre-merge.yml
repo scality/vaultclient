@@ -10,11 +10,15 @@ on:  # yamllint disable-line rule:truthy
 jobs:
   tests:
     runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        node-version: ['22', '24']
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '22'
+          node-version: ${{ matrix.node-version }}
           cache: 'yarn'
       - name: install dependencies
         run: yarn install --frozen-lockfile --network-concurrency 1
