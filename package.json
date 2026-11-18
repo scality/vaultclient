@@ -32,7 +32,7 @@
   },
   "scripts": {
     "start": "node client.js",
-    "lint": "eslint $(git ls-files '*.js')",
+    "lint": "eslint $(git ls-files '*.js' '*.mjs')",
     "lint_yml": "yamllint $(git ls-files '*.yml')",
     "lint_md": "mdlint $(git ls-files '*.md')",
     "prettier:check": "prettier --check .",
