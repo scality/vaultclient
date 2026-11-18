@@ -277,7 +277,7 @@ program
             let limits;
             try {
                 if (args.limits.startsWith('file://')) {
-                    const data = fs.readFileSync(args.limits);
+                    const data = fs.readFileSync(new URL(args.limits));
                     limits = JSON.parse(data);
                 } else {
                     limits = JSON.parse(args.limits);
