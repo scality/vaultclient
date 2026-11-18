@@ -248,7 +248,7 @@ program
             } else {
                 limits = JSON.parse(args.limits);
             }
-        } catch (err) {
+        } catch {
             console.error('Error: limits must be valid JSON');
             process.exit(1);
         }
