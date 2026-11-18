@@ -51,7 +51,7 @@ function readConfigFile(configFilePath) {
         checkConfig(config);
         return config;
     } catch (err) {
-        throw new Error(`error reading config file: ${err}`);
+        throw new Error(`error reading config file: ${err}`, { cause: err });
     }
 };
 
