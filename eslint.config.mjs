@@ -5,7 +5,7 @@ import { mocha } from '@scality/eslint-config-scality/testing';
 export default defineConfig(
     ...scality,
     {
-        files: ['**/*.js'],
+        files: ['**/*.js', 'bin/vaultclient'],
         languageOptions: {
             sourceType: 'commonjs',
         },

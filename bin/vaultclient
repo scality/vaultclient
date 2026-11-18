@@ -249,6 +249,7 @@ program
                 limits = JSON.parse(args.limits);
             }
         } catch {
+            // eslint-disable-next-line no-console
             console.error('Error: limits must be valid JSON');
             process.exit(1);
         }
