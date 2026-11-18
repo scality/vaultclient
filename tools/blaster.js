@@ -28,9 +28,7 @@ if (program.nOps) {
     options.nOps = program.nOps;
 }
 
-process.stdout.write(
-    `process: ${options.nOps} ops server ${options.host}:${options.port}\n`,
-);
+process.stdout.write(`process: ${options.nOps} ops server ${options.host}:${options.port}\n`);
 
 const client = new IAMClient(options.host, Number(options.port));
 
@@ -44,11 +42,10 @@ const scopeDate = '20150830';
 
 const chars = 'abcdefghipqrstuvwxyz0123456789';
 
-
 function generateString(size) {
     let str = '';
     for (let i = 0; i < size; i += 1) {
-        str += chars[Math.floor(Math.random() * (chars.length))];
+        str += chars[Math.floor(Math.random() * chars.length)];
     }
     return str;
 }
@@ -248,9 +245,7 @@ function deleteUser(index, callback) {
         if (!error && !err) {
             const acc = accounts[accountName];
             acc.usersNames.splice(acc.usersNames.indexOf(userName), 1);
-            acc.usersEmails.splice(
-                acc.usersEmails.indexOf(acc.users[userName].email), 1,
-            );
+            acc.usersEmails.splice(acc.usersEmails.indexOf(acc.users[userName].email), 1);
             acc.users[userName] = undefined;
             return callback(null, index + 1);
         }
@@ -285,8 +280,7 @@ function createAccessKey(index, callback) {
         if (!err && !error) {
             const accessKey = data.message.body.id;
             const secretKey = data.message.body.value;
-            accounts[accountName].users[userName]
-                .secretKeys[accessKey] = secretKey;
+            accounts[accountName].users[userName].secretKeys[accessKey] = secretKey;
             accounts[accountName].users[userName].accessKeys.push(accessKey);
             return callback(null, index + 1);
         }
@@ -321,8 +315,7 @@ function deleteAccessKey(index, callback) {
         if (!err && !error) {
             const { accessKeys } = accounts[accountName].users[userName];
             accessKeys.splice(accessKeys.indexOf(accessKey), 1);
-            accounts[accountName]
-                .users[userName].secretKeys[accessKey] = undefined;
+            accounts[accountName].users[userName].secretKeys[accessKey] = undefined;
             return callback(null, index + 1);
         }
         if (err && error) {
@@ -351,8 +344,7 @@ function verifySignatureV2(index, callback) {
             if (user.accessKeys.length > 0) {
                 accessKey = getName(user.accessKeys);
                 if (random()) {
-                    signature = hmac('signature',
-                        user.secretKeys[accessKey]).toString('base64');
+                    signature = hmac('signature', user.secretKeys[accessKey]).toString('base64');
                     if (random()) {
                         error = false;
                         params.algo = 'sha256';
@@ -391,9 +383,7 @@ function verifySignatureV4(index, callback) {
             if (user.accessKeys.length > 0) {
                 accessKey = getName(user.accessKeys);
                 if (random()) {
-                    const signingKey = calculateSigningKeyV4(
-                        user.secretKeys[accessKey],
-                    );
+                    const signingKey = calculateSigningKeyV4(user.secretKeys[accessKey]);
                     signature = hmac('signature', signingKey).toString('hex');
                     error = false;
                 }
@@ -447,11 +437,9 @@ function getEmails(index, callback) {
                 ok = false;
             }
         });
-        return ok ? callback(null, index + 1)
-            : callback('Fail in getEmailAddresses', index);
+        return ok ? callback(null, index + 1) : callback('Fail in getEmailAddresses', index);
     });
 }
-
 
 function getCanonicalIds(index, callback) {
     let error = true;
@@ -465,11 +453,7 @@ function getCanonicalIds(index, callback) {
             }
             error = false;
         } else {
-            arr = [
-                'unexisting1@toto.com',
-                'unexisting2@toto.com',
-                'undefined@toto.com',
-            ];
+            arr = ['unexisting1@toto.com', 'unexisting2@toto.com', 'undefined@toto.com'];
         }
     }
     client.getCanonicalIds(arr, { reqUid: 'toto' }, (err, data) => {
@@ -477,16 +461,14 @@ function getCanonicalIds(index, callback) {
         let canonicalId = 'NotFound';
         arr.forEach(e => {
             if (error === false) {
-                canonicalId = accounts[accountNames[emails.indexOf(e)]]
-                    .canonicalId;
+                canonicalId = accounts[accountNames[emails.indexOf(e)]].canonicalId;
             }
             if (canonicalId !== data.message.body[e]) {
                 nbError += 1;
                 ok = false;
             }
         });
-        return ok ? callback(null, index + 1)
-            : callback('Fail in getCanonicalIds', index);
+        return ok ? callback(null, index + 1) : callback('Fail in getCanonicalIds', index);
     });
 }
 

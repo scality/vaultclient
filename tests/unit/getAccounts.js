@@ -28,7 +28,9 @@ describe('getAccounts', () => {
         done();
     });
 
-    afterEach('reset spyArg', () => { spyArg = null; });
+    afterEach('reset spyArg', () => {
+        spyArg = null;
+    });
 
     describe('should send request with correct arguments', () => {
         [
@@ -36,26 +38,27 @@ describe('getAccounts', () => {
             { name: 'emailAddresses', args: [null, emailAddresses, null, opt, mockCB] },
             { name: 'canonicalIds', args: [null, null, canonicalIds, opt, mockCB] },
             { name: 'accountNames', args: [accountNames, null, null, optAccountNames, mockCB] },
-        ].forEach(({ name, args }) => it(`for ${name}`, () => {
-            client.getAccounts(...args);
-            const [method, path, auth, cb, data, reqUid, contentType] = spyArg;
-            assert.strictEqual(method, 'GET');
-            assert.strictEqual(path, '/');
-            assert.strictEqual(auth, false);
-            assert.strictEqual(cb, mockCB);
-            assert.strictEqual(reqUid, opt.reqUid);
-            assert.strictEqual(contentType, null);
-            assert.deepStrictEqual(
-                data,
-                { ...expectedData, [name]: args[0] || args[1] || args[2] },
-            );
-        }));
+        ].forEach(({ name, args }) =>
+            it(`for ${name}`, () => {
+                client.getAccounts(...args);
+                const [method, path, auth, cb, data, reqUid, contentType] = spyArg;
+                assert.strictEqual(method, 'GET');
+                assert.strictEqual(path, '/');
+                assert.strictEqual(auth, false);
+                assert.strictEqual(cb, mockCB);
+                assert.strictEqual(reqUid, opt.reqUid);
+                assert.strictEqual(contentType, null);
+                assert.deepStrictEqual(data, { ...expectedData, [name]: args[0] || args[1] || args[2] });
+            }),
+        );
     });
 
     describe('should throw with invalid arguments', () => {
         it('for all values set', () => {
-            assert.throws(() => client.getAccounts(accountIds, emailAddresses, canonicalIds, opt, mockCB),
-                assert.AssertionError);
+            assert.throws(
+                () => client.getAccounts(accountIds, emailAddresses, canonicalIds, opt, mockCB),
+                assert.AssertionError,
+            );
         });
     });
 });

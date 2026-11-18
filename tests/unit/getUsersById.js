@@ -6,7 +6,6 @@ const querystring = require('querystring');
 const IAMClient = require('../../lib/IAMClient');
 const { InvalidParameterValue } = require('../../lib/constants');
 
-
 const userId1 = 'userId1';
 const userId2 = 'userId2';
 const userId3 = 'userId3';
@@ -67,7 +66,9 @@ describe('GetUsersById with mockup server', () => {
         done();
     });
 
-    afterEach('stop server', () => { server.close(); });
+    afterEach('stop server', () => {
+        server.close();
+    });
 
     it('should correctly retrieve user info', done => {
         const userIds = [userId1, userId2, userId3];

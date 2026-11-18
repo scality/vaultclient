@@ -23,22 +23,36 @@ describe('path prefix test with path parameter set', () => {
     let client;
 
     beforeEach('start server', done => {
-        server = http.createServer(handler).listen(8500, () => {
-            client = new IAMClient('127.0.0.1', 8500, undefined, undefined,
-                undefined, undefined, undefined, undefined, undefined,
-                undefined, path);
-            done();
-        }).on('error', done);
+        server = http
+            .createServer(handler)
+            .listen(8500, () => {
+                client = new IAMClient(
+                    '127.0.0.1',
+                    8500,
+                    undefined,
+                    undefined,
+                    undefined,
+                    undefined,
+                    undefined,
+                    undefined,
+                    undefined,
+                    undefined,
+                    path,
+                );
+                done();
+            })
+            .on('error', done);
     });
 
-    afterEach('stop server', () => { server.close(); });
+    afterEach('stop server', () => {
+        server.close();
+    });
 
     it('should send a request with the set path', done => {
-        client.assumeRoleBackbeat(roleArn, roleSessionName, { reqUid: '1' },
-            err => {
-                assert.strictEqual(err, null);
-                done();
-            });
+        client.assumeRoleBackbeat(roleArn, roleSessionName, { reqUid: '1' }, err => {
+            assert.strictEqual(err, null);
+            done();
+        });
     });
 });
 
@@ -67,23 +81,21 @@ describe('V4 signature with proxyPath must use IAM canonical path', () => {
     // Reference: https://docs.aws.amazon.com/IAM/latest/UserGuide/reference_sigv.html
     function computeExpectedSignature(req, canonicalPath) {
         const authHeader = req.headers.authorization;
-        assert(authHeader,
-            'request must include Authorization header (admin credentials)');
+        assert(authHeader, 'request must include Authorization header (admin credentials)');
 
-        const credMatch = authHeader.match(
-            /Credential=([^/]+)\/(\d{8})\/([^/]+)\/(\w+)\/aws4_request/);
+        const credMatch = authHeader.match(/Credential=([^/]+)\/(\d{8})\/([^/]+)\/(\w+)\/aws4_request/);
         assert(credMatch, 'Authorization header must contain valid Credential');
         const [, , date, region, service] = credMatch;
 
-        const signedHeaders = authHeader
-            .match(/SignedHeaders=([^,]+)/)[1].split(';');
+        const signedHeaders = authHeader.match(/SignedHeaders=([^,]+)/)[1].split(';');
 
-        const headersStr = signedHeaders
-            .map(h => `${h}:${req.headers[h]}`).join('\n');
+        const headersStr = signedHeaders.map(h => `${h}:${req.headers[h]}`).join('\n');
         const payloadHash = req.headers['x-amz-content-sha256'];
 
         const canonicalReq = [
-            req.method, canonicalPath, '',
+            req.method,
+            canonicalPath,
+            '',
             `${headersStr}\n`,
             signedHeaders.join(';'),
             payloadHash,
@@ -100,43 +112,57 @@ describe('V4 signature with proxyPath must use IAM canonical path', () => {
         const kRegion = hmac(region, kDate);
         const kService = hmac(service, kRegion);
         const kSigning = hmac('aws4_request', kService);
-        return createHmac('sha256', kSigning)
-            .update(stringToSign, 'utf8').digest('hex');
+        return createHmac('sha256', kSigning).update(stringToSign, 'utf8').digest('hex');
     }
 
     function getClientSignature(req) {
-        const match = req.headers.authorization.match(
-            /Signature=([a-f0-9]+)/);
+        const match = req.headers.authorization.match(/Signature=([a-f0-9]+)/);
         assert(match, 'Authorization header must contain Signature');
         return match[1];
     }
 
     beforeEach('start server', done => {
-        server = http.createServer((req, res) => {
-            req.on('data', () => {});
-            req.on('end', () => {
-                const clientSig = getClientSignature(req);
-                const expectedSig =
-                    computeExpectedSignature(req, iamCanonicalPath);
-                if (clientSig !== expectedSig) {
-                    res.writeHead(403);
-                    res.end(JSON.stringify({
-                        ErrorResponse: { Error: {
-                            Code: 'InvalidAccessKeyId',
-                            Message: 'Signature mismatch',
-                        } },
-                    }));
-                    return;
-                }
-                res.writeHead(200);
-                res.end(JSON.stringify({ accounts: [] }));
-            });
-        }).listen(8500, () => {
-            client = new IAMClient('127.0.0.1', 8500,
-                undefined, undefined, undefined, undefined, undefined,
-                accessKey, secretKey, undefined, proxyPath);
-            done();
-        }).on('error', done);
+        server = http
+            .createServer((req, res) => {
+                req.on('data', () => {});
+                req.on('end', () => {
+                    const clientSig = getClientSignature(req);
+                    const expectedSig = computeExpectedSignature(req, iamCanonicalPath);
+                    if (clientSig !== expectedSig) {
+                        res.writeHead(403);
+                        res.end(
+                            JSON.stringify({
+                                ErrorResponse: {
+                                    Error: {
+                                        Code: 'InvalidAccessKeyId',
+                                        Message: 'Signature mismatch',
+                                    },
+                                },
+                            }),
+                        );
+                        return;
+                    }
+                    res.writeHead(200);
+                    res.end(JSON.stringify({ accounts: [] }));
+                });
+            })
+            .listen(8500, () => {
+                client = new IAMClient(
+                    '127.0.0.1',
+                    8500,
+                    undefined,
+                    undefined,
+                    undefined,
+                    undefined,
+                    undefined,
+                    accessKey,
+                    secretKey,
+                    undefined,
+                    proxyPath,
+                );
+                done();
+            })
+            .on('error', done);
     });
 
     afterEach('stop server', () => server.close());

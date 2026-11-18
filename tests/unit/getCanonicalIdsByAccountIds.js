@@ -6,13 +6,9 @@ const querystring = require('querystring');
 const IAMClient = require('../../lib/IAMClient');
 const { InvalidParameterValue } = require('../../lib/constants');
 
-
-const canId1 =
-    '0123456789012345678901234567890123456789012345678901234567890123';
-const canId2 =
-    '1234567890123456789012345678901234567890123456789012345678901230';
-const canId3 =
-    '2345678901234567890123456789012345678901234567890123456789012301';
+const canId1 = '0123456789012345678901234567890123456789012345678901234567890123';
+const canId2 = '1234567890123456789012345678901234567890123456789012345678901230';
+const canId3 = '2345678901234567890123456789012345678901234567890123456789012301';
 
 const accountId1 = 'accountId1';
 const accountId2 = 'accountId2';
@@ -36,10 +32,12 @@ function handler(req, res) {
         return res.end(JSON.stringify(InvalidParameterValue));
     }
     const output = [];
-    inputArray.forEach(id => output.push({
-        accountId: id,
-        canonicalId: serverDB[id],
-    }));
+    inputArray.forEach(id =>
+        output.push({
+            accountId: id,
+            canonicalId: serverDB[id],
+        }),
+    );
     res.writeHead(200);
     return res.end(JSON.stringify(output), null, 4);
 }
@@ -54,7 +52,9 @@ describe('getCanonicalIdsByAccountIds with mockup server', () => {
         done();
     });
 
-    afterEach('stop server', () => { server.close(); });
+    afterEach('stop server', () => {
+        server.close();
+    });
 
     it('should correctly retrieve canonical Ids', done => {
         const accountIds = [accountId1, accountId2, accountId3];

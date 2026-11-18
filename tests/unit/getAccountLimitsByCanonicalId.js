@@ -24,7 +24,9 @@ describe('getAccountLimitsByCanonicalIds', () => {
         done();
     });
 
-    afterEach('reset spyArg', () => { spyArg = null; });
+    afterEach('reset spyArg', () => {
+        spyArg = null;
+    });
 
     it('should send request with correct arguments', () => {
         client.getAccountLimitsByCanonicalIds(canonicalIds, opt, mockCB);
@@ -35,15 +37,10 @@ describe('getAccountLimitsByCanonicalIds', () => {
         assert.strictEqual(typeof cb, 'function');
         assert.strictEqual(reqUid, opt.reqUid);
         assert.strictEqual(contentType, null);
-        assert.deepStrictEqual(
-            data,
-            { ...expectedData, canonicalIds },
-        );
+        assert.deepStrictEqual(data, { ...expectedData, canonicalIds });
     });
 
-
     it('should throw with invalid arguments', () => {
-        assert.throws(() => client.getAccountLimitsByCanonicalIds('foobar', opt, mockCB),
-            assert.AssertionError);
+        assert.throws(() => client.getAccountLimitsByCanonicalIds('foobar', opt, mockCB), assert.AssertionError);
     });
 });

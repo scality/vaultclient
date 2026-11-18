@@ -15,11 +15,14 @@ describe('IAMClient - addAccountAttribute', () => {
     });
 
     it('should call the request method with the correct parameters', () => {
-        client.addAccountAttribute({
-            accountName: 'exampleAccount',
-            key: 'exampleKey',
-            value: 'exampleValue',
-        }, () => {});
+        client.addAccountAttribute(
+            {
+                accountName: 'exampleAccount',
+                key: 'exampleKey',
+                value: 'exampleValue',
+            },
+            () => {},
+        );
 
         assert.strictEqual(lastRequestData.method, 'POST');
         assert.strictEqual(lastRequestData.path, '/');
@@ -34,10 +37,13 @@ describe('IAMClient - addAccountAttribute', () => {
     });
 
     it('should not send the value when it is not provided', () => {
-        client.addAccountAttribute({
-            accountName: 'exampleAccount',
-            key: 'exampleKey',
-        }, () => {});
+        client.addAccountAttribute(
+            {
+                accountName: 'exampleAccount',
+                key: 'exampleKey',
+            },
+            () => {},
+        );
 
         assert.deepStrictEqual(lastRequestData.data, {
             Action: 'AddAccountAttribute',
@@ -49,10 +55,13 @@ describe('IAMClient - addAccountAttribute', () => {
 
     ['accountArn', 'accountName', 'accountId', 'canonicalId'].forEach(identifier => {
         it(`should accept ${identifier} on its own`, () => {
-            client.addAccountAttribute({
-                [identifier]: 'exampleIdentifier',
-                key: 'exampleKey',
-            }, () => {});
+            client.addAccountAttribute(
+                {
+                    [identifier]: 'exampleIdentifier',
+                    key: 'exampleKey',
+                },
+                () => {},
+            );
 
             assert.deepStrictEqual(lastRequestData.data, {
                 Action: 'AddAccountAttribute',
@@ -83,30 +92,39 @@ describe('IAMClient - addAccountAttribute', () => {
     ].forEach(({ identifier, message }) => {
         it(`should throw an error if ${identifier} is not a string`, () => {
             assert.throws(() => {
-                client.addAccountAttribute({
-                    [identifier]: 123,
-                    key: 'exampleKey',
-                }, () => {});
+                client.addAccountAttribute(
+                    {
+                        [identifier]: 123,
+                        key: 'exampleKey',
+                    },
+                    () => {},
+                );
             }, message);
         });
     });
 
     it('should throw an error if key is not a string', () => {
         assert.throws(() => {
-            client.addAccountAttribute({
-                accountName: 'exampleAccount',
-                key: 123,
-            }, () => {});
+            client.addAccountAttribute(
+                {
+                    accountName: 'exampleAccount',
+                    key: 123,
+                },
+                () => {},
+            );
         }, /key should be a string/);
     });
 
     it('should throw an error if value is not a string', () => {
         assert.throws(() => {
-            client.addAccountAttribute({
-                accountName: 'exampleAccount',
-                key: 'exampleKey',
-                value: 123,
-            }, () => {});
+            client.addAccountAttribute(
+                {
+                    accountName: 'exampleAccount',
+                    key: 'exampleKey',
+                    value: 123,
+                },
+                () => {},
+            );
         }, /value should be a string/);
     });
 });

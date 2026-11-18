@@ -31,11 +31,11 @@ const serverDB = {
 
 function handler(req, res) {
     let body = '';
-    
+
     req.on('data', chunk => {
         body += chunk.toString();
     });
-    
+
     req.on('end', () => {
         let data;
         try {
@@ -51,7 +51,7 @@ function handler(req, res) {
             res.writeHead(400);
             return res.end(JSON.stringify({ error: 'Invalid request data' }));
         }
-        
+
         let output;
         try {
             const accessKeyObject = serverDB[data.accessKey];
@@ -61,10 +61,12 @@ function handler(req, res) {
             return res.end(output, null, 4);
         } catch {
             res.writeHead(constants.EntityDoesNotExist.code);
-            return res.end(JSON.stringify({
-                code: 404,
-                description: constants.EntityDoesNotExist.description,
-            }));
+            return res.end(
+                JSON.stringify({
+                    code: 404,
+                    description: constants.EntityDoesNotExist.description,
+                }),
+            );
         }
     });
 }
@@ -81,7 +83,9 @@ describe('GetUserByAccessKey with mockup server', () => {
         done();
     });
 
-    afterEach('stop server', () => { server.close(); });
+    afterEach('stop server', () => {
+        server.close();
+    });
 
     it('should correctly retrieve user info by accessKey', done => {
         const expectedUser = serverDB[serverDB[testAccessKey].userId];
@@ -94,7 +98,7 @@ describe('GetUserByAccessKey with mockup server', () => {
         });
     });
 
-    it('should return error if accessKey doesn\'t exist', done => {
+    it("should return error if accessKey doesn't exist", done => {
         client.getUserByAccessKey(notExistingAccessKey, (err, res) => {
             assert(err);
             assert(!res);

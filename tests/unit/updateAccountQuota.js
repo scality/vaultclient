@@ -122,7 +122,6 @@ describe('updateAccountQuota', () => {
         client.updateAccountQuota(undefined, quota, () => {});
     });
 
-
     it('should not throw an error even when the quota is 0 if ci is true', () => {
         client.parameterValidation = false;
 

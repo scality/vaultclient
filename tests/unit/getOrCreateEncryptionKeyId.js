@@ -22,27 +22,31 @@ describe('getOrCreateEncryptionKeyId Test', () => {
     };
 
     beforeEach('start server', done => {
-        server = http.createServer(handler).listen(8500, () => {
-            client = new IAMClient('127.0.0.1', 8500);
-            done();
-        }).on('error', done);
+        server = http
+            .createServer(handler)
+            .listen(8500, () => {
+                client = new IAMClient('127.0.0.1', 8500);
+                done();
+            })
+            .on('error', done);
     });
 
-    afterEach('stop server', () => { server.close(); });
+    afterEach('stop server', () => {
+        server.close();
+    });
 
     it('should retrieve getOrCreateEncryptionKeyId response', done => {
-        client.getOrCreateEncryptionKeyId(canonicalId,
-            { reqUid: '123' },
-            (err, response) => {
-                assert(!err);
-                assert.deepStrictEqual(response.message.body, output);
-                done();
-            });
+        client.getOrCreateEncryptionKeyId(canonicalId, { reqUid: '123' }, (err, response) => {
+            assert(!err);
+            assert.deepStrictEqual(response.message.body, output);
+            done();
+        });
     });
 
     it('should throw error if canonical id is undefined', () => {
         assert.throws(
-            () => client.getOrCreateEncryptionKeyId(undefined, { reqUid: '123' }, () => {}), err => {
+            () => client.getOrCreateEncryptionKeyId(undefined, { reqUid: '123' }, () => {}),
+            err => {
                 assert(err instanceof assert.AssertionError);
                 assert.strictEqual(err.message, 'canonicalId need to be specified');
                 return true;
@@ -52,7 +56,8 @@ describe('getOrCreateEncryptionKeyId Test', () => {
 
     it('should throw error if canonical id is not a string', () => {
         assert.throws(
-            () => client.getOrCreateEncryptionKeyId(0, { reqUid: '123' }, () => {}), err => {
+            () => client.getOrCreateEncryptionKeyId(0, { reqUid: '123' }, () => {}),
+            err => {
                 assert(err instanceof assert.AssertionError);
                 assert.strictEqual(err.message, 'canonicalId should be a string');
                 return true;
@@ -62,7 +67,8 @@ describe('getOrCreateEncryptionKeyId Test', () => {
 
     it('should throw error if canonical id is an empty string', () => {
         assert.throws(
-            () => client.getOrCreateEncryptionKeyId('', { reqUid: '123' }, () => {}), err => {
+            () => client.getOrCreateEncryptionKeyId('', { reqUid: '123' }, () => {}),
+            err => {
                 assert(err instanceof assert.AssertionError);
                 assert.strictEqual(err.message, 'canonicalId should not be empty string');
                 return true;
@@ -76,29 +82,33 @@ describe('getOrCreateEncryptionKeyId with server error', () => {
     let client;
     const erroredHandler = (req, res) => {
         res.writeHead(200);
-        const serverError = '<ErrorResponse xmlns="https://iam.amazonaws.com/doc/2010-05-08/">'
-        + '<Error><Code>ServiceFailure</Code><Message>Server error: the request processing has '
-        + 'failed because of an unknown error, exception or failure.</Message></Error>'
-        + '<RequestId>3ac25e70c649bd4a6394:897ac94c0240b2a65f96</RequestId></ErrorResponse>';
+        const serverError =
+            '<ErrorResponse xmlns="https://iam.amazonaws.com/doc/2010-05-08/">' +
+            '<Error><Code>ServiceFailure</Code><Message>Server error: the request processing has ' +
+            'failed because of an unknown error, exception or failure.</Message></Error>' +
+            '<RequestId>3ac25e70c649bd4a6394:897ac94c0240b2a65f96</RequestId></ErrorResponse>';
         return res.end(serverError);
     };
 
     beforeEach('start server', done => {
-        server = http.createServer(erroredHandler).listen(8500, () => {
-            client = new IAMClient('127.0.0.1', 8500);
-            done();
-        }).on('error', done);
+        server = http
+            .createServer(erroredHandler)
+            .listen(8500, () => {
+                client = new IAMClient('127.0.0.1', 8500);
+                done();
+            })
+            .on('error', done);
     });
 
-    afterEach('stop server', () => { server.close(); });
+    afterEach('stop server', () => {
+        server.close();
+    });
 
     it('should return an error', done => {
-        client.getOrCreateEncryptionKeyId(canonicalId,
-            { reqUid: '123' },
-            (err, response) => {
-                assert(!err);
-                assert(response.message.body.ErrorResponse);
-                done();
-            });
+        client.getOrCreateEncryptionKeyId(canonicalId, { reqUid: '123' }, (err, response) => {
+            assert(!err);
+            assert(response.message.body.ErrorResponse);
+            done();
+        });
     });
 });

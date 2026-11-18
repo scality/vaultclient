@@ -6,8 +6,21 @@ describe('GetAccountQuota', () => {
     let lastRequestData;
 
     const createClient = parameterValidation => {
-        client = new IAMClient('127.0.0.1', 8500, undefined, undefined, undefined,
-            undefined, undefined, undefined, undefined, undefined, undefined, undefined, parameterValidation);
+        client = new IAMClient(
+            '127.0.0.1',
+            8500,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            parameterValidation,
+        );
         lastRequestData = null;
         client.request = (method, path, iamAuthenticate, callback, data, reqUid, contentType) => {
             lastRequestData = { method, path, iamAuthenticate, data, reqUid, contentType };

@@ -1,42 +1,42 @@
 {
-  "name": "vaultclient",
-  "engines": {
-    "node": ">=22"
-  },
-  "version": "8.5.9",
-  "description": "Client library and binary for Vault, the user directory and key management service",
-  "main": "index.js",
-  "repository": "scality/vaultclient",
-  "author": "Giorgio Regni",
-  "license": "Apache-2.0",
-  "bugs": {
-    "url": "https://github.com/scality/vaultclient/issues"
-  },
-  "homepage": "https://github.com/scality/vaultclient#readme",
-  "dependencies": {
-    "@aws-crypto/sha256-universal": "^5.2.0",
-    "@smithy/signature-v4": "^4.1.0",
-    "commander": "^11.0.0",
-    "httpagent": "git+https://github.com/scality/httpagent#1.1.1",
-    "werelogs": "scality/werelogs#8.2.5",
-    "xml2js": "^0.6.2"
-  },
-  "devDependencies": {
-    "@scality/eslint-config-scality": "scality/Guidelines#8.4.0",
-    "eslint": "^10.15.0",
-    "eslint-plugin-mocha": "^11.3.0",
-    "mocha": "^12.0.1",
-    "prettier": "^3.10.1",
-    "sinon": "^21.0.1",
-    "typescript": "^5.5.4"
-  },
-  "scripts": {
-    "start": "node client.js",
-    "lint": "eslint $(git ls-files '*.js' '*.mjs' bin/vaultclient)",
-    "lint_yml": "yamllint $(git ls-files '*.yml')",
-    "lint_md": "mdlint $(git ls-files '*.md')",
-    "prettier:check": "prettier --check .",
-    "test": "mocha --exit tests/unit",
-    "gen-types": "rm -f lib/IAMClient.d.ts && rm -f lib/constants.d.ts && tsc --declaration --emitDeclarationOnly"
-  }
+    "name": "vaultclient",
+    "engines": {
+        "node": ">=22"
+    },
+    "version": "8.5.9",
+    "description": "Client library and binary for Vault, the user directory and key management service",
+    "main": "index.js",
+    "repository": "scality/vaultclient",
+    "author": "Giorgio Regni",
+    "license": "Apache-2.0",
+    "bugs": {
+        "url": "https://github.com/scality/vaultclient/issues"
+    },
+    "homepage": "https://github.com/scality/vaultclient#readme",
+    "dependencies": {
+        "@aws-crypto/sha256-universal": "^5.2.0",
+        "@smithy/signature-v4": "^4.1.0",
+        "commander": "^11.0.0",
+        "httpagent": "git+https://github.com/scality/httpagent#1.1.1",
+        "werelogs": "scality/werelogs#8.2.5",
+        "xml2js": "^0.6.2"
+    },
+    "devDependencies": {
+        "@scality/eslint-config-scality": "scality/Guidelines#8.4.0",
+        "eslint": "^10.15.0",
+        "eslint-plugin-mocha": "^11.3.0",
+        "mocha": "^12.0.1",
+        "prettier": "^3.10.1",
+        "sinon": "^21.0.1",
+        "typescript": "^5.5.4"
+    },
+    "scripts": {
+        "start": "node client.js",
+        "lint": "eslint $(git ls-files '*.js' '*.mjs' bin/vaultclient)",
+        "lint_yml": "yamllint $(git ls-files '*.yml')",
+        "lint_md": "mdlint $(git ls-files '*.md')",
+        "prettier:check": "prettier --check .",
+        "test": "mocha --exit tests/unit",
+        "gen-types": "rm -f lib/IAMClient.d.ts && rm -f lib/constants.d.ts && tsc --declaration --emitDeclarationOnly"
+    }
 }

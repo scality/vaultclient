@@ -5,15 +5,11 @@ const http = require('http');
 const querystring = require('querystring');
 const IAMClient = require('../../lib/IAMClient');
 
-const canId1 =
-    '0123456789012345678901234567890123456789012345678901234567890123';
-const canId2 =
-    '1234567890123456789012345678901234567890123456789012345678901230';
-const canId3 =
-    '2345678901234567890123456789012345678901234567890123456789012301';
+const canId1 = '0123456789012345678901234567890123456789012345678901234567890123';
+const canId2 = '1234567890123456789012345678901234567890123456789012345678901230';
+const canId3 = '2345678901234567890123456789012345678901234567890123456789012301';
 const canIdWrongFormat = 'wrongformatcanid';
-const canIdNotFound =
-    '3456789012345678901234567890123456789012345678901234567890123012';
+const canIdNotFound = '3456789012345678901234567890123456789012345678901234567890123012';
 
 const email1 = 'email1@test.com';
 const email2 = 'email2@test.com';
@@ -65,8 +61,7 @@ function buildExpecteds() {
     testOutputKeys.forEach((currentValue0, index0) => {
         output[index0] = {};
         testOutputKeys[index0].forEach((currentValue1, index1) => {
-            output[index0][currentValue1]
-                = testOutputValues[index0][index1];
+            output[index0][currentValue1] = testOutputValues[index0][index1];
         });
     });
     return output;
@@ -91,7 +86,9 @@ function handler(req, res) {
     }
 
     const outputDict = {};
-    inputArray.forEach(key => { outputDict[key] = serverDB[key]; });
+    inputArray.forEach(key => {
+        outputDict[key] = serverDB[key];
+    });
     res.writeHead(200);
     return res.end(JSON.stringify(outputDict), null, 4);
 }
@@ -106,16 +103,15 @@ describe('getAccountProperties with mockup server', () => {
         done();
     });
 
-    afterEach('stop server', () => { server.close(); });
+    afterEach('stop server', () => {
+        server.close();
+    });
 
     testNames.forEach((currentValue, testIndex) => {
         it(testNames[testIndex], done => {
             client.getEmailAddresses(testOutputKeys[testIndex], {}, (err, value) => {
                 assert(!err);
-                assert.deepStrictEqual(
-                    value.message.body,
-                    testExpecteds[testIndex],
-                );
+                assert.deepStrictEqual(value.message.body, testExpecteds[testIndex]);
                 done();
             });
         });

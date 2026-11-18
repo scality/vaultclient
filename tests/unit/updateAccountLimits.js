@@ -6,8 +6,21 @@ describe('updateAccountLimits', () => {
     let lastRequestData;
 
     const createClient = parameterValidation => {
-        client = new IAMClient('127.0.0.1', 8500, undefined, undefined, undefined,
-            undefined, undefined, undefined, undefined, undefined, undefined, undefined, parameterValidation);
+        client = new IAMClient(
+            '127.0.0.1',
+            8500,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            undefined,
+            parameterValidation,
+        );
         lastRequestData = null;
         client.request = (method, path, iamAuthenticate, callback, data, reqUid, contentType) => {
             lastRequestData = { method, path, iamAuthenticate, data, reqUid, contentType };
@@ -39,8 +52,8 @@ describe('updateAccountLimits', () => {
         client = createClient(true);
         const limits = { rateLimit: 1000 };
         assert.throws(
-            () => client.updateAccountLimits(undefined, limits, () => {})
-            , /the account name should be a string/
+            () => client.updateAccountLimits(undefined, limits, () => {}),
+            /the account name should be a string/,
         );
     });
 

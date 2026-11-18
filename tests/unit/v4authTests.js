@@ -44,37 +44,54 @@ describe('IAMClient verifySignatureV4', () => {
     const noRegion = '';
 
     beforeEach('start server', done => {
-        server = http.createServer(handler).listen(8500, () => {
-            client = new IAMClient('127.0.0.1', 8500);
-            done();
-        }).on('error', done);
+        server = http
+            .createServer(handler)
+            .listen(8500, () => {
+                client = new IAMClient('127.0.0.1', 8500);
+                done();
+            })
+            .on('error', done);
     });
 
-    afterEach('stop server', () => { server.close(); });
+    afterEach('stop server', () => {
+        server.close();
+    });
 
     invalidRegions.forEach(region => {
-        it('should set no region when invalid region is provided',
-            done => {
-                client.verifySignatureV4('signature', signature, accessKey, region, scopeDate, { reqUid: 'requid' },
-                    (err, resp) => {
-                        assert.ifError(err);
-                        assert(resp);
-                        const responseBody = resp.message.body;
-                        assert.strictEqual(responseBody.region, noRegion);
-                        done();
-                    });
-            });
+        it('should set no region when invalid region is provided', done => {
+            client.verifySignatureV4(
+                'signature',
+                signature,
+                accessKey,
+                region,
+                scopeDate,
+                { reqUid: 'requid' },
+                (err, resp) => {
+                    assert.ifError(err);
+                    assert(resp);
+                    const responseBody = resp.message.body;
+                    assert.strictEqual(responseBody.region, noRegion);
+                    done();
+                },
+            );
+        });
 
-        it('should set no region when invalid region is provided (get)',
-            done => {
-                client.verifySignatureV4('signature', signature, accessKey,
-                    region, scopeDate, { reqUid: 'requid', get: true }, (err, resp) => {
-                        assert.ifError(err);
-                        assert(resp);
-                        const responseBody = resp.message.body;
-                        assert.strictEqual(responseBody.region, noRegion);
-                        done();
-                    });
-            });
+        it('should set no region when invalid region is provided (get)', done => {
+            client.verifySignatureV4(
+                'signature',
+                signature,
+                accessKey,
+                region,
+                scopeDate,
+                { reqUid: 'requid', get: true },
+                (err, resp) => {
+                    assert.ifError(err);
+                    assert(resp);
+                    const responseBody = resp.message.body;
+                    assert.strictEqual(responseBody.region, noRegion);
+                    done();
+                },
+            );
+        });
     });
 });

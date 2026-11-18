@@ -15,10 +15,13 @@ describe('IAMClient - deleteAccountAttribute', () => {
     });
 
     it('should call the request method with the correct parameters', () => {
-        client.deleteAccountAttribute({
-            accountName: 'exampleAccount',
-            key: 'exampleKey',
-        }, () => {});
+        client.deleteAccountAttribute(
+            {
+                accountName: 'exampleAccount',
+                key: 'exampleKey',
+            },
+            () => {},
+        );
 
         assert.strictEqual(lastRequestData.method, 'POST');
         assert.strictEqual(lastRequestData.path, '/');
@@ -33,10 +36,13 @@ describe('IAMClient - deleteAccountAttribute', () => {
 
     ['accountArn', 'accountName', 'accountId', 'canonicalId'].forEach(identifier => {
         it(`should accept ${identifier} on its own`, () => {
-            client.deleteAccountAttribute({
-                [identifier]: 'exampleIdentifier',
-                key: 'exampleKey',
-            }, () => {});
+            client.deleteAccountAttribute(
+                {
+                    [identifier]: 'exampleIdentifier',
+                    key: 'exampleKey',
+                },
+                () => {},
+            );
 
             assert.deepStrictEqual(lastRequestData.data, {
                 Action: 'DeleteAccountAttribute',
@@ -67,20 +73,26 @@ describe('IAMClient - deleteAccountAttribute', () => {
     ].forEach(({ identifier, message }) => {
         it(`should throw an error if ${identifier} is not a string`, () => {
             assert.throws(() => {
-                client.deleteAccountAttribute({
-                    [identifier]: 123,
-                    key: 'exampleKey',
-                }, () => {});
+                client.deleteAccountAttribute(
+                    {
+                        [identifier]: 123,
+                        key: 'exampleKey',
+                    },
+                    () => {},
+                );
             }, message);
         });
     });
 
     it('should throw an error if key is not a string', () => {
         assert.throws(() => {
-            client.deleteAccountAttribute({
-                accountName: 'exampleAccount',
-                key: 123,
-            }, () => {});
+            client.deleteAccountAttribute(
+                {
+                    accountName: 'exampleAccount',
+                    key: 123,
+                },
+                () => {},
+            );
         }, /key should be a string/);
     });
 });

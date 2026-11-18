@@ -14,13 +14,18 @@ describe('healthcheck test', () => {
     let client;
 
     beforeEach('start server', done => {
-        server = http.createServer(handler).listen(8500, () => {
-            client = new IAMClient('127.0.0.1', 8500);
-            done();
-        }).on('error', done);
+        server = http
+            .createServer(handler)
+            .listen(8500, () => {
+                client = new IAMClient('127.0.0.1', 8500);
+                done();
+            })
+            .on('error', done);
     });
 
-    afterEach('stop server', () => { server.close(); });
+    afterEach('stop server', () => {
+        server.close();
+    });
 
     it('should return 200 on request', done => {
         client.healthcheck(null, (err, obj, resCode) => {

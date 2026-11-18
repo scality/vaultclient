@@ -39,10 +39,10 @@ examples.
 
 ### Https
 
-To enable https for vaultclient cli, you have to pass the option ```--https```
+To enable https for vaultclient cli, you have to pass the option `--https`
 to vaultclient cli. In the case of self-signed certificates, you also need to
-use the option ```--cafile <certificate-authority-path>```. Another option is
-using the option ```--noCaVerification``` to disable ssl certificate validation.
+use the option `--cafile <certificate-authority-path>`. Another option is
+using the option `--noCaVerification` to disable ssl certificate validation.
 
 ### Create account
 
@@ -117,13 +117,13 @@ vautclient create-account --name john3 --email john3@acme.com \
 ```
 
 In the following output, secretKey is the first accessKey of the account, the
-relevant information here are ```secretKey.id``` (AccessKeyId)
-and ```secretKey.value``` (SecretKey)
+relevant information here are `secretKey.id` (AccessKeyId)
+and `secretKey.value` (SecretKey)
 
 ### Generate account access key
 
 The following example shows how to generate a new account access key for the account
-named ```john```
+named `john`
 
 ```sh
 vaultclient generate-account-access-key --name john
@@ -145,7 +145,7 @@ Output example:
 ### Inject accesskey and secretkey
 
 The following example shows how to inject the supplied account access key
-and secret key for the account named ```john```
+and secret key for the account named `john`
 
 ```sh
 vaultclient generate-account-access-key --name john \
@@ -169,7 +169,7 @@ Output example:
 ### Update account quota
 
 The following example shows how to update the quota with the value specified
-for the account named ```john```. The value given for quota is in bytes.
+for the account named `john`. The value given for quota is in bytes.
 
 ```sh
 vaultclient update-account-quota --account-name john --quota 10000
@@ -189,7 +189,7 @@ Output example:
 ### Delete account quota
 
 The following example shows how to delete any quota for the account
-named ```john```
+named `john`
 
 ```sh
 vaultclient delete-account-quota --account-name john
@@ -215,7 +215,7 @@ vaultclient list-accounts --max-items 30
 ```
 
 The following example shows how to list, at most, 30 accounts.
-You can also paginate by using ```--marker```, like:
+You can also paginate by using `--marker`, like:
 
 ```sh
 vaultclient list-accounts --max-items 30 --marker 1
@@ -259,9 +259,9 @@ Output example:
 
 ```sh
 vaultclient delete-account --name john
-````
+```
 
-The following example shows how to delete the account named ```john```.
+The following example shows how to delete the account named `john`.
 
 Output example:
 
@@ -288,7 +288,7 @@ const client = new Client(
     false, // ignore certificate authority
     'AdminAccessKeyID', // Access key id of superadmin (ignore for s3 routes)
     'AdminSecretKey', // Secret key of superadmin (ignore for s3 routes)
-    );
+);
 ```
 
 ### Create account
@@ -296,11 +296,13 @@ const client = new Client(
 The following example shows how to create an account with the api:
 
 ```js
-client.createAccount('accountName', {
-    email: 'accountName@test.com',
-}, (err, result) => {
-
-});
+client.createAccount(
+    'accountName',
+    {
+        email: 'accountName@test.com',
+    },
+    (err, result) => {},
+);
 ```
 
 The result is formatted the same as Vaultclient CLI.
@@ -311,12 +313,14 @@ The following example shows how create an account with quota
 using the API:
 
 ```js
-client.createAccount('accountName', {
-    email: 'accountName@test.com',
-    quota: 100
-}, (err, result) => {
-
-});
+client.createAccount(
+    'accountName',
+    {
+        email: 'accountName@test.com',
+        quota: 100,
+    },
+    (err, result) => {},
+);
 ```
 
 The result is formatted the same as Vaultclient CLI.
@@ -327,12 +331,14 @@ The following example shows how to create an account with custom account ID
 using the api:
 
 ```js
-client.createAccount('accountName', {
-    email: 'accountName@test.com',
-    externalAccountId: '123123123123'
-}, (err, result) => {
-
-});
+client.createAccount(
+    'accountName',
+    {
+        email: 'accountName@test.com',
+        externalAccountId: '123123123123',
+    },
+    (err, result) => {},
+);
 ```
 
 The result is formatted the same as Vaultclient CLI.
@@ -342,9 +348,7 @@ The result is formatted the same as Vaultclient CLI.
 The following example shows how to create an account access key:
 
 ```js
-client.generateAccountAccessKey('accountName', (err, result) => {
-
-});
+client.generateAccountAccessKey('accountName', (err, result) => {});
 ```
 
 ### Inject accesskey and secretkey
@@ -372,7 +376,7 @@ client.updateAccountQuota('accountName', <quotavalue>, (err, result) => {
 });
 ```
 
-```<quotavalue>``` should be a positive number (not a string).
+`<quotavalue>` should be a positive number (not a string).
 The output is formatted the same as Vaultclient CLI.
 
 ### Delete account quota
@@ -380,11 +384,7 @@ The output is formatted the same as Vaultclient CLI.
 The following example shows how to use the API to delete an account's quota:
 
 ```js
-
-client.deleteAccountQuota('accountName', (err, result) => {
-
-});
-
+client.deleteAccountQuota('accountName', (err, result) => {});
 ```
 
 The output is formatted the same as Vaultclient CLI.
@@ -394,23 +394,22 @@ The output is formatted the same as Vaultclient CLI.
 The following examples show the methods for updating an account's custom
 attributes.
 
-* Remove existing custom attributes:
+- Remove existing custom attributes:
 
 ```js
-
 client.updateAccountAttributes('accountName', {}, (err, result) => {});
-
 ```
 
-* Set custom attributes:
+- Set custom attributes:
 
 ```js
-
-client.updateAccountAttributes('accountName', {
-    attr: 'custom'
-}, (err, result) => {
-});
-
+client.updateAccountAttributes(
+    'accountName',
+    {
+        attr: 'custom',
+    },
+    (err, result) => {},
+);
 ```
 
 **note**: This API call will overwrite existing custom attributes.
@@ -420,14 +419,13 @@ client.updateAccountAttributes('accountName', {
 The following example shows how to list accounts:
 
 ```js
-
-client.listAccounts({
-    marker: '2', // Marker for pagination
-    maxItems: 100, // Max accounts to return
-}, (err, result) => {
-
-});
-
+client.listAccounts(
+    {
+        marker: '2', // Marker for pagination
+        maxItems: 100, // Max accounts to return
+    },
+    (err, result) => {},
+);
 ```
 
 The output is formatted the same as Vaultclient CLI.
@@ -437,11 +435,7 @@ The output is formatted the same as Vaultclient CLI.
 The following example shows how to delete an account:
 
 ```js
-
-client.deleteAccount('accountName', (err, result) => {
-
-});
-
+client.deleteAccount('accountName', (err, result) => {});
 ```
 
 The output is the same as vautclient cli
@@ -453,7 +447,6 @@ client.
 The following example shows how to authenticate with AWS Signature Version 2:
 
 ```js
-
 client.verifySignatureV2(
     'stringToSign',
     'signature',
@@ -475,8 +468,8 @@ client.verifySignatureV2(
         result.message.body.email; // account / user email address
         result.message.body.accountDisplayName; // Name of account
         result.message.body.IAMDisplayName; // Name of user (or undefined)
-    });
-
+    },
+);
 ```
 
 ### Authenticate V4
@@ -486,7 +479,6 @@ client.
 The following example shows how to authenticate with AWS Signature Version 4:
 
 ```js
-
 client.verifySignatureV4(
     'stringToSign',
     'signature',
@@ -509,8 +501,8 @@ client.verifySignatureV4(
         result.message.body.email; // account / user email address
         result.message.body.accountDisplayName; // Name of account
         result.message.body.IAMDisplayName; // Name of user (or undefined)
-    });
-
+    },
+);
 ```
 
 ### Get email addresses
@@ -521,15 +513,17 @@ The following example shows how to get email addresses of accounts from their
 canonical IDs:
 
 ```js
-
-client.getEmailAddresses(['canonicalId1', 'canonicalId2'], {
-    reqUid: 'some-request-id', // Request id to trace request (optionnal)
-}, (err, result) => {
-    result.message.code; // http result code
-    // Email address for 'canonicalId1', Can also be 'WrongFormat' or 'NotFound'
-    result.message.body['canonicalId1'];
-});
-
+client.getEmailAddresses(
+    ['canonicalId1', 'canonicalId2'],
+    {
+        reqUid: 'some-request-id', // Request id to trace request (optionnal)
+    },
+    (err, result) => {
+        result.message.code; // http result code
+        // Email address for 'canonicalId1', Can also be 'WrongFormat' or 'NotFound'
+        result.message.body['canonicalId1'];
+    },
+);
 ```
 
 ### Get canonical IDs
@@ -540,22 +534,24 @@ The following example shows how to get canonical IDs of accounts from their
 email addresses:
 
 ```js
-
-client.getEmailAddresses(['email1', 'email2'], {
-    reqUid: 'some-request-id', // Request id to trace request in logs (optionnal)
-}, (err, result) => {
-    result.message.code; // http result code
-    // Canonical id for 'email1', Can also be 'WrongFormat' or 'NotFound'
-    result.message.body['email1'];
-});
-
+client.getEmailAddresses(
+    ['email1', 'email2'],
+    {
+        reqUid: 'some-request-id', // Request id to trace request in logs (optionnal)
+    },
+    (err, result) => {
+        result.message.code; // http result code
+        // Canonical id for 'email1', Can also be 'WrongFormat' or 'NotFound'
+        result.message.body['email1'];
+    },
+);
 ```
 
 ## Step to set up an account
 
 The following step are the minimal steps to set up an account, an user and his
-access key. Account will be named ```Acme corp``` and user will be
-named ```john```.
+access key. Account will be named `Acme corp` and user will be
+named `john`.
 
 ### Create account
 
@@ -587,17 +583,15 @@ aws iam create-user --user-name john
 Ouptut example:
 
 ```json
-
 {
-  "User": {
-      "UserName": "john",
-      "Path": "/",
-      "CreateDate": "2013-06-08T03:20:41.270Z",
-      "UserId": "AKIAIOSFODNN7EXAMPLE",
-      "Arn": "arn:aws:iam::123456789012:user/john"
-  }
+    "User": {
+        "UserName": "john",
+        "Path": "/",
+        "CreateDate": "2013-06-08T03:20:41.270Z",
+        "UserId": "AKIAIOSFODNN7EXAMPLE",
+        "Arn": "arn:aws:iam::123456789012:user/john"
+    }
 }
-
 ```
 
 ### Create access key
@@ -611,17 +605,15 @@ aws iam create-access-key --user-name john
 Output example:
 
 ```json
-
 {
-  "AccessKey": {
-      "UserName": "john",
-      "Status": "Active",
-      "CreateDate": "2015-03-09T18:39:23.411Z",
-      "SecretAccessKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYzEXAMPLEKEY",
-      "AccessKeyId": "AKIAIOSFODNN7EXAMPLE"
-  }
+    "AccessKey": {
+        "UserName": "john",
+        "Status": "Active",
+        "CreateDate": "2015-03-09T18:39:23.411Z",
+        "SecretAccessKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYzEXAMPLEKEY",
+        "AccessKeyId": "AKIAIOSFODNN7EXAMPLE"
+    }
 }
-
 ```
 
 You have now an account, an user and his access key.

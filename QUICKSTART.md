@@ -38,7 +38,7 @@ Yarn can be installed from [yarnpkg.com](https://yarnpkg.com/en/docs/install).
 
 Open a terminal and run the following:
 
-``` sh
+```sh
 # clone this repository in a folder in your home
 $> git clone https://github.com/scality/vaultclient.git ~/vaultClient
 # go into the cloned folder
@@ -59,7 +59,7 @@ $> sudo pip install awscli==1.10.38
 
 Open a terminal and run the following:
 
-``` sh
+```sh
 # clone the vault server repository in a folder in your home
 $> git clone https://github.com/scality/Vault.git ~/vaultServer
 # go into the cloned folder
@@ -73,7 +73,7 @@ $> npm install --production
 In order to provision anything, you need to have a Vault Server running. Open a
 terminal and run the following:
 
-``` sh
+```sh
 # start your vault server
 $> cd ~/vaultServer && npm start
 # go into the client repository for next steps
@@ -87,27 +87,27 @@ the next steps, please read our [examples](./Examples.md).
 
 Decide on a name and email address for your account, and run:
 
-``` sh
+```sh
 $> ./bin/vaultclient create-account --name accountName --email account@email.com
 ```
 
 HTTP is used by default. However you can force the use of HTTPS by adding the
 option '--https' to every command, like this:
 
-``` sh
+```sh
 $> ./bin/vaultclient create-account --name accountName \
   --email account@email.com --https
 ```
 
-You can also use self-signed certificate by adding the option ```--cafile``` to
+You can also use self-signed certificate by adding the option `--cafile` to
 the command line, like this:
 
-``` sh
+```sh
 $> ./bin/vaultclient create-account --name accountName \
   --email account@email.com --https --cafile myca.crt
 ```
 
-Or disable the ssl verification by using the option ```---noCaVerification```
+Or disable the ssl verification by using the option `---noCaVerification`
 to the command line, like:
 
 ```sh
@@ -115,7 +115,7 @@ $> ./bin/vaultclient create-account --name accountName \
   --email account@email.com --https --noCaVerification
 ```
 
-If no ```--cafile``` or ```---noCaVerification``` is provided and Vault's
+If no `--cafile` or `---noCaVerification` is provided and Vault's
 certificates are signed by a not well-known CA the connection will fail.
 
 ### Create an access key for the account
@@ -135,12 +135,12 @@ You will have an output like:
     "value": "5tK4XOid7pXss66A7Jn=Yz7ybnMIB4Uf/BjavN58",
     "createDate": "2016-07-02T21:47:57Z",
     "lastUsedDate": "2016-07-02T21:47:57Z",
-    "status": "Active",
+    "status": "Active"
 }
 ```
 
-You will need both ```id``` and ```value``` to configure Amanzon aws cli in
-the next step. Where ```id``` is your access key and ```value``` is your
+You will need both `id` and `value` to configure Amanzon aws cli in
+the next step. Where `id` is your access key and `value` is your
 secret key.
 
 ### Set up amazon aws cli
@@ -162,7 +162,7 @@ You can use aws cli to manager now.
 
 Decide on a name for your user, and run:
 
-``` sh
+```sh
 $> aws --endpoint-url http://localhost:8600 iam create-user --user-name userName
 ```
 
@@ -170,21 +170,21 @@ $> aws --endpoint-url http://localhost:8600 iam create-user --user-name userName
 
 To create your access key, run the following command:
 
-``` sh
+```sh
 $> aws --endpoint-url http://localhost:8600 iam create-access-key --user-name userName
 ```
 
 The response will print something like:
 
-``` json
+```json
 {
-  "AccessKey": {
-      "UserName": "userName",
-      "Status": "Active",
-      "CreateDate": "2015-03-09T18:39:23.411Z",
-      "SecretAccessKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYzEXAMPLEKEY",
-      "AccessKeyId": "AKIAIOSFODNN7EXAMPLE"
-  }
+    "AccessKey": {
+        "UserName": "userName",
+        "Status": "Active",
+        "CreateDate": "2015-03-09T18:39:23.411Z",
+        "SecretAccessKey": "wJalrXUtnFEMI/K7MDENG/bPxRfiCYzEXAMPLEKEY",
+        "AccessKeyId": "AKIAIOSFODNN7EXAMPLE"
+    }
 }
 ```
 
@@ -244,11 +244,11 @@ $> sed -i 's/s3\.amazonaws\.com/localhost:8600/g' ~/.s3cfg
 
 You can now use s3cmd with your .s3cfg file. Try:
 
-``` sh
+```sh
 $> s3cmd mb s3://myTestBucket
 $> s3cmd ls
 ```
 
-This should tell you that you have a bucket called ```s3://myTestBucket```.
+This should tell you that you have a bucket called `s3://myTestBucket`.
 
 You're good to go! Enjoy Vault Server and Vault Client.

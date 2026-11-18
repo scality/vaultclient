@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-'use strict';  
+'use strict';
 
 const fs = require('fs');
 const homedir = require('os').homedir;
@@ -15,17 +15,19 @@ const internalServiceAccountId = '000000000000';
 const internalServiceAccountName = 'scality-internal-services';
 const internalServiceAccountEmail = 'scality@internal';
 
-program.version(version)
-    .option('--host [HOST]', 'host where Vault is running (default to ' +
-        'VAULT_HOST environment variable)')
-    .option('--port [PORT]', 'port where Vault is running (default to ' +
-        'VAULT_PORT environment variable)')
+program
+    .version(version)
+    .option('--host [HOST]', 'host where Vault is running (default to ' + 'VAULT_HOST environment variable)')
+    .option('--port [PORT]', 'port where Vault is running (default to ' + 'VAULT_PORT environment variable)')
     .option('--https', 'use HTTPs instead of the default HTTP')
     .option('--cafile [FILE]', 'Authority certificate to use')
     .option('--noCaVerification', 'Allow untrusted certificate authority')
-    .option('--config [PATH]', 'path where the configuration for ' +
-        'vaultclient is (defaults to VAULT_CONFIG environment ' +
-        'variable and ~/.vaultclient.conf in that order)');
+    .option(
+        '--config [PATH]',
+        'path where the configuration for ' +
+            'vaultclient is (defaults to VAULT_CONFIG environment ' +
+            'variable and ~/.vaultclient.conf in that order)',
+    );
 
 function checkConfig(configObject) {
     if (!configObject) {
@@ -53,7 +55,7 @@ function readConfigFile(configFilePath) {
     } catch (err) {
         throw new Error(`error reading config file: ${err}`, { cause: err });
     }
-};
+}
 
 /**
  * Gets admin credentials via environment variables or via config file
@@ -77,8 +79,7 @@ function action(cmd, fn, _, options) {
 
     try {
         const useHttps = !!args.https;
-        const ca = args.cafile ?
-            fs.readFileSync(args.cafile, 'ascii') : undefined;
+        const ca = args.cafile ? fs.readFileSync(args.cafile, 'ascii') : undefined;
         const untrusted = !!args.noCaVerification;
         const config = getAdminConfig(args.config);
         const accessKey = config.accessKey;
@@ -86,9 +87,9 @@ function action(cmd, fn, _, options) {
         const host = args.host || process.env.VAULT_HOST || 'localhost';
         const token = config.sessionToken;
         const parameterValidation = args.parameterValidation || true;
-        const client = new vaultclient.Client(host,
-            Number.parseInt(args.port ? args.port :
-                process.env.VAULT_PORT, 10),
+        const client = new vaultclient.Client(
+            host,
+            Number.parseInt(args.port ? args.port : process.env.VAULT_PORT, 10),
             useHttps,
             undefined,
             undefined,
@@ -99,11 +100,12 @@ function action(cmd, fn, _, options) {
             null,
             null,
             token,
-            parameterValidation);
+            parameterValidation,
+        );
         fn(client, args);
     } catch (err) {
         //process.stderr.write(err.message + '\n');
-        process.stderr.write(`${err  }\n`);
+        process.stderr.write(`${err}\n`);
         program.commands.find(c => c._name === cmd).outputHelp();
         process.exit(-1);
     }
@@ -111,10 +113,10 @@ function action(cmd, fn, _, options) {
 
 function handleVaultResponse(err, data) {
     if (err) {
-        process.stdout.write(`${JSON.stringify(err, null, 4)  }\n`);
+        process.stdout.write(`${JSON.stringify(err, null, 4)}\n`);
         process.exit(1);
     }
-    if (process.stdout.write(`${JSON.stringify(data, null, 4)  }\n`)) {
+    if (process.stdout.write(`${JSON.stringify(data, null, 4)}\n`)) {
         process.exit(0);
     }
     process.stdout.on('drain', () => {
@@ -129,24 +131,30 @@ program
     .option('--quota <Quota>', 'Maximum quota for the account', BigInt)
     .option('--accountid <ExternalAccountID>')
     .option('--canonicalid <ExternalCanonicalID>')
-    .action(action.bind(null, 'create-account', (client, args) => {
-        client.createAccount(
-            args.name, {
-            email: args.email,
-            quota: args.quota || null,
-            externalAccountId: args.accountid || null,
-            externalCanonicalId: args.canonicalid || null
-        },
-            handleVaultResponse);
-    }));
+    .action(
+        action.bind(null, 'create-account', (client, args) => {
+            client.createAccount(
+                args.name,
+                {
+                    email: args.email,
+                    quota: args.quota || null,
+                    externalAccountId: args.accountid || null,
+                    externalCanonicalId: args.canonicalid || null,
+                },
+                handleVaultResponse,
+            );
+        }),
+    );
 
 program
     .command('generate-account-password')
     .option('--name <NAME>')
     .option('--password <PASSOWRD>')
-    .action(action.bind(null, 'generate-account-password', (client, args) => {
-        client.generateAccountPassword(args.name, args.password, handleVaultResponse);
-    }));
+    .action(
+        action.bind(null, 'generate-account-password', (client, args) => {
+            client.generateAccountPassword(args.name, args.password, handleVaultResponse);
+        }),
+    );
 
 program
     .command('generate-account-access-key')
@@ -154,13 +162,15 @@ program
     .option('--accesskey <ExternalAccessKey>')
     .option('--secretkey <ExternalSecretKey>')
     .option('--durationSeconds <DurationSeconds>', 'Duration in number of seconds')
-    .action(action.bind(null, 'generate-account-access-key', (client, args) => {
-        client.generateAccountAccessKey(args.name, handleVaultResponse, {
-            externalAccessKey: args.accesskey || null,
-            externalSecretKey: args.secretkey || null,
-            durationSeconds: args.durationSeconds || null
-        });
-    }));
+    .action(
+        action.bind(null, 'generate-account-access-key', (client, args) => {
+            client.generateAccountAccessKey(args.name, handleVaultResponse, {
+                externalAccessKey: args.accesskey || null,
+                externalSecretKey: args.secretkey || null,
+                durationSeconds: args.durationSeconds || null,
+            });
+        }),
+    );
 
 program
     .command('list-accounts')
@@ -168,14 +178,19 @@ program
     .option('--maxItems [MAXITEMS]', 'Max items for pagination', parseInt)
     .option('--filterKey <string>', 'Filter for custom attributes')
     .option('--filterKeyStartsWith <string>', 'Generic filter for custom attributes')
-    .action(action.bind(null, 'list-accounts', (client, args) => {
-        client.listAccounts({
-            marker: args.marker,
-            maxItems: args.maxItems,
-            filterKey: args.filterKey,
-            filterKeyStartsWith: args.filterKeyStartsWith,
-        }, handleVaultResponse);
-    }));
+    .action(
+        action.bind(null, 'list-accounts', (client, args) => {
+            client.listAccounts(
+                {
+                    marker: args.marker,
+                    maxItems: args.maxItems,
+                    filterKey: args.filterKey,
+                    filterKeyStartsWith: args.filterKeyStartsWith,
+                },
+                handleVaultResponse,
+            );
+        }),
+    );
 
 program
     .command('get-account')
@@ -184,91 +199,115 @@ program
     .option('--account-id <ACCOUNT ID')
     .option('--canonical-id <CANONICAL ID>')
     .option('--email <EMAIL>')
-    .action(action.bind(null, 'get-account', (client, args) => {
-        client.getAccount({
-            accountArn: args.accountArn || undefined,
-            accountName: args.accountName || undefined,
-            accountId: args.accountId || undefined,
-            canonicalId: args.canonicalId || undefined,
-            emailAddress: args.email || undefined,
-        }, handleVaultResponse);
-    }));
+    .action(
+        action.bind(null, 'get-account', (client, args) => {
+            client.getAccount(
+                {
+                    accountArn: args.accountArn || undefined,
+                    accountName: args.accountName || undefined,
+                    accountId: args.accountId || undefined,
+                    canonicalId: args.canonicalId || undefined,
+                    emailAddress: args.email || undefined,
+                },
+                handleVaultResponse,
+            );
+        }),
+    );
 
 program
     .command('get-accounts')
     .option('--account-ids <ACCOUNT ID,ACCOUNT ID,...>')
     .option('--canonical-ids <CANONICAL ID,CANONICAL ID,...>')
     .option('--emails <EMAIL,EMAIL,...>')
-    .action(action.bind(null, 'get-accounts', (client, args) => {
-        client.enableIAMOnAdminRoutes().getAccounts(
-            args.accountIds?.split(',') || null,
-            args.canonicalIds?.split(',') || null,
-            args.emails?.split(',') || null,
-            {},
-            handleVaultResponse,
-        );
-    }));
+    .action(
+        action.bind(null, 'get-accounts', (client, args) => {
+            client
+                .enableIAMOnAdminRoutes()
+                .getAccounts(
+                    args.accountIds?.split(',') || null,
+                    args.canonicalIds?.split(',') || null,
+                    args.emails?.split(',') || null,
+                    {},
+                    handleVaultResponse,
+                );
+        }),
+    );
 
 program
     .command('update-account-quota')
     .option('--account-name <NAME>', 'Name of the account')
     .option('--quota <QUOTA>', 'Maximum quota for the account', BigInt)
     .option('--parameter-validation', 'Disable validation of quota')
-    .action(action.bind(null, 'update-account-quota', (client, args) => {
-        client.updateAccountQuota(args.accountName, args.quota, handleVaultResponse);
-    }));
+    .action(
+        action.bind(null, 'update-account-quota', (client, args) => {
+            client.updateAccountQuota(args.accountName, args.quota, handleVaultResponse);
+        }),
+    );
 
 program
     .command('delete-account-quota')
     .option('--account-name <NAME>', 'Name of the account')
     .option('--parameter-validation', 'Disable validation of quota')
-    .action(action.bind(null, 'delete-account-quota', (client, args) => {
-        client.deleteAccountQuota(args.accountName, handleVaultResponse);
-    }));
+    .action(
+        action.bind(null, 'delete-account-quota', (client, args) => {
+            client.deleteAccountQuota(args.accountName, handleVaultResponse);
+        }),
+    );
 
 program
     .command('get-account-quota')
     .option('--account-name <NAME>', 'Name of the account')
     .option('--parameter-validation', 'Disable validation of quota')
-    .action(action.bind(null, 'get-account-quota', (client, args) => {
-        client.getAccountQuota(args.accountName, handleVaultResponse);
-    }));
+    .action(
+        action.bind(null, 'get-account-quota', (client, args) => {
+            client.getAccountQuota(args.accountName, handleVaultResponse);
+        }),
+    );
 
 program
     .command('update-account-limits')
     .option('--account-name <NAME>', 'Name of the account')
-    .option('--limits <JSON>', 'Limits configuration as JSON string. Use file:// to read from a local file. '
-            + 'Ex. \'{ "RequestsPerSecond": { "Limit": 100 } }\'')
-    .action(action.bind(null, 'update-account-limits', (client, args) => {
-        let limits;
-        try {
-            if (args.limits.startsWith('file://')) {
-                const data = fs.readFileSync(args.limits);
-                limits = JSON.parse(data);
-            } else {
-                limits = JSON.parse(args.limits);
+    .option(
+        '--limits <JSON>',
+        'Limits configuration as JSON string. Use file:// to read from a local file. ' +
+            'Ex. \'{ "RequestsPerSecond": { "Limit": 100 } }\'',
+    )
+    .action(
+        action.bind(null, 'update-account-limits', (client, args) => {
+            let limits;
+            try {
+                if (args.limits.startsWith('file://')) {
+                    const data = fs.readFileSync(args.limits);
+                    limits = JSON.parse(data);
+                } else {
+                    limits = JSON.parse(args.limits);
+                }
+            } catch {
+                // eslint-disable-next-line no-console
+                console.error('Error: limits must be valid JSON');
+                process.exit(1);
             }
-        } catch {
-            // eslint-disable-next-line no-console
-            console.error('Error: limits must be valid JSON');
-            process.exit(1);
-        }
-        client.updateAccountLimits(args.accountName, limits, handleVaultResponse);
-    }));
+            client.updateAccountLimits(args.accountName, limits, handleVaultResponse);
+        }),
+    );
 
 program
     .command('delete-account-limits')
     .option('--account-name <NAME>', 'Name of the account')
-    .action(action.bind(null, 'delete-account-limits', (client, args) => {
-        client.deleteAccountLimits(args.accountName, handleVaultResponse);
-    }));
+    .action(
+        action.bind(null, 'delete-account-limits', (client, args) => {
+            client.deleteAccountLimits(args.accountName, handleVaultResponse);
+        }),
+    );
 
 program
     .command('get-account-limits')
     .option('--account-name <NAME>', 'Name of the account')
-    .action(action.bind(null, 'get-account-limits', (client, args) => {
-        client.getAccountLimits(args.accountName, handleVaultResponse);
-    }));
+    .action(
+        action.bind(null, 'get-account-limits', (client, args) => {
+            client.getAccountLimits(args.accountName, handleVaultResponse);
+        }),
+    );
 
 program
     .command('add-account-attribute')
@@ -278,16 +317,21 @@ program
     .option('--canonical-id <string>')
     .option('--key <account attribute key | string>')
     .option('--value <account attribute value | string>')
-    .action(action.bind(null, 'add-account-attribute', (client, args) => {
-        client.addAccountAttribute({
-            accountName: args.accountName || undefined,
-            accountId: args.accountId || undefined,
-            accountArn: args.accountArn || undefined,
-            canonicalId: args.canonicalId || undefined,
-            key: args.key || undefined,
-            value: args.value || undefined,
-        }, handleVaultResponse);
-    }));
+    .action(
+        action.bind(null, 'add-account-attribute', (client, args) => {
+            client.addAccountAttribute(
+                {
+                    accountName: args.accountName || undefined,
+                    accountId: args.accountId || undefined,
+                    accountArn: args.accountArn || undefined,
+                    canonicalId: args.canonicalId || undefined,
+                    key: args.key || undefined,
+                    value: args.value || undefined,
+                },
+                handleVaultResponse,
+            );
+        }),
+    );
 
 program
     .command('delete-account-attribute')
@@ -296,85 +340,98 @@ program
     .option('--account-arn <string>')
     .option('--canonical-id <string>')
     .option('--key <account attribute key | string>')
-    .action(action.bind(null, 'delete-account-attribute', (client, args) => {
-        client.deleteAccountAttribute({
-            accountName: args.accountName || undefined,
-            accountId: args.accountId || undefined,
-            accountArn: args.accountArn || undefined,
-            canonicalId: args.canonicalId || undefined,
-            key: args.key || undefined,
-        }, handleVaultResponse);
-    }));
-
+    .action(
+        action.bind(null, 'delete-account-attribute', (client, args) => {
+            client.deleteAccountAttribute(
+                {
+                    accountName: args.accountName || undefined,
+                    accountId: args.accountId || undefined,
+                    accountArn: args.accountArn || undefined,
+                    canonicalId: args.canonicalId || undefined,
+                    key: args.key || undefined,
+                },
+                handleVaultResponse,
+            );
+        }),
+    );
 
 program
     .command('delete-account')
     .option('--name <NAME>')
-    .action(action.bind(null, 'delete-account', (client, args) => {
-        client.deleteAccount(args.name, handleVaultResponse);
-    }));
+    .action(
+        action.bind(null, 'delete-account', (client, args) => {
+            client.deleteAccount(args.name, handleVaultResponse);
+        }),
+    );
 
 program
     .command('ensure-internal-services-account')
     .option('--accesskey <AccessKey>')
     .option('--secretkey <SecretKey>')
-    .action(action.bind(null, 'ensure-internal-management-account', (client, args) => {
-        const ensureAccessKey = err => {
-            if (err) {
-                return handleVaultResponse(err);
-            }
-            const params = {
-                externalAccessKey: args.accesskey,
-                externalSecretKey: args.secretkey,
+    .action(
+        action.bind(null, 'ensure-internal-management-account', (client, args) => {
+            const ensureAccessKey = err => {
+                if (err) {
+                    return handleVaultResponse(err);
+                }
+                const params = {
+                    externalAccessKey: args.accesskey,
+                    externalSecretKey: args.secretkey,
+                };
+                return client.generateAccountAccessKey(
+                    internalServiceAccountName,
+                    (err, data) => {
+                        if (err && err.EntityAlreadyExists) {
+                            return handleVaultResponse(null, data);
+                        }
+                        return handleVaultResponse(err, data);
+                    },
+                    params,
+                );
             };
-            return client.generateAccountAccessKey(internalServiceAccountName,
-                (err, data) => {
-                    if (err && err.EntityAlreadyExists) {
-                        return handleVaultResponse(null, data);
-                    }
-                    return handleVaultResponse(err, data);
-                }, params);
-        };
 
-        client.getAccount({ accountId: internalServiceAccountId }, (err, data) => {
-            if (!err) {
-                if (data.name !== internalServiceAccountName || data.emailAddress !== internalServiceAccountEmail) {
-                    return handleVaultResponse({
-                        errorMessage: `An account already exists with id ${internalServiceAccountId}`,
-                        existingAccount: data,
-                    });
+            client.getAccount({ accountId: internalServiceAccountId }, (err, data) => {
+                if (!err) {
+                    if (data.name !== internalServiceAccountName || data.emailAddress !== internalServiceAccountEmail) {
+                        return handleVaultResponse({
+                            errorMessage: `An account already exists with id ${internalServiceAccountId}`,
+                            existingAccount: data,
+                        });
+                    }
+
+                    return ensureAccessKey();
                 }
 
-                return ensureAccessKey();
-            }
+                if (err.NoSuchEntity) {
+                    return client.createAccount(
+                        internalServiceAccountName,
+                        {
+                            email: internalServiceAccountEmail,
+                            externalAccountId: internalServiceAccountId,
+                            disableSeed: true,
+                        },
+                        ensureAccessKey,
+                    );
+                }
 
-            if (err.NoSuchEntity) {
-                return client.createAccount(
-                    internalServiceAccountName, {
-                        email: internalServiceAccountEmail,
-                        externalAccountId: internalServiceAccountId,
-                        disableSeed: true,
-                    },
-                    ensureAccessKey);
-            }
-
-            return handleVaultResponse(err);
-        });
-    }));
+                return handleVaultResponse(err);
+            });
+        }),
+    );
 
 program
     .command('get-user-by-access-key')
     .option('--access-key <Access Key>')
-    .action(action.bind(null, 'get-user-by-access-key', (client, args) => {
-        client.getUserByAccessKey(args.accessKey || undefined, handleVaultResponse);
-    }));
+    .action(
+        action.bind(null, 'get-user-by-access-key', (client, args) => {
+            client.getUserByAccessKey(args.accessKey || undefined, handleVaultResponse);
+        }),
+    );
 
-program
-    .command('*')
-    .action(() => {
-        program.outputHelp();
-        process.exit(-1);
-    });
+program.command('*').action(() => {
+    program.outputHelp();
+    process.exit(-1);
+});
 
 if (process.argv.length > 2) {
     program.parse(process.argv);

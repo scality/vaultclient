@@ -23,8 +23,7 @@ You can check our [quickstart guide](QUICKSTART.md).
 ## Contributing
 
 In order to contribute, please follow the
-[Contributing Guidelines](
-https://github.com/scality/Guidelines/blob/master/CONTRIBUTING.md).
+[Contributing Guidelines](https://github.com/scality/Guidelines/blob/master/CONTRIBUTING.md).
 
 ## Prerequisite
 
@@ -46,11 +45,11 @@ $> cat federation/env/s3config/vault/admin-clientprofile/admin1.json
 
 There are three ways of passing the content of the file to vaultclient:
 
-* Name the file `.vaultclient.conf` and place it in your home folder; that is: `~/.vaultclient.conf`
+- Name the file `.vaultclient.conf` and place it in your home folder; that is: `~/.vaultclient.conf`
 
-* Set environment variable `VAULT_CONFIG` with the path of the file: `export VAULT_CONFIG=<filepath>`
+- Set environment variable `VAULT_CONFIG` with the path of the file: `export VAULT_CONFIG=<filepath>`
 
-* Pass the filepath in the command line with option `--config`
+- Pass the filepath in the command line with option `--config`
 
 An example of the third option is:
 
@@ -92,7 +91,7 @@ $> ./bin/vaultclient --config ./admin.conf --host <S3C-storage-node-IP> \
 ```
 
 Alternatively, if you are using S3 Connector storage node, vaultclient can be
-found in the ```scality-vault``` Docker container.
+found in the `scality-vault` Docker container.
 
 ```sh
 # SSH to a storage node and exec to the scality-vault Docker container.
@@ -154,7 +153,7 @@ from javascript code.
 ### Javascript API HTTPS support
 
 The programmatical client supports both the HTTP and HTTPS protocols. HTTP is
-the default protocol. To enable HTTPS, set the constructor's argument ```useHttps```
+the default protocol. To enable HTTPS, set the constructor's argument `useHttps`
 to true.
 
 See [examples](./EXAMPLES.md) to know how to see all constructor arguments.
@@ -162,14 +161,16 @@ See [examples](./EXAMPLES.md) to know how to see all constructor arguments.
 ```js
 const vaultclient = require('vaultclient');
 
-const client = new vaultclient.Client('auth.mydomain.com', 8500,
+const client = new vaultclient.Client(
+    'auth.mydomain.com',
+    8500,
     true, // This argument set up https
 );
 ```
 
-To enable two way https encryption, set the constructor argument ```cert```
-and ```key``` to the content of the client certificate. To use your own
-certificate authority, set the constructor argument ```ca``` to the content of
+To enable two way https encryption, set the constructor argument `cert`
+and `key` to the content of the client certificate. To use your own
+certificate authority, set the constructor argument `ca` to the content of
 your authority certificate.
 
 ### Javascript API use of Vault administration credentials
@@ -182,9 +183,17 @@ See [examples](./EXAMPLES.md) to know how to see all constructor arguments.
 ```js
 const vaultclient = require('vaultclient');
 
-const client = new vaultclient.Client('auth.mydomain.com', 8500, false,
-    undefined, undefined, undefined, true, '7C66DCVN609K7ZHDBVZ0',
-    'JXxTT04NxiWb6NcES+rpkHnkXszDq3KxexocJIJ9');
+const client = new vaultclient.Client(
+    'auth.mydomain.com',
+    8500,
+    false,
+    undefined,
+    undefined,
+    undefined,
+    true,
+    '7C66DCVN609K7ZHDBVZ0',
+    'JXxTT04NxiWb6NcES+rpkHnkXszDq3KxexocJIJ9',
+);
 
 client.createAccount('account0', { email: 'dev@null' }, (err, data) => {
     console.log(data);
