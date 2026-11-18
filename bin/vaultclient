@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-'use strict'; // eslint-disable-line
+'use strict';  
 
 const fs = require('fs');
 const homedir = require('os').homedir;
@@ -79,11 +79,11 @@ function action(cmd, fn, _, options) {
         const useHttps = !!args.https;
         const ca = args.cafile ?
             fs.readFileSync(args.cafile, 'ascii') : undefined;
-        const untrusted = args.noCaVerification ? true : false;
+        const untrusted = !!args.noCaVerification;
         const config = getAdminConfig(args.config);
         const accessKey = config.accessKey;
         const secretKey = config.secretKeyValue;
-        let host = args.host || process.env.VAULT_HOST || 'localhost';
+        const host = args.host || process.env.VAULT_HOST || 'localhost';
         const token = config.sessionToken;
         const parameterValidation = args.parameterValidation || true;
         const client = new vaultclient.Client(host,
@@ -103,7 +103,7 @@ function action(cmd, fn, _, options) {
         fn(client, args);
     } catch (err) {
         //process.stderr.write(err.message + '\n');
-        process.stderr.write(err + '\n');
+        process.stderr.write(`${err  }\n`);
         program.commands.find(c => c._name === cmd).outputHelp();
         process.exit(-1);
     }
@@ -111,10 +111,10 @@ function action(cmd, fn, _, options) {
 
 function handleVaultResponse(err, data) {
     if (err) {
-        process.stdout.write(JSON.stringify(err, null, 4) + '\n');
+        process.stdout.write(`${JSON.stringify(err, null, 4)  }\n`);
         process.exit(1);
     }
-    if (process.stdout.write(JSON.stringify(data, null, 4) + '\n')) {
+    if (process.stdout.write(`${JSON.stringify(data, null, 4)  }\n`)) {
         process.exit(0);
     }
     process.stdout.on('drain', () => {
@@ -340,7 +340,7 @@ program
             if (!err) {
                 if (data.name !== internalServiceAccountName || data.emailAddress !== internalServiceAccountEmail) {
                     return handleVaultResponse({
-                        errorMessage: "An account already exists with id "+internalServiceAccountId,
+                        errorMessage: `An account already exists with id ${internalServiceAccountId}`,
                         existingAccount: data,
                     });
                 }
