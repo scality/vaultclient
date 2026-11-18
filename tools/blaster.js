@@ -338,7 +338,7 @@ function deleteAccessKey(index, callback) {
 
 function verifySignatureV2(index, callback) {
     let error = true;
-    let accountName = 'unexistingAccountName';
+    let accountName;
     let accessKey = 'unexistingAccessKey';
     let signature = hmac('signature', 'secretKey').toString('base64');
     const params = { algo: 'sha1' };
@@ -379,7 +379,7 @@ function verifySignatureV2(index, callback) {
 
 function verifySignatureV4(index, callback) {
     let error = true;
-    let accountName = 'unexistingAccountName';
+    let accountName;
     let accessKey = 'unexistingAccessKey';
     let signature = hmac('signature', 'secretKey').toString('hex');
     if (accountNames.length > 0) {

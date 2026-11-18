@@ -52,7 +52,7 @@ function handler(req, res) {
             return res.end(JSON.stringify({ error: 'Invalid request data' }));
         }
         
-        let output = null;
+        let output;
         try {
             const accessKeyObject = serverDB[data.accessKey];
             const userObject = serverDB[accessKeyObject.userId];
