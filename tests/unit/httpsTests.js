@@ -24,7 +24,7 @@ const expectedResponse = {
         data: {
             arn: 'arn:aws:iam::619305055237:/account0/',
             id: '619305055237',
-            canonicalId: 'CER9UNUF89LNFWQCS90RHR0WHTYUW9Q3HY9KBUMSR75V9B4VX' + 'GJ0RF89X8SQEBSG',
+            canonicalId: 'CER9UNUF89LNFWQCS90RHR0WHTYUW9Q3HY9KBUMSR75V9B4VXGJ0RF89X8SQEBSG',
         },
     },
     secretKey: {

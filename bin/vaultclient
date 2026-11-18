@@ -17,8 +17,8 @@ const internalServiceAccountEmail = 'scality@internal';
 
 program
     .version(version)
-    .option('--host [HOST]', 'host where Vault is running (default to ' + 'VAULT_HOST environment variable)')
-    .option('--port [PORT]', 'port where Vault is running (default to ' + 'VAULT_PORT environment variable)')
+    .option('--host [HOST]', 'host where Vault is running (default to VAULT_HOST environment variable)')
+    .option('--port [PORT]', 'port where Vault is running (default to VAULT_PORT environment variable)')
     .option('--https', 'use HTTPs instead of the default HTTP')
     .option('--cafile [FILE]', 'Authority certificate to use')
     .option('--noCaVerification', 'Allow untrusted certificate authority')
